@@ -96,21 +96,41 @@ var srfi1 = {
     return lst;
   },
   
-  // eXchanged cons
   xcons: function (cdr, car) {
+    // eXchanged cons
     return this.cons(car, cdr);
   },
   
-  // cons* - like list except the last value is used as the tail
   cons_list: function () {
+    // cons* - like list except the last value is used as the tail
     var last_arg = arguments.length-1,
         lst = arguments[last_arg];
     for (var i=last_arg-1; i >= 0; i--) {
       lst = this.cons(arguments[i], lst);
     }
     return lst;
-  }
+  },
 
+  make_list: function (n, fill) {
+    // Returns an n-element list, whose elements are all the value fill. If the 
+    // fill argument is not given, the elements of the list will be undefined. 
+    var lst = null;
+    for (var i=0; i < n; i++) {
+      lst = this.cons(fill, lst);
+    }
+    return lst;
+  },
+  
+  list_tabulate: function (n, init_proc) {
+    // Returns an n-element list. Element i of the list, where 0 <= i < n, 
+    // is produced by (init-proc i).  No guarantee is made about the dynamic 
+    // order in which init-proc is applied to these indices. 
+    var lst = null;
+    for (var i=n-1; i >= 0; i--) {
+      lst = this.cons(init_proc(i), lst);
+    }
+    return lst;
+  }
   
 };
 
@@ -232,8 +252,7 @@ var srfi1 = {
   // 1 - proper list
   t(srfi1.xcons(srfi1.list(2, 3), 1),
     srfi1.list(1, 2, 3));
-  
-  
+    
   
   //________________________________________________________________________//
   // srfi1.cons_list
@@ -253,6 +272,33 @@ var srfi1 = {
   // 2 - too few arguments
   // srfi1.cons_list(1) should error instead of returning (1, undefined)
   
+  
+  //________________________________________________________________________//
+  // srfi1.make_list
+  //________________________________________________________________________//
+
+  current_method = "make_list";
+  counter = 0;
+  
+  // 0 - (1 1 1)
+  t(srfi1.make_list(3, 1),
+    srfi1.list(1, 1, 1));
+  
+  // 1 - no arguments
+  t(srfi1.make_list(),
+    null);
+
+  
+  //________________________________________________________________________//
+  // srfi1.list_tabulate
+  //________________________________________________________________________//
+
+  current_method = "list_tabulate";
+  counter = 0;
+  
+  // 0 - (1 2 3)
+  t(srfi1.list_tabulate(3, function (i) { return i; }),
+    srfi1.list(1, 2, 3));
   
   
   console.log("Tests completed!");

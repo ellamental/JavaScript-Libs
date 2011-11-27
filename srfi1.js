@@ -77,9 +77,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Constructors
   // 
-  // Implemented: cons
+  // Implemented: cons  list  xcons
   // 
-  // Not yet implemented: list  xcons  cons*  make-list  list-tabulate 
+  // Not yet implemented: cons*  make-list  list-tabulate 
   //                      list-copy  circular-list  iota
   //________________________________________________________________________//
   
@@ -95,9 +95,12 @@ var srfi1 = {
       lst = this.cons(arguments[i], lst);
     }
     return lst;
+  },
+  
+  // eXchanged cons
+  xcons: function (cdr, car) {
+    return this.cons(car, cdr);
   }
-  
-  
 };
 
 
@@ -202,6 +205,22 @@ var srfi1 = {
   // 3 - list with embedded list
   t(srfi1.list(srfi1.list(1), 2),
     srfi1.cons(srfi1.cons(1, null), srfi1.cons(2, null)));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.xcons
+  //________________________________________________________________________//
+
+  current_method = "xcons";
+  counter = 0;
+  
+  // 0 - pair
+  t(srfi1.xcons(2, 1),
+    srfi1.cons(1, 2));
+  
+  // 1 - proper list
+  t(srfi1.xcons(srfi1.list(2, 3), 1),
+    srfi1.list(1, 2, 3));
   
   
   console.log("Tests completed!");

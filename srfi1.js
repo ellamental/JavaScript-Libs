@@ -86,8 +86,16 @@ var srfi1 = {
   cons: function (car, cdr) {
     // should this throw an error if cdr is not provided or coerce cdr to null?
     return new this.Pair(car, cdr);
-  }
+  },
   
+  list: function () {
+    var arg_length = arguments.length,
+        lst = null;
+    for (var i=arguments.length-1; i >= 0; i--) {
+      lst = this.cons(arguments[i], lst);
+    }
+    return lst;
+  }
   
   
 };
@@ -170,6 +178,30 @@ var srfi1 = {
   // 6 - make a list of length 2 with improper lists in both car and cdr
   t(srfi1.cons(srfi1.cons(1, 2), srfi1.cons(3, 4)),
     new srfi1.Pair(new srfi1.Pair(1, 2), new srfi1.Pair(3, 4)));
+  
+
+  //________________________________________________________________________//
+  // srfi1.list
+  //________________________________________________________________________//
+
+  current_method = "list";
+  counter = 0;
+  
+  // 0 - list with no arguments
+  t(srfi1.list(),
+    null);
+  
+  // 1 - list of length 1
+  t(srfi1.list(1),
+    srfi1.cons(1, null));
+  
+  // 2 - list of length 2
+  t(srfi1.list(1, 2),
+    srfi1.cons(1, srfi1.cons(2, null)));
+  
+  // 3 - list with embedded list
+  t(srfi1.list(srfi1.list(1), 2),
+    srfi1.cons(srfi1.cons(1, null), srfi1.cons(2, null)));
   
   
   console.log("Tests completed!");

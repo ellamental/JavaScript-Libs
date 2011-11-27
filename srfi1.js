@@ -77,9 +77,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Constructors
   // 
-  // Implemented: cons  list  xcons
+  // Implemented: cons  list  xcons  cons_list(cons*)
   // 
-  // Not yet implemented: cons*  make-list  list-tabulate 
+  // Not yet implemented:   make-list  list-tabulate 
   //                      list-copy  circular-list  iota
   //________________________________________________________________________//
   
@@ -89,8 +89,7 @@ var srfi1 = {
   },
   
   list: function () {
-    var arg_length = arguments.length,
-        lst = null;
+    var lst = null;
     for (var i=arguments.length-1; i >= 0; i--) {
       lst = this.cons(arguments[i], lst);
     }
@@ -100,7 +99,19 @@ var srfi1 = {
   // eXchanged cons
   xcons: function (cdr, car) {
     return this.cons(car, cdr);
+  },
+  
+  // cons* - like list except the last value is used as the tail
+  cons_list: function () {
+    var last_arg = arguments.length-1,
+        lst = arguments[last_arg];
+    for (var i=last_arg-1; i >= 0; i--) {
+      lst = this.cons(arguments[i], lst);
+    }
+    return lst;
   }
+
+  
 };
 
 
@@ -221,6 +232,27 @@ var srfi1 = {
   // 1 - proper list
   t(srfi1.xcons(srfi1.list(2, 3), 1),
     srfi1.list(1, 2, 3));
+  
+  
+  
+  //________________________________________________________________________//
+  // srfi1.cons_list
+  //________________________________________________________________________//
+
+  current_method = "cons_list";
+  counter = 0;
+  
+  // 0
+  t(srfi1.cons_list(1, 2, 3),
+    srfi1.cons(1, srfi1.cons(2, 3)));
+  
+  // 1 - pair
+  t(srfi1.cons_list(1, 2),
+    srfi1.cons(1, 2));
+  
+  // 2 - too few arguments
+  // srfi1.cons_list(1) should error instead of returning (1, undefined)
+  
   
   
   console.log("Tests completed!");

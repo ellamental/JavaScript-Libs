@@ -168,10 +168,9 @@ var srfi1 = {
   // Selectors
   //
   // Implemented: car  cdr  rest(not srfi-1)  c...r  list_ref  first...tenth
-  //              take/drop
+  //              take/drop  take/drop-right  split_at  last  last_pair
   //
-  // Not yet implemented: car_cdr(car+cdr)  take/drop-right  split_at
-  //                      last  last_pair
+  // Not yet implemented: car_cdr(car+cdr)
   //________________________________________________________________________//
   
   // Canonical Lisp accessor functions
@@ -236,6 +235,7 @@ var srfi1 = {
   },
   
   take_right: function (list, n) {
+    // take-right returns the last i elements of list.
     var return_value;
     function loop(lag, lead) {
       if (srfi1.isPair(lead)) {
@@ -250,7 +250,7 @@ var srfi1 = {
   },
 
   drop_right: function (list, n) {
-    var return_value;
+    // drop-right returns all but the last i elements of list.
     function loop(lag, lead) {
       if (srfi1.isPair(lead)) {
         return srfi1.cons(lag.car, loop(lag.cdr, lead.cdr));
@@ -260,7 +260,28 @@ var srfi1 = {
       }
     }
     return loop(list, this.drop(list, n));
+  },
+  
+  split_at: function (list, n) {
+    // split-at splits the list x at index i, returning a pair containing a
+    // list of the first i elements, and the remaining tail.
+    return this.cons(this.take(list, n), this.drop(list, n));
+  },
+  
+  last: function (list) {
+    while (list.cdr !== null) {
+      list = list.cdr;
+    }
+    return list.car;
+  },
+  
+  last_pair: function (list) {
+    while (list.cdr !== null) {
+      list = list.cdr;
+    }
+    return list;
   }
+  
   
   
   
@@ -716,6 +737,42 @@ var srfi1 = {
   // 0
   t(s.drop_right(s.list(1, 2, 3, 4), 2),
     s.list(1, 2));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.split_at
+  //________________________________________________________________________//
+
+  current_method = "split_at";
+  counter = 0;
+  
+  // 0
+  t(s.split_at(s.list(1, 2, 3, 4), 2),
+    s.cons(s.list(1, 2), s.list(3, 4)));
+    
+  
+  //________________________________________________________________________//
+  // srfi1.last
+  //________________________________________________________________________//
+
+  current_method = "last";
+  counter = 0;
+  
+  // 0
+  t(s.last(s.list(1, 2, 3)),
+    3);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.last_pair
+  //________________________________________________________________________//
+
+  current_method = "last_pair";
+  counter = 0;
+  
+  // 0
+  t(s.last_pair(s.list(1, 2, 3)),
+    s.cons(3, null));
   
   
   

@@ -336,6 +336,40 @@ var srfi1 = {
     }
   },
 
+  reverse: function (list) {
+    // reverse returns a newly allocated list consisting of the elements 
+    // of list in reverse order. 
+    var l = null;
+    while (list !== null) {
+      l = this.cons(list.car, l);
+      list = list.cdr;
+    }
+    return l;
+  },
+  
+  zip: function () {
+    // convert arguments to an array
+    var args = Array.prototype.slice.call(arguments, 0),
+        num_args = args.length,
+        temp_array = [],
+        values,
+        i;
+    while (true) {
+      values = null;
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values = this.cons(args[i].car, values);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return this.list.apply(this, temp_array);
+        }
+      }
+      temp_array.push(values);
+    }
+  },
+      
+    
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -905,6 +939,38 @@ var srfi1 = {
   t(s.append(s.list(1), s.list(2), 3),
     s.cons(1, s.cons(2, 3)));
   
+  
+  //________________________________________________________________________//
+  // srfi1.reverse
+  //________________________________________________________________________//
+
+  current_method = "reverse";
+  counter = 0;
+  
+  // 0
+  t(s.reverse(s.list(1, 2, 3)),
+    s.list(3, 2, 1));
+
+  
+  //________________________________________________________________________//
+  // srfi1.zip
+  //________________________________________________________________________//
+
+  current_method = "zip";
+  counter = 0;
+  
+  // 0 - zip 2 equal length lists
+  t(s.zip(s.list(1, 2), s.list(3, 4)),
+    s.list(s.list(1, 3), s.list(2, 4)));
+  
+  // 1 - zip 2 unequal length lists
+  t(s.zip(s.list(1, 2, 5), s.list(3, 4)),
+    s.list(s.list(1, 3), s.list(2, 4)));
+
+  // 2 - zip 2 unequal length lists
+  t(s.zip(s.list(1, 2), s.list(3, 4, 5)),
+    s.list(s.list(1, 3), s.list(2, 4)));
+
   
   
   

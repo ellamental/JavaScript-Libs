@@ -155,6 +155,10 @@ var srfi1 = {
     return (elem instanceof this.Pair);
   },
   
+  isNull: function (elem) {
+    return elem === null;
+  },
+  
   
   //________________________________________________________________________//
   // Selectors
@@ -171,12 +175,23 @@ var srfi1 = {
   
   cdr: function (p) {
     return p.cdr;
-  }
+  },
   
+  caar: function (p) { return p.car.car; },
+  cadr: function (p) { return p.cdr.car; },
+  cdar: function (p) { return p.car.cdr; },
+  cddr: function (p) { return p.cdr.cdr; },
+  
+  caaar: function (p) { return p.car.car.car; },
+  caadr: function (p) { return p.cdr.car.car; },
+  cadar: function (p) { return p.car.cdr.car; },
+  caddr: function (p) { return p.cdr.cdr.car; },
+  cdaar: function (p) { return p.car.car.cdr; },
+  cdadr: function (p) { return p.cdr.car.cdr; },
+  cddar: function (p) { return p.car.cdr.cdr; },
+  cdddr: function (p) { return p.cdr.cdr.cdr; }
   
 };
-
-
 
 
 
@@ -389,6 +404,22 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // srfi1.isNull
+  //________________________________________________________________________//
+
+  current_method = "isNull";
+  counter = 0;
+  
+  // 0 - null
+  t(s.isNull(null),
+    true);
+  
+  // 1 - pair
+  t(s.isNull(s.cons(1, 2)),
+    false);
+  
+  
+  //________________________________________________________________________//
   // srfi1.car
   //________________________________________________________________________//
 
@@ -427,6 +458,58 @@ var srfi1 = {
   t(s.cdr(s.list(1, 2, 3)),
     s.list(2, 3));
   
+  //________________________________________________________________________//
+  // srfi1.c...r
+  //________________________________________________________________________//
+
+  current_method = "c...r";
+  counter = 0;
+  
+  var crlist = s.list(
+                 s.list(
+                   s.list(1, 2, 3),
+                   s.list(4, 5, 6),
+                   s.list(7, 8, 9)
+                 ),
+                 s.list(
+                   s.list(10, 11, 12),
+                   s.list(13, 14, 15),
+                   s.list(16, 17, 18)
+                 ),
+                 s.list(
+                   s.list(19, 20, 21),
+                   s.list(22, 23, 24),
+                   s.list(25, 26, 27)
+                 )
+               );
+  
+  // 0-3
+  t(s.caar(crlist),
+    s.list(1, 2, 3));
+  t(s.cadr(crlist),
+    s.list(s.list(10, 11, 12), s.list(13, 14, 15), s.list(16, 17, 18)));
+  t(s.cdar(crlist),
+    s.list(s.list(4, 5, 6), s.list(7, 8, 9)));
+  t(s.cddr(crlist),
+    s.list(s.list(s.list(19, 20, 21), s.list(22, 23, 24), s.list(25, 26, 27))));
+
+  // 4-11
+  t(s.caaar(crlist),
+    1);
+  t(s.caadr(crlist),
+    s.list(10, 11, 12));
+  t(s.cadar(crlist),
+    s.list(4, 5, 6));
+  t(s.caddr(crlist),
+    s.list(s.list(19, 20, 21), s.list(22, 23, 24), s.list(25, 26, 27)));
+  t(s.cdaar(crlist),
+    s.list(2, 3));
+  t(s.cdadr(crlist),
+    s.list(s.list(13, 14, 15), s.list(16, 17, 18)));
+  t(s.cddar(crlist),
+    s.list(s.list(7, 8, 9)));
+  t(s.cdddr(crlist),
+    null);
 
   
   

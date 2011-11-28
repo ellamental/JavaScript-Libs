@@ -304,11 +304,14 @@ var srfi1 = {
     return len;
   },
   
+  // This should be rewritten to traverse backward over the arguments.  The 
+  // current implementation creates n! copies of the intermediate list where 
+  // n = the number of arguments.
   append: function (a, b, c) {
     // append returns a list consisting of the elements of list1 followed by
     // the elements of the other list parameters.
     // The resulting list is always newly allocated, except that it shares
-    // structure with the final listi argument. This last argument may be any
+    // structure with the final list argument. This last argument may be any
     // value at all; an improper list results if it is not a proper list.
     // All other arguments must be proper lists.
     var l, args;

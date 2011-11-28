@@ -304,6 +304,35 @@ var srfi1 = {
     return len;
   },
   
+  append: function (a, b, c) {
+    // append returns a list consisting of the elements of list1 followed by
+    // the elements of the other list parameters.
+    // The resulting list is always newly allocated, except that it shares
+    // structure with the final listi argument. This last argument may be any
+    // value at all; an improper list results if it is not a proper list.
+    // All other arguments must be proper lists.
+    var l, args;
+    function loop(f, s) {
+      if (f instanceof srfi1.Pair) {
+        return srfi1.cons(f.car, loop(f.cdr, s));
+      }
+      else {
+        return s;
+      }
+    }
+    l = loop(a, b);
+    // fast path, avoids a call to the arguments object which is generally slow
+    if (typeof c === 'undefined') {
+      return l;
+    }
+    else {
+      // convert arguments object to array, leaving off the first 2 arguments
+      args = Array.prototype.slice.call(arguments, 2);
+      args.unshift(l);
+      return this.append.apply(this, args);
+    }
+  },
+
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -852,6 +881,26 @@ var srfi1 = {
   // 0
   t(s.length(s.list(0, 1, 2)),
     3);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.append
+  //________________________________________________________________________//
+
+  current_method = "append";
+  counter = 0;
+  
+  // 0 - append 2 lists
+  t(s.append(s.list(1, 2), s.list(3, 4)),
+    s.list(1, 2, 3, 4));
+  
+  // 1 - append 3 lists
+  t(s.append(s.list(1, 2), s.list(3, 4), s.list(5, 6)),
+    s.list(1, 2, 3, 4, 5, 6));
+  
+  // 2 - append 2 lists and an atom (should return an improper list)
+  t(s.append(s.list(1), s.list(2), 3),
+    s.cons(1, s.cons(2, 3)));
   
   
   

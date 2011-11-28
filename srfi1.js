@@ -145,14 +145,18 @@ var srfi1 = {
   //________________________________________________________________________//
   // Predicates
   //
-  // Implemented: isPair(pair?)
+  // Implemented: isPair(pair?)  null?  not-pair?
   //
-  // Not yet implemented: null?  proper-list?  circular-list?  dotted-list?
-  //                      not-pair?  null-list?  list=
+  // Not yet implemented: proper-list?  circular-list?  dotted-list?
+  //                      null-list?  list=
   //________________________________________________________________________//
   
   isPair: function (elem) {
     return (elem instanceof this.Pair);
+  },
+  
+  notPair: function (elem) {
+    return !(elem instanceof this.Pair);
   },
   
   isNull: function (elem) {
@@ -163,19 +167,19 @@ var srfi1 = {
   //________________________________________________________________________//
   // Selectors
   //
-  // Implemented: car  cdr
+  // Implemented: car  cdr  rest(not srfi-1)  c...r  list_ref  first...tenth
   //
-  // Not yet implemented: c...r  list_ref  first...tenth  car_cdr(car+cdr)
-  //                      take/drop  take/drop-right  split_at  last  last_pair
+  // Not yet implemented: car_cdr(car+cdr)  take/drop  take/drop-right
+  //                      split_at  last  last_pair
   //________________________________________________________________________//
   
-  car: function (p) {
-    return p.car;
-  },
+  // Canonical Lisp accessor functions
+  car: function (p) { return p.car; },
+  cdr: function (p) { return p.cdr; },
   
-  cdr: function (p) {
-    return p.cdr;
-  },
+  // Clojure/Racket aliases for car/cdr
+  first: function (p) { return p.car; },
+  rest: function (p) { return p.cdr; },
   
   caar: function (p) { return p.car.car; },
   cadr: function (p) { return p.cdr.car; },
@@ -196,7 +200,17 @@ var srfi1 = {
       lst = lst.cdr;
     }
     return lst.car;
-  }
+  },
+  
+  second:  function (p) { return this.list_ref(p, 1); },
+  third:   function (p) { return this.list_ref(p, 2); },
+  fourth:  function (p) { return this.list_ref(p, 3); },
+  fifth:   function (p) { return this.list_ref(p, 4); },
+  sixth:   function (p) { return this.list_ref(p, 5); },
+  seventh: function (p) { return this.list_ref(p, 6); },
+  eighth:  function (p) { return this.list_ref(p, 7); },
+  ninth:   function (p) { return this.list_ref(p, 8); },
+  tenth:   function (p) { return this.list_ref(p, 9); }
   
 };
 
@@ -387,7 +401,7 @@ var srfi1 = {
   
 
   //________________________________________________________________________//
-  // srfi1.isPair
+  // srfi1.isPair and srfi1.notPair
   //________________________________________________________________________//
 
   current_method = "isPair";
@@ -409,6 +423,22 @@ var srfi1 = {
   t(s.isPair(42),
     false);
   
+  // 4 - pair
+  t(s.notPair(s.cons(1, 2)),
+    false);
+  
+  // 5 - list
+  t(s.notPair(s.list(1, 2, 3)),
+    false);
+  
+  // 6 - null
+  t(s.notPair(null),
+    true);
+  
+  // 7 - integer
+  t(s.notPair(42),
+    true);
+  
   
   //________________________________________________________________________//
   // srfi1.isNull
@@ -427,7 +457,7 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
-  // srfi1.car
+  // srfi1.car and srfi1.first
   //________________________________________________________________________//
 
   current_method = "car";
@@ -445,9 +475,13 @@ var srfi1 = {
   t(s.car(s.list(s.cons(1, 2), 3)),
     s.cons(1, 2));
   
+  // 3 - list
+  t(s.first(s.list(1, 2, 3)),
+    1);
+  
 
   //________________________________________________________________________//
-  // srfi1.cdr
+  // srfi1.cdr and srfi1.rest
   //________________________________________________________________________//
 
   current_method = "cdr";
@@ -465,6 +499,10 @@ var srfi1 = {
   t(s.cdr(s.list(1, 2, 3)),
     s.list(2, 3));
   
+  // 2 - 3 element list
+  t(s.rest(s.list(1, 2, 3)),
+    s.list(2, 3));
+
   
   //________________________________________________________________________//
   // srfi1.c...r
@@ -535,6 +573,33 @@ var srfi1 = {
   t(s.list_ref(s.list(1, 2, 3), 2),
     3);
   
+  
+  //________________________________________________________________________//
+  // srfi1.second...tenth
+  //________________________________________________________________________//
+
+  current_method = "first...tenth";
+  counter = 0;
+  
+  // 0-8
+  t(s.second(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    2);
+  t(s.third(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    3);
+  t(s.fourth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    4);
+  t(s.fifth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    5);
+  t(s.sixth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    6);
+  t(s.seventh(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    7);
+  t(s.eighth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    8);
+  t(s.ninth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    9);
+  t(s.tenth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
+    10);
   
   
   

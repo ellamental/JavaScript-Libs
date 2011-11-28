@@ -189,7 +189,14 @@ var srfi1 = {
   cdaar: function (p) { return p.car.car.cdr; },
   cdadr: function (p) { return p.cdr.car.cdr; },
   cddar: function (p) { return p.car.cdr.cdr; },
-  cdddr: function (p) { return p.cdr.cdr.cdr; }
+  cdddr: function (p) { return p.cdr.cdr.cdr; },
+  
+  list_ref: function (lst, index) {
+    for (var i=0; i < index; i++) {
+      lst = lst.cdr;
+    }
+    return lst.car;
+  }
   
 };
 
@@ -458,6 +465,7 @@ var srfi1 = {
   t(s.cdr(s.list(1, 2, 3)),
     s.list(2, 3));
   
+  
   //________________________________________________________________________//
   // srfi1.c...r
   //________________________________________________________________________//
@@ -511,6 +519,23 @@ var srfi1 = {
   t(s.cdddr(crlist),
     null);
 
+  
+  //________________________________________________________________________//
+  // srfi1.list_ref
+  //________________________________________________________________________//
+
+  current_method = "list_ref";
+  counter = 0;
+  
+  // 0 - get first element
+  t(s.list_ref(s.list(1, 2, 3), 0),
+    1);
+  
+  // 1 - get last element
+  t(s.list_ref(s.list(1, 2, 3), 2),
+    3);
+  
+  
   
   
   console.log("Tests completed!");

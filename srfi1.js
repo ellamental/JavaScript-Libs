@@ -130,6 +130,15 @@ var srfi1 = {
       lst = this.cons(init_proc(i), lst);
     }
     return lst;
+  },
+  
+  list_copy: function (lst) {
+    if (lst instanceof this.Pair) {
+      return this.cons(lst.car, this.list_copy(lst.cdr));
+    }
+    else {
+      return lst;
+    }
   }
   
 };
@@ -299,6 +308,29 @@ var srfi1 = {
   // 0 - (1 2 3)
   t(srfi1.list_tabulate(3, function (i) { return i; }),
     srfi1.list(1, 2, 3));
+  
+
+  //________________________________________________________________________//
+  // srfi1.list_copy
+  //________________________________________________________________________//
+
+  current_method = "list_copy";
+  counter = 0;
+  
+  // 0 - copy a proper list
+  t(srfi1.list_copy(srfi1.list(1, 2, 3)),
+    srfi1.list(1, 2, 3));
+  
+  // 1 - copy a pair
+  t(srfi1.list_copy(srfi1.cons(1, 2)),
+    srfi1.cons(1, 2));
+  
+  // 2 - copy an improper list
+  t(srfi1.list_copy(srfi1.cons(1, srfi1.cons(2, 3))),
+    srfi1.cons(1, srfi1.cons(2, 3)));
+  
+  
+  
   
   
   console.log("Tests completed!");

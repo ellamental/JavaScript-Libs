@@ -247,7 +247,22 @@ var srfi1 = {
     }
     loop(list, this.drop(list, n));
     return return_value;
+  },
+
+  drop_right: function (list, n) {
+    var return_value;
+    function loop(lag, lead) {
+      if (srfi1.isPair(lead)) {
+        return srfi1.cons(lag.car, loop(lag.cdr, lead.cdr));
+      }
+      else {
+        return null;
+      }
+    }
+    return loop(list, this.drop(list, n));
   }
+  
+  
   
 };
 
@@ -690,7 +705,20 @@ var srfi1 = {
   t(s.take_right(s.list(1, 2, 3, 4), 2),
     s.list(3, 4));
   
-  //console.log(s.take_right(s.list(1, 2, 3, 4), 2));
+  
+  //________________________________________________________________________//
+  // srfi1.drop_right
+  //________________________________________________________________________//
+
+  current_method = "drop_right";
+  counter = 0;
+  
+  // 0
+  t(s.drop_right(s.list(1, 2, 3, 4), 2),
+    s.list(1, 2));
+  
+  
+  
   
   console.log("Tests completed!");
 })();

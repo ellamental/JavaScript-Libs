@@ -405,9 +405,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Filtering & partitioning 
   //
-  // Implemented: filter
+  // Implemented: filter  partition  remove
   //
-  // Not yet implemented: partition  remove  filter!  partition!  remove! //________________________________________________________________________//
+  // Not yet implemented: filter!  partition!  remove! //________________________________________________________________________//
   
   filter: function (fn, list) {
     var l = null;
@@ -435,6 +435,16 @@ var srfi1 = {
     return this.cons(this.reverse(in_list), this.reverse(out_list));
   },
   
+  remove: function (fn, list) {
+    var l = null;
+    while (list !== null) {
+      if (!fn(list.car)) {
+        l = this.cons(list.car, l);
+      }
+      list = list.cdr;
+    }
+    return this.reverse(l);
+  },
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -1073,8 +1083,6 @@ var srfi1 = {
     s.list(1, 2));
   
   
-  
-  
   //________________________________________________________________________//
   // srfi1.partition
   //________________________________________________________________________//
@@ -1087,6 +1095,16 @@ var srfi1 = {
     s.cons(s.list(2, 4), s.list(1, 3)));
   
   
+  //________________________________________________________________________//
+  // srfi1.remove
+  //________________________________________________________________________//
+
+  current_method = "remove";
+  counter = 0;
+  
+  // 0 - remove < 3
+  t(s.remove(function (x) { return x < 3; }, s.list(1, 2, 3, 4)),
+    s.list(3, 4));
   
   
   

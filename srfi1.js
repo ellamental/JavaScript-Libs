@@ -76,11 +76,11 @@ var srfi1 = {
   
   //________________________________________________________________________//
   // Constructors
-  // 
-  // Implemented: cons  list  xcons  cons_list(cons*)
-  // 
-  // Not yet implemented:   make-list  list-tabulate 
-  //                      list-copy  circular-list  iota
+  //
+  // Implemented: cons  list  xcons  cons_list(cons*)  make-list
+  //              list-tabulate  list-copy
+  //
+  // Not yet implemented: circular-list  iota
   //________________________________________________________________________//
   
   cons: function (car, cdr) {
@@ -139,7 +139,40 @@ var srfi1 = {
     else {
       return lst;
     }
+  },
+  
+  
+  //________________________________________________________________________//
+  // Predicates
+  //
+  // Implemented: isPair(pair?)
+  //
+  // Not yet implemented: null?  proper-list?  circular-list?  dotted-list?
+  //                      not-pair?  null-list?  list=
+  //________________________________________________________________________//
+  
+  isPair: function (elem) {
+    return (elem instanceof this.Pair);
+  },
+  
+  
+  //________________________________________________________________________//
+  // Selectors
+  //
+  // Implemented: car  cdr
+  //
+  // Not yet implemented: c...r  list_ref  first...tenth  car_cdr(car+cdr)
+  //                      take/drop  take/drop-right  split_at  last  last_pair
+  //________________________________________________________________________//
+  
+  car: function (p) {
+    return p.car;
+  },
+  
+  cdr: function (p) {
+    return p.cdr;
   }
+  
   
 };
 
@@ -330,8 +363,71 @@ var srfi1 = {
   t(s.list_copy(s.cons(1, s.cons(2, 3))),
     s.cons(1, s.cons(2, 3)));
   
+
+  //________________________________________________________________________//
+  // srfi1.isPair
+  //________________________________________________________________________//
+
+  current_method = "isPair";
+  counter = 0;
+  
+  // 0 - pair
+  t(s.isPair(s.cons(1, 2)),
+    true);
+  
+  // 1 - list
+  t(s.isPair(s.list(1, 2, 3)),
+    true);
+  
+  // 2 - null
+  t(s.isPair(null),
+    false);
+  
+  // 3 - integer
+  t(s.isPair(42),
+    false);
   
   
+  //________________________________________________________________________//
+  // srfi1.car
+  //________________________________________________________________________//
+
+  current_method = "car";
+  counter = 0;
+  
+  // 0 - pair
+  t(s.car(s.cons(1, 2)),
+    1);
+  
+  // 1 - list
+  t(s.car(s.list(1, 2, 3)),
+    1);
+  
+  // 2 - embedded pair
+  t(s.car(s.list(s.cons(1, 2), 3)),
+    s.cons(1, 2));
+  
+
+  //________________________________________________________________________//
+  // srfi1.cdr
+  //________________________________________________________________________//
+
+  current_method = "cdr";
+  counter = 0;
+  
+  // 0 - pair
+  t(s.cdr(s.cons(1, 2)),
+    2);
+  
+  // 1 - 1 element list
+  t(s.cdr(s.cons(1, null)),
+    null);
+  
+  // 2 - 3 element list
+  t(s.cdr(s.list(1, 2, 3)),
+    s.list(2, 3));
+  
+
   
   
   console.log("Tests completed!");

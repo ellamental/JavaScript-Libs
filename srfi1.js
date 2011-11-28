@@ -233,9 +233,21 @@ var srfi1 = {
       list = list.cdr;
     }
     return list;
+  },
+  
+  take_right: function (list, n) {
+    var return_value;
+    function loop(lag, lead) {
+      if (srfi1.isPair(lead)) {
+        loop(lag.cdr, lead.cdr);
+      }
+      else {
+        return_value = lag;
+      }
+    }
+    loop(list, this.drop(list, n));
+    return return_value;
   }
-  
-  
   
 };
 
@@ -666,6 +678,19 @@ var srfi1 = {
   t(s.drop(s.list(1, 2, 3, 4), 4),
     null);
   
+  
+  //________________________________________________________________________//
+  // srfi1.take_right
+  //________________________________________________________________________//
+
+  current_method = "take_right";
+  counter = 0;
+  
+  // 0
+  t(s.take_right(s.list(1, 2, 3, 4), 2),
+    s.list(3, 4));
+  
+  //console.log(s.take_right(s.list(1, 2, 3, 4), 2));
   
   console.log("Tests completed!");
 })();

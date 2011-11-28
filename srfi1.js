@@ -286,15 +286,15 @@ var srfi1 = {
   //________________________________________________________________________//
   // Miscellaneous
   //
-  // Implemented:  length
+  // Implemented:  length  append  reverse  zip  unzip1
   //
-  // Not yet implemented: length+  append  concatenate  reverse
+  // Not yet implemented: length+  concatenate
   //                      append!  concatenate!  reverse!  append-reverse
-  //                      append-reverse!  zip  unzip1  unzip2  unzip3
+  //                      append-reverse!  unzip2  unzip3
   //                      unzip4  unzip5  count
   //________________________________________________________________________//
   
-  // should raise an error is passed a circular list
+  // should raise an error if passed a circular list
   length: function (list) {
     var len = 0;
     while (list !== null) {
@@ -368,8 +368,18 @@ var srfi1 = {
       temp_array.push(values);
     }
   },
-      
     
+  unzip1: function () {
+    // unzip1 takes a list of lists, where every list must contain at least
+    // one element, and returns a list containing the initial element of each
+    // such list. That is, it returns (map car lists)
+    var l = null;
+    for (i=arguments.length-1; i >= 0; i--) {
+      l = this.cons(arguments[i].car, l);
+    }
+    return l;
+  },
+  
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -972,8 +982,17 @@ var srfi1 = {
     s.list(s.list(1, 3), s.list(2, 4)));
 
   
+  //________________________________________________________________________//
+  // srfi1.unzip1
+  //________________________________________________________________________//
+
+  current_method = "unzip1";
+  counter = 0;
   
-  
+  // 0
+  t(s.unzip1(s.list(1, 2), s.list(3, 4)),
+    s.list(1, 3));
+
   
   
   

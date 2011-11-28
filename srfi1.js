@@ -152,11 +152,12 @@ var srfi1 = {
 //__________________________________________________________________________//
 
 (function () {
-  var counter, current_method;
+  var s = srfi1,
+      counter, current_method;
     
   function t(expr, expected) {
-    if (expected instanceof srfi1.Pair) {
-      if (!srfi1.equal(expr, expected)) {
+    if (expected instanceof s.Pair) {
+      if (!s.equal(expr, expected)) {
         console.log("Test Failed! "+current_method+": #"+counter);
       }
     }
@@ -174,8 +175,8 @@ var srfi1 = {
   //________________________________________________________________________//
 
   (function () {
-    var p = new srfi1.Pair(1, 2);
-    if (!(p instanceof srfi1.Pair)) {
+    var p = new s.Pair(1, 2);
+    if (!(p instanceof s.Pair)) {
       console.log("Test Failed! srfi1.Pair(1, 2) is not instanceof srfi1.Pair");
     }
     else if (p.car !== 1) {
@@ -195,32 +196,32 @@ var srfi1 = {
   counter = 0;
   
   // 0 - cons two integers
-  t(srfi1.cons(1, 2),
-    new srfi1.Pair(1, 2));
+  t(s.cons(1, 2),
+    new s.Pair(1, 2));
   
   // 1 - make a proper list of length 1
-  t(srfi1.cons(1, null),
-    new srfi1.Pair(1, null));
+  t(s.cons(1, null),
+    new s.Pair(1, null));
   
   // 2 - make a proper list of length 2
-  t(srfi1.cons(1, srfi1.cons(2, null)),
-    new srfi1.Pair(1, new srfi1.Pair(2, null)));
+  t(s.cons(1, s.cons(2, null)),
+    new s.Pair(1, new s.Pair(2, null)));
   
   // 3 - make list of length 1 with an improper nested list
-  t(srfi1.cons(srfi1.cons(1, 2), null),
-    new srfi1.Pair(new srfi1.Pair(1, 2), null));
+  t(s.cons(s.cons(1, 2), null),
+    new s.Pair(new s.Pair(1, 2), null));
   
   // 4 - make a list of length 1 with a proper nested list
-  t(srfi1.cons(srfi1.cons(1, null), null),
-    new srfi1.Pair(new srfi1.Pair(1, null), null));
+  t(s.cons(s.cons(1, null), null),
+    new s.Pair(new s.Pair(1, null), null));
   
   // 5 - make a list of length 2 with an improper list in the cdr
-  t(srfi1.cons(1, srfi1.cons(2, 3)),
-    new srfi1.Pair(1, new srfi1.Pair(2, 3)));
+  t(s.cons(1, s.cons(2, 3)),
+    new s.Pair(1, new s.Pair(2, 3)));
   
   // 6 - make a list of length 2 with improper lists in both car and cdr
-  t(srfi1.cons(srfi1.cons(1, 2), srfi1.cons(3, 4)),
-    new srfi1.Pair(new srfi1.Pair(1, 2), new srfi1.Pair(3, 4)));
+  t(s.cons(s.cons(1, 2), s.cons(3, 4)),
+    new s.Pair(new s.Pair(1, 2), new s.Pair(3, 4)));
   
 
   //________________________________________________________________________//
@@ -231,20 +232,20 @@ var srfi1 = {
   counter = 0;
   
   // 0 - list with no arguments
-  t(srfi1.list(),
+  t(s.list(),
     null);
   
   // 1 - list of length 1
-  t(srfi1.list(1),
-    srfi1.cons(1, null));
+  t(s.list(1),
+    s.cons(1, null));
   
   // 2 - list of length 2
-  t(srfi1.list(1, 2),
-    srfi1.cons(1, srfi1.cons(2, null)));
+  t(s.list(1, 2),
+    s.cons(1, s.cons(2, null)));
   
   // 3 - list with embedded list
-  t(srfi1.list(srfi1.list(1), 2),
-    srfi1.cons(srfi1.cons(1, null), srfi1.cons(2, null)));
+  t(s.list(s.list(1), 2),
+    s.cons(s.cons(1, null), s.cons(2, null)));
   
   
   //________________________________________________________________________//
@@ -255,12 +256,12 @@ var srfi1 = {
   counter = 0;
   
   // 0 - pair
-  t(srfi1.xcons(2, 1),
-    srfi1.cons(1, 2));
+  t(s.xcons(2, 1),
+    s.cons(1, 2));
   
   // 1 - proper list
-  t(srfi1.xcons(srfi1.list(2, 3), 1),
-    srfi1.list(1, 2, 3));
+  t(s.xcons(s.list(2, 3), 1),
+    s.list(1, 2, 3));
     
   
   //________________________________________________________________________//
@@ -271,15 +272,15 @@ var srfi1 = {
   counter = 0;
   
   // 0
-  t(srfi1.cons_list(1, 2, 3),
-    srfi1.cons(1, srfi1.cons(2, 3)));
+  t(s.cons_list(1, 2, 3),
+    s.cons(1, s.cons(2, 3)));
   
   // 1 - pair
-  t(srfi1.cons_list(1, 2),
-    srfi1.cons(1, 2));
+  t(s.cons_list(1, 2),
+    s.cons(1, 2));
   
   // 2 - too few arguments
-  // srfi1.cons_list(1) should error instead of returning (1, undefined)
+  // s.cons_list(1) should error instead of returning (1, undefined)
   
   
   //________________________________________________________________________//
@@ -290,11 +291,11 @@ var srfi1 = {
   counter = 0;
   
   // 0 - (1 1 1)
-  t(srfi1.make_list(3, 1),
-    srfi1.list(1, 1, 1));
+  t(s.make_list(3, 1),
+    s.list(1, 1, 1));
   
   // 1 - no arguments
-  t(srfi1.make_list(),
+  t(s.make_list(),
     null);
 
   
@@ -306,8 +307,8 @@ var srfi1 = {
   counter = 0;
   
   // 0 - (1 2 3)
-  t(srfi1.list_tabulate(3, function (i) { return i; }),
-    srfi1.list(1, 2, 3));
+  t(s.list_tabulate(3, function (i) { return i; }),
+    s.list(1, 2, 3));
   
 
   //________________________________________________________________________//
@@ -318,16 +319,16 @@ var srfi1 = {
   counter = 0;
   
   // 0 - copy a proper list
-  t(srfi1.list_copy(srfi1.list(1, 2, 3)),
-    srfi1.list(1, 2, 3));
+  t(s.list_copy(s.list(1, 2, 3)),
+    s.list(1, 2, 3));
   
   // 1 - copy a pair
-  t(srfi1.list_copy(srfi1.cons(1, 2)),
-    srfi1.cons(1, 2));
+  t(s.list_copy(s.cons(1, 2)),
+    s.cons(1, 2));
   
   // 2 - copy an improper list
-  t(srfi1.list_copy(srfi1.cons(1, srfi1.cons(2, 3))),
-    srfi1.cons(1, srfi1.cons(2, 3)));
+  t(s.list_copy(s.cons(1, s.cons(2, 3))),
+    s.cons(1, s.cons(2, 3)));
   
   
   

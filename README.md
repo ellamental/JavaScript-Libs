@@ -12,3 +12,8 @@ collections.js
 --------------
 
 A library for operations on collections (arrays and object properties).
+
+srfi1.js
+--------
+
+A 'just for fun' implementation of the Scheme SRFI-1 linked list library in Javascript.

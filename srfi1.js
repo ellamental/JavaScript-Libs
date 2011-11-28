@@ -382,6 +382,27 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // Fold, unfold & map 
+  //
+  // Implemented: map
+  //
+  // Not yet implemented: for-each  fold  unfold  pair-fold  reduce
+  //                      fold-right  unfold-right  pair-fold-right
+  //                      reduce-right  append-map  append-map!  map!
+  //                      pair-for-each  filter-map  map-in-order
+  //________________________________________________________________________//
+  
+  map: function (fn, list) {
+    var l = null;
+    while (list !== null) {
+      l = this.cons(fn(list.car), l);
+      list = list.cdr;
+    }
+    return this.reverse(l);
+  },
+  
+  
+  //________________________________________________________________________//
   // Primitive side-effects
   //
   // Implemented: set_car  set_cdr
@@ -993,6 +1014,21 @@ var srfi1 = {
   t(s.unzip1(s.list(1, 2), s.list(3, 4)),
     s.list(1, 3));
 
+  
+  
+  //________________________________________________________________________//
+  // srfi1.map
+  //________________________________________________________________________//
+
+  current_method = "map";
+  counter = 0;
+  
+  // 0
+  t(s.map(function (x) { return x+1; }, s.list(1, 2, 3)),
+    s.list(2, 3, 4));
+  
+  
+  
   
   
   

@@ -410,8 +410,7 @@ var srfi1 = {
   // Not yet implemented: partition  remove  filter!  partition!  remove! //________________________________________________________________________//
   
   filter: function (fn, list) {
-    var l = null,
-        r;
+    var l = null;
     while (list !== null) {
       if (fn(list.car)) {
         l = this.cons(list.car, l);
@@ -419,6 +418,21 @@ var srfi1 = {
       list = list.cdr;
     }
     return this.reverse(l);
+  },
+  
+  partition: function (fn, list) {
+    var in_list = null,
+        out_list = null;
+    while (list !== null) {
+      if (fn(list.car)) {
+        in_list = this.cons(list.car, in_list);
+      }
+      else {
+        out_list = this.cons(list.car, out_list);
+      }
+      list = list.cdr;
+    }
+    return this.cons(this.reverse(in_list), this.reverse(out_list));
   },
   
   
@@ -1057,6 +1071,22 @@ var srfi1 = {
   // 0 - return list of values less than 3
   t(s.filter(function (x) { return x < 3; }, s.list(1, 2, 3, 4)),
     s.list(1, 2));
+  
+  
+  
+  
+  //________________________________________________________________________//
+  // srfi1.partition
+  //________________________________________________________________________//
+
+  current_method = "partition";
+  counter = 0;
+  
+  // 0 - partition on even?
+  t(s.partition(function (x) { return (x % 2) == 0; }, s.list(1, 2, 3, 4)),
+    s.cons(s.list(2, 4), s.list(1, 3)));
+  
+  
   
   
   

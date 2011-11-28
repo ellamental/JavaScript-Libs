@@ -403,6 +403,26 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // Filtering & partitioning 
+  //
+  // Implemented: filter
+  //
+  // Not yet implemented: partition  remove  filter!  partition!  remove! //________________________________________________________________________//
+  
+  filter: function (fn, list) {
+    var l = null,
+        r;
+    while (list !== null) {
+      if (fn(list.car)) {
+        l = this.cons(list.car, l);
+      }
+      list = list.cdr;
+    }
+    return this.reverse(l);
+  },
+  
+  
+  //________________________________________________________________________//
   // Primitive side-effects
   //
   // Implemented: set_car  set_cdr
@@ -1015,7 +1035,6 @@ var srfi1 = {
     s.list(1, 3));
 
   
-  
   //________________________________________________________________________//
   // srfi1.map
   //________________________________________________________________________//
@@ -1023,10 +1042,21 @@ var srfi1 = {
   current_method = "map";
   counter = 0;
   
-  // 0
+  // 0 - add 1 to each element of list
   t(s.map(function (x) { return x+1; }, s.list(1, 2, 3)),
     s.list(2, 3, 4));
   
+  
+  //________________________________________________________________________//
+  // srfi1.filter
+  //________________________________________________________________________//
+
+  current_method = "filter";
+  counter = 0;
+  
+  // 0 - return list of values less than 3
+  t(s.filter(function (x) { return x < 3; }, s.list(1, 2, 3, 4)),
+    s.list(1, 2));
   
   
   

@@ -280,11 +280,78 @@ var srfi1 = {
       list = list.cdr;
     }
     return list;
+  },
+  
+  
+  //________________________________________________________________________//
+  // Miscellaneous
+  //
+  // Implemented:  length
+  //
+  // Not yet implemented: length+  append  concatenate  reverse
+  //                      append!  concatenate!  reverse!  append-reverse
+  //                      append-reverse!  zip  unzip1  unzip2  unzip3
+  //                      unzip4  unzip5  count
+  //________________________________________________________________________//
+  
+  // should raise an error is passed a circular list
+  length: function (list) {
+    var len = 0;
+    while (list !== null) {
+      len += 1;
+      list = list.cdr;
+    }
+    return len;
+  },
+  
+  
+  //________________________________________________________________________//
+  // Primitive side-effects
+  //
+  // Implemented: set_car  set_cdr
+  //________________________________________________________________________//
+  
+  set_car: function (list, val) {
+    list.car = val;
+  },
+  
+  set_cdr: function (list, val) {
+    list.cdr = val;
+  },
+  
+  
+  //________________________________________________________________________//
+  // Implementation specific helper functions (not in srfi-1)
+  //
+  // Implemented: to_array  to_string
+  //________________________________________________________________________//
+  
+  to_array: function (list) {
+    // Converts list to a Javascript array
+    var a = [];
+    while (list !== null) {
+      a.push(list.car);
+    }
+    return a;
+  },
+  
+  to_string: function (list) {
+    // Return a string representation of list
+    var s = "(";
+    while (list !== null) {
+      if (list.car instanceof this.Pair) {
+        s += this.to_string(list.car);
+        if (list.cdr !== null) { s += " "; }
+      }
+      else {
+        s += list.car;
+        if (list.cdr !== null) { s += " "; }
+      }
+      list = list.cdr;
+    }
+    return s + ")"
   }
-  
-  
-  
-  
+
 };
 
 
@@ -775,7 +842,49 @@ var srfi1 = {
     s.cons(3, null));
   
   
+  //________________________________________________________________________//
+  // srfi1.length
+  //________________________________________________________________________//
+
+  current_method = "length";
+  counter = 0;
+  
+  // 0
+  t(s.length(s.list(0, 1, 2)),
+    3);
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  //________________________________________________________________________//
+  // srfi1.to_array
+  //________________________________________________________________________//
+
+  (function () {
+    var a = s.to_array(s.list(1, 2, 3)),
+        b = [1, 2, 3];
+    if (a<b || b<a) {
+      console.log("Test Failed! to_array");
+    }
+  });
+  
+  
+  //________________________________________________________________________//
+  // srfi1.to_string
+  //________________________________________________________________________//
+  
+  if (s.to_string(s.list(1, 2, 3)) !== "(1 2 3)") {
+    console.log("Test Failed! to_string");
+  }
+
+
+
   console.log("Tests completed!");
 })();

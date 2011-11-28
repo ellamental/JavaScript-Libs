@@ -168,9 +168,10 @@ var srfi1 = {
   // Selectors
   //
   // Implemented: car  cdr  rest(not srfi-1)  c...r  list_ref  first...tenth
+  //              take/drop
   //
-  // Not yet implemented: car_cdr(car+cdr)  take/drop  take/drop-right
-  //                      split_at  last  last_pair
+  // Not yet implemented: car_cdr(car+cdr)  take/drop-right  split_at
+  //                      last  last_pair
   //________________________________________________________________________//
   
   // Canonical Lisp accessor functions
@@ -210,7 +211,31 @@ var srfi1 = {
   seventh: function (p) { return this.list_ref(p, 6); },
   eighth:  function (p) { return this.list_ref(p, 7); },
   ninth:   function (p) { return this.list_ref(p, 8); },
-  tenth:   function (p) { return this.list_ref(p, 9); }
+  tenth:   function (p) { return this.list_ref(p, 9); },
+  
+  take: function (list, n) {
+    // take returns the first n elements of list x.  take is guaranteed to
+    // return a freshly-allocated list, even in the case where the entire
+    // list is taken.
+    if (n === 0) {
+      return null;
+    }
+    else {
+      return this.cons(list.car, this.take(list.cdr, n-1));
+    }
+  },
+  
+  drop: function (list, n) {
+    // drop returns all but the first n elements of list x.  drop is exactly
+    // equivalent to performing n cdr operations on x; the returned value
+    // shares a common tail with x.
+    for (var i=0; i < n; i++) {
+      list = list.cdr;
+    }
+    return list;
+  }
+  
+  
   
 };
 
@@ -601,6 +626,45 @@ var srfi1 = {
   t(s.tenth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
     10);
   
+  
+  //________________________________________________________________________//
+  // srfi1.take
+  //________________________________________________________________________//
+
+  current_method = "take";
+  counter = 0;
+  
+  // 0
+  t(s.take(s.list(1, 2, 3, 4), 2),
+    s.list(1, 2));
+  
+  // 1 - take with n = 0
+  t(s.take(s.list(1, 2, 3, 4), 0),
+    null);
+  
+  // 2 - take with n = list length
+  t(s.take(s.list(1, 2, 3, 4), 4),
+    s.list(1, 2, 3, 4));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.drop
+  //________________________________________________________________________//
+
+  current_method = "drop";
+  counter = 0;
+  
+  // 0
+  t(s.drop(s.list(1, 2, 3, 4), 2),
+    s.list(3, 4));
+  
+  // 1 - drop with n = 0
+  t(s.drop(s.list(1, 2, 3, 4), 0),
+    s.list(1, 2, 3, 4));
+  
+  // 2 - drop with n = list length
+  t(s.drop(s.list(1, 2, 3, 4), 4),
+    null);
   
   
   console.log("Tests completed!");

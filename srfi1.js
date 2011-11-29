@@ -446,6 +446,34 @@ var srfi1 = {
     return this.reverse(l);
   },
   
+  
+  //________________________________________________________________________//
+  // Searching
+  //
+  // Implemented:
+  //
+  // Not yet implemented: member  memq  memv  find  find-tail  any  every
+  //                      list-index  take-while  drop-while  take-while!
+  //                      span  break  span!  break!
+  //________________________________________________________________________//
+  
+  member: function (elem, list, fn) {
+    // returns the first sublist of list whose car is === to elem.
+    // fn is an optional parameter to specify a different equality procedure
+    // for example this.list(1, 2) === this.list(1, 2) returns false so an
+    // equailty procedure like this.equals is necessary to compare lists.
+    fn = (typeof fn === 'undefined') ? function (a, b) { return a === b; } : fn;
+    while (list !== null) {
+      if (fn(elem, list.car)) {
+        return list;
+      }
+      list = list.cdr;
+    }
+    return false;
+  },
+  
+  
+  
   //________________________________________________________________________//
   // Primitive side-effects
   //
@@ -1107,6 +1135,24 @@ var srfi1 = {
     s.list(3, 4));
   
   
+  //________________________________________________________________________//
+  // srfi1.member
+  //________________________________________________________________________//
+
+  current_method = "member";
+  counter = 0;
+  
+  // 0 - is 2 in (1 2 3)
+  t(s.member(2, s.list(1, 2, 3)),
+    s.list(2, 3));
+  
+  // 1 - is 5 in (1 2 3)
+  t(s.member(5, s.list(1, 2, 3)),
+    false);
+  
+  // 2 - using optional equality procedure (subtract 2 from elem and compare)
+  t(s.member(5, s.list(1, 2, 3), function (x, y) { return (x-3) === y; }),
+    s.list(2, 3));
   
   
   

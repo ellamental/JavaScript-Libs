@@ -472,6 +472,15 @@ var srfi1 = {
     return false;
   },
   
+  find: function (pred, list) {
+    while (list !== null) {
+      if (pred(list.car)) {
+        return list.car;
+      }
+      list = list.cdr;
+    }
+    return false;
+  },
   
   
   //________________________________________________________________________//
@@ -1153,6 +1162,26 @@ var srfi1 = {
   // 2 - using optional equality procedure (subtract 2 from elem and compare)
   t(s.member(5, s.list(1, 2, 3), function (x, y) { return (x-3) === y; }),
     s.list(2, 3));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.find
+  //________________________________________________________________________//
+
+  current_method = "find";
+  counter = 0;
+  
+  // 0 - even number in (1 2 3)
+  t(s.find(function (x) { return x % 2 === 0; }, s.list(1, 2, 3)),
+    2);
+  
+  // 1 - even number in (1 3 5)
+  t(s.find(function (x) { return x % 2 === 0; }, s.list(1, 3, 5)),
+    false);
+  
+  
+  
+  
   
   
   

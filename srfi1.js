@@ -482,6 +482,16 @@ var srfi1 = {
     return false;
   },
   
+  find_tail: function (pred, list) {
+    while (list !== null) {
+      if (pred(list.car)) {
+        return list;
+      }
+      list = list.cdr;
+    }
+    return false;
+  },
+  
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -1177,6 +1187,22 @@ var srfi1 = {
   
   // 1 - even number in (1 3 5)
   t(s.find(function (x) { return x % 2 === 0; }, s.list(1, 3, 5)),
+    false);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.find_tail
+  //________________________________________________________________________//
+
+  current_method = "find_tail";
+  counter = 0;
+  
+  // 0 - even number in (1 2 3)
+  t(s.find_tail(function (x) { return x % 2 === 0; }, s.list(1, 2, 3)),
+    s.list(2, 3));
+  
+  // 1 - even number in (1 3 5)
+  t(s.find_tail(function (x) { return x % 2 === 0; }, s.list(1, 3, 5)),
     false);
   
   

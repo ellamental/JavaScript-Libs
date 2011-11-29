@@ -469,11 +469,10 @@ var srfi1 = {
   //________________________________________________________________________//
   // Searching
   //
-  // Implemented: member  find  find-tail  any
+  // Implemented: member  find  find-tail  any  every
   //
-  // Not yet implemented: memq  memv  every
-  //                      list-index  take-while  drop-while  take-while!
-  //                      span  break  span!  break!
+  // Not yet implemented: memq  memv  list-index  take-while  drop-while
+  //                      take-while!  span  break  span!  break!
   //________________________________________________________________________//
   
   member: function (elem, list, fn) {
@@ -542,6 +541,33 @@ var srfi1 = {
     }
   },
 
+  every: function (pred /* list1 ...listn */) {
+    // Applies the predicate across the lists, returning the return value of
+    // pred if the predicate returns a truthy value on every application.
+    // pred must be a function taking n arguments and returning a boolean
+    // result, where n is the number of list arguments passed to every.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        temp_array = [],
+        values, v, i;
+    while (true) {
+      values = [];
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return v;
+        }
+      }
+      v = pred.apply(pred, values);
+      if (!v) {
+        return false;
+      }
+    }
+  },
+  
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -1313,6 +1339,40 @@ var srfi1 = {
           s.list(1, 2, 3, 4, 5)),
     2);
 
+  
+  //________________________________________________________________________//
+  // srfi1.every
+  //________________________________________________________________________//
+
+  current_method = "every";
+  counter = 0;
+  
+  // 0 - every > 0
+  t(s.every(function (x) { return x > 0; }, s.list(1, 2, 3)),
+    true);
+  
+  // 1 - every > 0
+  t(s.every(function (x) { return x > 0; }, s.list(1, -2, 3)),
+    false);
+  
+  // 2 - every with 2 lists
+  t(s.every(function (x, y) { return x > 0 && y > 0; },
+            s.list(1, 2, 3),
+            s.list(4, 5, 6)),
+    true);
+  
+  // 3 - every with 2 lists
+  t(s.every(function (x, y) { return x > 0 && y > 0; },
+            s.list(1, 2, 3),
+            s.list(4, -5, 6)),
+    false);
+
+  // 4 - every return value
+  t(s.every(function (x) { if (x > 0) { return x; } }, s.list(1, 2, 3)),
+    3);
+  
+  
+  
   
   
   

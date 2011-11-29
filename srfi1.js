@@ -405,7 +405,7 @@ var srfi1 = {
       values = [];
       for (i=num_args-1; i >= 0; i--) {
         if (args[i] !== null) {
-          values.push(args[i].car);// = this.cons(args[i].car, values);
+          values.push(args[i].car);
           args[i] = args[i].cdr;
         }
         else {
@@ -469,9 +469,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Searching
   //
-  // Implemented:
+  // Implemented: member  find  find-tail  any
   //
-  // Not yet implemented: member  memq  memv  find  find-tail  any  every
+  // Not yet implemented: memq  memv  every
   //                      list-index  take-while  drop-while  take-while!
   //                      span  break  span!  break!
   //________________________________________________________________________//
@@ -515,6 +515,33 @@ var srfi1 = {
     return false;
   },
   
+  any: function (pred /* list1 ...listn */) {
+    // Applies the predicate across the lists, returning the return value of
+    // pred if the predicate returns a truthy value on any application.
+    // pred must be a function taking n arguments and returning a boolean
+    // result, where n is the number of list arguments passed to any.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        temp_array = [],
+        values, v, i;
+    while (true) {
+      values = [];
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return false;
+        }
+      }
+      v = pred.apply(pred, values);
+      if (v) {
+        return v;
+      }
+    }
+  },
+
   
   //________________________________________________________________________//
   // Primitive side-effects
@@ -1254,7 +1281,38 @@ var srfi1 = {
     false);
   
   
+  //________________________________________________________________________//
+  // srfi1.any
+  //________________________________________________________________________//
+
+  current_method = "any";
+  counter = 0;
   
+  // 0 - any even?
+  t(s.any(function (x) { return x % 2 === 0; }, s.list(1, 2, 3)),
+    true);
+  
+  // 1 - any even?
+  t(s.any(function (x) { return x % 2 === 0; }, s.list(1, 3, 5)),
+    false);
+  
+  // 2 - any with 2 lists
+  t(s.any(function (x, y) { return x === y; },
+          s.list(1, 2, 3),
+          s.list(3, 2, 1)),
+    true);
+  
+  // 3 - any with 2 lists
+  t(s.any(function (x, y) { return x === y; },
+          s.list(1, 2, 3),
+          s.list(2, 3, 1)),
+    false);
+  
+  // 4 - any return value
+  t(s.any(function (x) { if (x % 2 === 0) { return x; } },
+          s.list(1, 2, 3, 4, 5)),
+    2);
+
   
   
   

@@ -17,6 +17,11 @@
 // <http://www.gnu.org/licenses/>.
 //___________________________________________________________________________//
 
+// Putting the "use strict" statement here will affect all other files that 
+// are concatenated with this code.  If this file is concatenated with other 
+// files and they suddenly start breaking, comment this out.  For me this is 
+// preferable to adding "use strict" to every function definition in this file.
+"use strict";
 
 
 var srfi1 = {
@@ -374,7 +379,7 @@ var srfi1 = {
     // one element, and returns a list containing the initial element of each
     // such list. That is, it returns (map car lists)
     var l = null;
-    for (i=arguments.length-1; i >= 0; i--) {
+    for (var i=arguments.length-1; i >= 0; i--) {
       l = this.cons(arguments[i].car, l);
     }
     return l;
@@ -595,6 +600,7 @@ var srfi1 = {
     var a = [];
     while (list !== null) {
       a.push(list.car);
+      list = list.cdr;
     }
     return a;
   },
@@ -613,7 +619,7 @@ var srfi1 = {
       }
       list = list.cdr;
     }
-    return s + ")"
+    return s + ")";
   }
 
 };
@@ -1239,7 +1245,7 @@ var srfi1 = {
   counter = 0;
   
   // 0 - partition on even?
-  t(s.partition(function (x) { return (x % 2) == 0; }, s.list(1, 2, 3, 4)),
+  t(s.partition(function (x) { return (x % 2) === 0; }, s.list(1, 2, 3, 4)),
     s.cons(s.list(2, 4), s.list(1, 3)));
   
   
@@ -1391,7 +1397,7 @@ var srfi1 = {
     if (a<b || b<a) {
       console.log("Test Failed! to_array");
     }
-  });
+  })();
   
   
   //________________________________________________________________________//

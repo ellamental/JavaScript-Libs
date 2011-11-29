@@ -392,13 +392,28 @@ var srfi1 = {
   //                      pair-for-each  filter-map  map-in-order
   //________________________________________________________________________//
   
-  map: function (fn, list) {
-    var l = null;
-    while (list !== null) {
-      l = this.cons(fn(list.car), l);
-      list = list.cdr;
+  map: function (fn) {
+    // fn is a function taking as many arguments as there are list arguments
+    // and returning a single value. map applies fn element-wise to the 
+    // elements of the lists and returns a list of the results, in order.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        temp_array = [],
+        values,
+        i;
+    while (true) {
+      values = [];
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values.push(args[i].car);// = this.cons(args[i].car, values);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return this.list.apply(this, temp_array);
+        }
+      }
+      temp_array.push(fn.apply(fn, values));
     }
-    return this.reverse(l);
   },
   
   
@@ -1125,6 +1140,31 @@ var srfi1 = {
   t(s.map(function (x) { return x+1; }, s.list(1, 2, 3)),
     s.list(2, 3, 4));
   
+  // 1 - map with 2 lists
+  t(s.map(function (x, y) { return x+y; },
+           s.list(1, 2, 3),
+           s.list(3, 4, 5)),
+    s.list(4, 6, 8));
+  
+  // 2 - map with unequal length lists
+  t(s.map(function (x, y) { return x+y; },
+           s.list(1, 2, 3, 4),
+           s.list(3, 4, 5)),
+    s.list(4, 6, 8));
+  
+  // 3 - map with unequal length lists
+  t(s.map(function (x, y) { return x+y; },
+           s.list(1, 2, 3),
+           s.list(3, 4, 5, 6)),
+    s.list(4, 6, 8));
+  
+  // 4 - map with 3 lists
+  t(s.map(function (x, y, z) { return x+y+z; },
+           s.list(1, 2, 3, 10),
+           s.list(3, 4, 5),
+           s.list(3, 2, 1, 20, 30)),
+    s.list(7, 8, 9));
+
   
   //________________________________________________________________________//
   // srfi1.filter

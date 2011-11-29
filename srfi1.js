@@ -409,10 +409,11 @@ var srfi1 = {
   //
   // Not yet implemented: filter!  partition!  remove! //________________________________________________________________________//
   
-  filter: function (fn, list) {
+  filter: function (pred, list) {
+    // Return all the elements of list that satisfy predicate pred.
     var l = null;
     while (list !== null) {
-      if (fn(list.car)) {
+      if (pred(list.car)) {
         l = this.cons(list.car, l);
       }
       list = list.cdr;
@@ -420,11 +421,13 @@ var srfi1 = {
     return this.reverse(l);
   },
   
-  partition: function (fn, list) {
+  partition: function (pred, list) {
+    // Partitions the elements of list with predicate pred, and returns two
+    // values: the list of in-elements and the list of out-elements.
     var in_list = null,
         out_list = null;
     while (list !== null) {
-      if (fn(list.car)) {
+      if (pred(list.car)) {
         in_list = this.cons(list.car, in_list);
       }
       else {
@@ -435,10 +438,11 @@ var srfi1 = {
     return this.cons(this.reverse(in_list), this.reverse(out_list));
   },
   
-  remove: function (fn, list) {
+  remove: function (pred, list) {
+    // Returns list without the elements that satisfy predicate pred
     var l = null;
     while (list !== null) {
-      if (!fn(list.car)) {
+      if (!pred(list.car)) {
         l = this.cons(list.car, l);
       }
       list = list.cdr;
@@ -473,6 +477,8 @@ var srfi1 = {
   },
   
   find: function (pred, list) {
+    // Return the first element of clist that satisfies predicate pred; 
+    // false if no element does. 
     while (list !== null) {
       if (pred(list.car)) {
         return list.car;
@@ -483,6 +489,8 @@ var srfi1 = {
   },
   
   find_tail: function (pred, list) {
+    // Return the first pair of clist whose car satisfies pred. If no pair
+    // does, return false. 
     while (list !== null) {
       if (pred(list.car)) {
         return list;

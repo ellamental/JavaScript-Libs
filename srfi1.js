@@ -93,7 +93,7 @@ var srfi1 = {
     return new this.Pair(car, cdr);
   },
   
-  list: function () {
+  list: function (/* elem, ..., elem-n */) {
     var lst = null;
     for (var i=arguments.length-1; i >= 0; i--) {
       lst = this.cons(arguments[i], lst);
@@ -106,7 +106,7 @@ var srfi1 = {
     return this.cons(car, cdr);
   },
   
-  cons_list: function () {
+  cons_list: function (/* elem, ..., elem-n */) {
     // cons* - like list except the last value is used as the tail
     var last_arg = arguments.length-1,
         lst = arguments[last_arg];
@@ -309,10 +309,10 @@ var srfi1 = {
     return len;
   },
   
-  // This should be rewritten to traverse backward over the arguments.  The 
-  // current implementation creates n! copies of the intermediate list where 
+  // This should be rewritten to traverse backward over the arguments.  The
+  // current implementation creates n! copies of the intermediate list where
   // n = the number of arguments.
-  append: function (a, b, c) {
+  append: function (a, b, c /* ... list-n */) {
     // append returns a list consisting of the elements of list1 followed by
     // the elements of the other list parameters.
     // The resulting list is always newly allocated, except that it shares
@@ -352,7 +352,7 @@ var srfi1 = {
     return l;
   },
   
-  zip: function () {
+  zip: function (/* list, ..., list-n */) {
     // convert arguments to an array
     var args = Array.prototype.slice.call(arguments, 0),
         num_args = args.length,
@@ -374,7 +374,7 @@ var srfi1 = {
     }
   },
     
-  unzip1: function () {
+  unzip1: function (/* list, ..., list-n */) {
     // unzip1 takes a list of lists, where every list must contain at least
     // one element, and returns a list containing the initial element of each
     // such list. That is, it returns (map car lists)
@@ -397,9 +397,9 @@ var srfi1 = {
   //                      pair-for-each  filter-map  map-in-order
   //________________________________________________________________________//
   
-  map: function (fn) {
+  map: function (fn /* list, ..., list-n */) {
     // fn is a function taking as many arguments as there are list arguments
-    // and returning a single value. map applies fn element-wise to the 
+    // and returning a single value. map applies fn element-wise to the
     // elements of the lists and returns a list of the results, in order.
     var args = Array.prototype.slice.call(arguments, 1),
         num_args = args.length,
@@ -519,7 +519,7 @@ var srfi1 = {
     return false;
   },
   
-  any: function (pred /* list1 ...listn */) {
+  any: function (pred /* list1, ..., listn */) {
     // Applies the predicate across the lists, returning the return value of
     // pred if the predicate returns a truthy value on any application.
     // pred must be a function taking n arguments and returning a boolean
@@ -546,7 +546,7 @@ var srfi1 = {
     }
   },
 
-  every: function (pred /* list1 ...listn */) {
+  every: function (pred /* list1, ..., listn */) {
     // Applies the predicate across the lists, returning the return value of
     // pred if the predicate returns a truthy value on every application.
     // pred must be a function taking n arguments and returning a boolean

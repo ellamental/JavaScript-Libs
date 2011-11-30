@@ -387,7 +387,7 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
-  // Fold, unfold & map 
+  // Fold, unfold & map
   //
   // Implemented: map
   //
@@ -423,7 +423,7 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
-  // Filtering & partitioning 
+  // Filtering & partitioning
   //
   // Implemented: filter  partition  remove
   //
@@ -595,7 +595,32 @@ var srfi1 = {
     return this.reverse(tmp_list);
   },
   
-
+  
+  //________________________________________________________________________//
+  // Association lists
+  //
+  // Implemented: assoc
+  //
+  // Not yet implemented: assq  assv  alist-cons  alist-copy
+  //                      alist-delete  alist-delete!
+  //________________________________________________________________________//
+  
+  assoc: function (key, alist, eq) {
+    // alist must be an association list -- a list of pairs. assoc finds the 
+    // first pair in alist whose car field is key, and returns that pair. If 
+    // no pair in alist has key as its car, then false is returned.
+    var eq = (typeof eq === 'undefined') ? function (a, b) { return a === b; } :
+                                           eq;
+    while (alist !== null) {
+      if (eq(key, alist.car.car)) {
+        return alist.car;
+      }
+      alist = alist.cdr;
+    }
+    return false;
+  },
+  
+  
   //________________________________________________________________________//
   // Primitive side-effects
   //
@@ -1414,7 +1439,27 @@ var srfi1 = {
   // 1 - with custom equality function
   t(s.delete(1, s.list(1, 2, 3), function (a, b) { return a+1 === b; }),
     s.list(1, 3));
+
   
+  //________________________________________________________________________//
+  // srfi1.assoc
+  //________________________________________________________________________//
+
+  current_method = "assoc";
+  counter = 0;
+  
+  // 0
+  t(s.assoc(2, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6))),
+    s.cons(2, 5));
+  
+  // 1 - not found
+  t(s.assoc(5, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6))),
+    false);
+  
+  // 2 - custom equality function
+  t(s.assoc(2, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6)),
+            function (a, b) { return a+1 === b; }),
+    s.cons(2, 5));
   
   
   

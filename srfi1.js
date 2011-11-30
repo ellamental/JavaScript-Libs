@@ -575,6 +575,28 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // Deleting
+  //
+  // Implemented: delete
+  //
+  // Not yet implemented: delete-duplicates  delete!  delete-duplicates!
+  //________________________________________________________________________//
+  
+  delete: function (x, list, eq_fn) {
+    var tmp_list = null,
+        eq_fn = (typeof eq_fn === 'undefined') ? function (a, b) { return a === b; } :
+                                                   eq_fn;
+    while (list !== null) {
+      if (!(eq_fn(x, list.car))) {
+        tmp_list = this.cons(list.car, tmp_list);
+      }
+      list = list.cdr;
+    }
+    return this.reverse(tmp_list);
+  },
+  
+
+  //________________________________________________________________________//
   // Primitive side-effects
   //
   // Implemented: set_car  set_cdr
@@ -1376,6 +1398,23 @@ var srfi1 = {
   // 4 - every return value
   t(s.every(function (x) { if (x > 0) { return x; } }, s.list(1, 2, 3)),
     3);
+
+  
+  //________________________________________________________________________//
+  // srfi1.delete
+  //________________________________________________________________________//
+
+  current_method = "delete";
+  counter = 0;
+  
+  // 0
+  t(s.delete(2, s.list(1, 2, 3)),
+    s.list(1, 3));
+  
+  // 1 - with custom equality function
+  t(s.delete(1, s.list(1, 2, 3), function (a, b) { return a+1 === b; }),
+    s.list(1, 3));
+  
   
   
   

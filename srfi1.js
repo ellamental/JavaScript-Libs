@@ -379,18 +379,36 @@ var srfi1 = {
   //________________________________________________________________________//
   // Miscellaneous
   //
-  // Implemented:  length  append  reverse  zip  unzip1
+  // Implemented:  length  length_plus  append  reverse  zip  unzip1
   //
-  // Not yet implemented: length+  concatenate
+  // Not yet implemented: concatenate
   //                      append!  concatenate!  reverse!  append-reverse
   //                      append-reverse!  unzip2  unzip3
   //                      unzip4  unzip5  count
   //________________________________________________________________________//
   
-  // should raise an error if passed a circular list
   length: function (list) {
+    // It is an error to pass a value to length which is not a proper and null
+    // terminated list.  This implementation allows for improper lists and
+    // will return the number of pairs which make up the list.
     var len = 0;
     while (list instanceof this.Pair) {
+      len += 1;
+      list = list.cdr;
+    }
+    return len;
+  },
+  
+  length_plus: function (list) {
+    // Same as length, but returns false when given a circular list.
+    var head = list,
+        len = 1;
+    if (list === null) { return 0; }
+    list = list.cdr;
+    while (list instanceof this.Pair) {
+      if (list === head) {
+        return false;
+      }
       len += 1;
       list = list.cdr;
     }
@@ -1503,6 +1521,34 @@ var srfi1 = {
   // 3 - length of an improper list
   t(s.length(s.cons(1, s.cons(2, 3))),
     2);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.length_plus
+  //________________________________________________________________________//
+
+  current_method = "length_plus";
+  counter = 0;
+  
+  // 0 - the empty list
+  t(s.length_plus(null),
+    0);
+  
+  // 1 - list of length 3
+  t(s.length_plus(s.list(1, 2, 3)),
+    3);
+  
+  // 2 - length of a pair
+  t(s.length_plus(s.cons(1, 2)),
+    1);
+  
+  // 3 - length of an improper list
+  t(s.length_plus(s.cons(1, s.cons(2, 3))),
+    2);
+  
+  // 4 - length of a circular list
+  t(s.length_plus(s.circular_list(1)),
+    false)
   
   
   //________________________________________________________________________//

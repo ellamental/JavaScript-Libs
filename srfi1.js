@@ -866,6 +866,10 @@ var srfi1 = {
       list = list.cdr;
     }
     return s + ")";
+  },
+  
+  array_to_list: function (a) {
+    return this.list.apply(this, a);
   }
 
 };
@@ -1962,6 +1966,14 @@ var srfi1 = {
   if (s.to_string(s.list(1, 2, 3)) !== "(1 2 3)") {
     console.log("Test Failed! to_string");
   }
+  
+  
+  //________________________________________________________________________//
+  // srfi1.array_to_list
+  //________________________________________________________________________//
+  
+  t(s.array_to_list([1, 2, 3]),
+    s.list(1, 2, 3));
 
 
 

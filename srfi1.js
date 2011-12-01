@@ -573,6 +573,34 @@ var srfi1 = {
     }
   },
   
+  list_index: function (pred /* list1, ..., listn */) {
+    // Applies the predicate across the lists, returning the return value of
+    // pred if the predicate returns a truthy value on any application.
+    // pred must be a function taking n arguments and returning a boolean
+    // result, where n is the number of list arguments passed to any.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        temp_array = [],
+        count = 0,
+        values, i;
+    while (true) {
+      values = [];
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return false;
+        }
+      }
+      if (pred.apply(pred, values)) {
+        return count;
+      }
+      count += 1;
+    }
+  },
+  
   
   //________________________________________________________________________//
   // Deleting
@@ -1447,6 +1475,30 @@ var srfi1 = {
   t(s.every(function (x) { if (x > 0) { return x; } }, s.list(1, 2, 3)),
     3);
 
+  
+  //________________________________________________________________________//
+  // srfi1.list_index
+  //________________________________________________________________________//
+
+  current_method = "list_index";
+  counter = 0;
+  
+  // 0 - single list
+  t(s.list_index(function (x) { return x === 2; },
+                 s.list(1, 2, 3)),
+    1);
+
+  // 1 - not in list
+  t(s.list_index(function (x) { return x === 6; },
+                 s.list(1, 2, 3)),
+    false);
+  
+  // 1 - 2 lists
+  t(s.list_index(function (x, y) { return x === y; },
+                 s.list(1, 2, 3),
+                 s.list(3, 2, 1)),
+    1);
+  
   
   //________________________________________________________________________//
   // srfi1.delete

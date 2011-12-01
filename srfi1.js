@@ -82,10 +82,10 @@ var srfi1 = {
   //________________________________________________________________________//
   // Constructors
   //
-  // Implemented: cons  list  xcons  cons_list(cons*)  make-list
-  //              list-tabulate  list-copy
+  // Implemented: cons  list  xcons  cons_list(cons*)  make_list
+  //              list_tabulate  list_copy  circular_list
   //
-  // Not yet implemented: circular-list  iota
+  // Not yet implemented:  iota
   //________________________________________________________________________//
   
   cons: function (car, cdr) {
@@ -145,6 +145,18 @@ var srfi1 = {
       return lst;
     }
   },
+  
+  circular_list: function (/* elem, ..., elem-n */) {
+    var first_node = this.cons(arguments[0], null),
+        lst = first_node;
+    for (var i=arguments.length-1; i >= 1; i--) {
+      lst = this.cons(arguments[i], lst);
+    }
+    first_node.cdr = lst;
+    return first_node;
+  },
+  
+
   
   
   //________________________________________________________________________//
@@ -627,12 +639,16 @@ var srfi1 = {
   //________________________________________________________________________//
   // Deleting
   //
-  // Implemented: delete
+  // Implemented: delete_elem(delete)
   //
   // Not yet implemented: delete-duplicates  delete!  delete-duplicates!
   //________________________________________________________________________//
   
-  delete: function (x, list, eq_fn) {
+  delete_elem: function (x, list, eq_fn) {
+    // delete_elem uses the comparison function eq_fn, which defaults to ===, 
+    // to create a new list without any element equal to x.
+    // Renamed from delete because reserved words are not allowed as object 
+    // properties in older (< ECMA 5) implementations.
     var tmp_list = null;
     eq_fn = (typeof eq_fn === 'undefined') ? function (a, b) { return a === b; } :
                                                    eq_fn;
@@ -649,9 +665,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Association lists
   //
-  // Implemented: assoc  alist_cons
+  // Implemented: assoc  alist_cons  alist-copy
   //
-  // Not yet implemented: assq  assv  alist-copy
+  // Not yet implemented: assq  assv
   //                      alist-delete  alist-delete!
   //________________________________________________________________________//
   
@@ -944,6 +960,18 @@ var srfi1 = {
   // 2 - copy an improper list
   t(s.list_copy(s.cons(1, s.cons(2, 3))),
     s.cons(1, s.cons(2, 3)));
+  
+
+  //________________________________________________________________________//
+  // srfi1.circular_list
+  //________________________________________________________________________//
+
+  current_method = "circular_list";
+  counter = 0;
+  
+  // 0
+  t(s.circular_list(0, 1).cdr.cdr.car,
+    0);
   
 
   //________________________________________________________________________//
@@ -1566,18 +1594,18 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
-  // srfi1.delete
+  // srfi1.delete_elem
   //________________________________________________________________________//
 
-  current_method = "delete";
+  current_method = "delete_elem";
   counter = 0;
   
   // 0
-  t(s.delete(2, s.list(1, 2, 3)),
+  t(s.delete_elem(2, s.list(1, 2, 3)),
     s.list(1, 3));
   
   // 1 - with custom equality function
-  t(s.delete(1, s.list(1, 2, 3), function (a, b) { return a+1 === b; }),
+  t(s.delete_elem(1, s.list(1, 2, 3), function (a, b) { return a+1 === b; }),
     s.list(1, 3));
 
   

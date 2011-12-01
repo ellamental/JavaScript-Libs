@@ -415,6 +415,22 @@ var srfi1 = {
     return len;
   },
   
+  length_circular: function (list) {
+    // Same as length_plus but returns the length of circular lists.
+    var head = list,
+        len = 1;
+    if (list === null) { return 0; }
+    list = list.cdr;
+    while (list instanceof this.Pair) {
+      if (list === head) {
+        return len;
+      }
+      len += 1;
+      list = list.cdr;
+    }
+    return len;
+  },
+  
   // This should be rewritten to traverse backward over the arguments.  The
   // current implementation creates n! copies of the intermediate list where
   // n = the number of arguments.
@@ -1552,7 +1568,39 @@ var srfi1 = {
   
   // 4 - length of a circular list
   t(s.length_plus(s.circular_list(1)),
-    false)
+    false);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.length_plus
+  //________________________________________________________________________//
+
+  current_method = "length_plus";
+  counter = 0;
+  
+  // 0 - the empty list
+  t(s.length_plus(null),
+    0);
+  
+  // 1 - list of length 3
+  t(s.length_plus(s.list(1, 2, 3)),
+    3);
+  
+  // 2 - length of a pair
+  t(s.length_plus(s.cons(1, 2)),
+    1);
+  
+  // 3 - length of an improper list
+  t(s.length_plus(s.cons(1, s.cons(2, 3))),
+    2);
+  
+  // 4 - length of a circular list
+  t(s.length_plus(s.circular_list(1)),
+    1);
+  
+  // 5 - length of a circular list
+  t(s.length_plus(s.circular_list(1, 2, 3)),
+    3);
   
   
   //________________________________________________________________________//

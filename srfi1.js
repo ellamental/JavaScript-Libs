@@ -421,6 +421,28 @@ var srfi1 = {
     }
   },
   
+  fold: function (kons, nil /* list, ..., list-n */) {
+    var args = Array.prototype.slice.call(arguments, 2),
+        num_args = args.length,
+        temp = nil,
+        values,
+        i;
+    while (true) {
+      values = [];
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return temp;
+        }
+      }
+      values.push(temp);
+      temp = kons.apply(kons, values);
+    }
+
+  },
   
   //________________________________________________________________________//
   // Filtering & partitioning
@@ -611,8 +633,8 @@ var srfi1 = {
   //________________________________________________________________________//
   
   delete: function (x, list, eq_fn) {
-    var tmp_list = null,
-        eq_fn = (typeof eq_fn === 'undefined') ? function (a, b) { return a === b; } :
+    var tmp_list = null;
+    eq_fn = (typeof eq_fn === 'undefined') ? function (a, b) { return a === b; } :
                                                    eq_fn;
     while (list !== null) {
       if (!(eq_fn(x, list.car))) {
@@ -637,8 +659,8 @@ var srfi1 = {
     // alist must be an association list -- a list of pairs. assoc finds the 
     // first pair in alist whose car field is key, and returns that pair. If 
     // no pair in alist has key as its car, then false is returned.
-    var eq = (typeof eq === 'undefined') ? function (a, b) { return a === b; } :
-                                           eq;
+    eq = (typeof eq === 'undefined') ? function (a, b) { return a === b; } :
+                                       eq;
     while (alist !== null) {
       if (eq(key, alist.car.car)) {
         return alist.car;
@@ -1324,6 +1346,33 @@ var srfi1 = {
 
   
   //________________________________________________________________________//
+  // srfi1.fold
+  //________________________________________________________________________//
+
+  current_method = "fold";
+  counter = 0;
+  
+  // 0 - add
+  t(s.fold(function (a, b) { return a + b; },
+           0,
+           s.list(1, 2, 3)),
+    6);
+  
+  // 1 - cons (reverse list)
+  t(s.fold(function (a, b) { return s.cons(a, b); },
+           null,
+           s.list(1, 2, 3)),
+    s.list(3, 2, 1));
+  
+  // 2 - add and cons
+  t(s.fold(function (a, b, c) { return s.cons(a+b, c); },
+           null,
+           s.list(1, 2, 3),
+           s.list(4, 5, 6)),
+    s.list(5, 7, 9));
+
+  
+  //________________________________________________________________________//
   // srfi1.filter
   //________________________________________________________________________//
 
@@ -1549,6 +1598,9 @@ var srfi1 = {
                  s.list(1, 2, 3),
                  s.list(2, 3, 4, 5)),
     s.list(5, 4, 1, 2, 3));
+  
+  
+  
   
   
   

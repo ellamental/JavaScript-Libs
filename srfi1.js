@@ -247,6 +247,15 @@ var srfi1 = {
     return true;
   },
   
+  is_null_list: function (list) {
+    if (list === null) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+  
   
   //________________________________________________________________________//
   // Selectors
@@ -1207,6 +1216,24 @@ var srfi1 = {
   // 5 - improper lists are dotted lists
   t(s.is_dotted_list(s.cons(1, s.cons(2, 3))),
     true);
+  
+  
+  
+  //________________________________________________________________________//
+  // srfi1.is_dotted_list
+  //________________________________________________________________________//
+
+  current_method = "is_dotted_list";
+  counter = 0;
+  
+  // 0 - null is the only value for which this function will return true
+  t(s.is_null_list(null),
+    true);
+  
+  // 1 - list
+  t(s.is_null_list(s.list(1, 2, 3)),
+    false);
+  
   
   //________________________________________________________________________//
   // srfi1.car and srfi1.first

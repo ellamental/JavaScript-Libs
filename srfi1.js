@@ -83,9 +83,7 @@ var srfi1 = {
   // Constructors
   //
   // Implemented: cons  list  xcons  cons_list(cons*)  make_list
-  //              list_tabulate  list_copy  circular_list
-  //
-  // Not yet implemented:  iota
+  //              list_tabulate  list_copy  circular_list  iota
   //________________________________________________________________________//
   
   cons: function (car, cdr) {
@@ -138,6 +136,7 @@ var srfi1 = {
   },
   
   list_copy: function (lst) {
+    // Return a shallow copy of lst
     if (lst instanceof this.Pair) {
       return this.cons(lst.car, this.list_copy(lst.cdr));
     }
@@ -156,7 +155,25 @@ var srfi1 = {
     return first_node;
   },
   
-
+  iota: function (start, stop, step) {
+    // Returns a list containing the elements:
+    // (start start+step ... start+(count-1)*step)
+    // The start and step parameters default to 0 and 1, respectively.
+    step = (typeof step === 'undefined') ? 1 : step;
+    if (typeof stop === 'undefined') {
+      stop = start;
+      start = 0;
+    }
+    else {
+      stop = start + stop;
+    }
+    var temp = [];
+    
+    for (var i = start; i < stop; i += step) {
+      temp.push(i);
+    }
+    return this.list.apply(this, temp);
+  },
   
   
   //________________________________________________________________________//
@@ -974,6 +991,30 @@ var srfi1 = {
     0);
   
 
+  //________________________________________________________________________//
+  // srfi1.iota
+  //________________________________________________________________________//
+
+  current_method = "iota";
+  counter = 0;
+  
+  // 0 - 1 argument
+  t(s.iota(3),
+    s.list(0, 1, 2));
+  
+  // 1 - start and stop arguments from 0
+  t(s.iota(0, 3),
+    s.list(0, 1, 2));
+  
+  // 2 - start and stop arguments from 2
+  t(s.iota(2, 3),
+    s.list(2, 3, 4));
+  
+  // 3 - start, stop and step arguments
+  t(s.iota(1, 0.3, 0.1),
+    s.list(1, 1.1, 1.2));
+  
+  
   //________________________________________________________________________//
   // srfi1.isPair and srfi1.notPair
   //________________________________________________________________________//

@@ -1,19 +1,33 @@
-jslibs
+srfi1
 ======
 
-jslibs is a collection of miscellaneous Javascript libraries.  These libraries are meant for my own personal use and education and probably should not be used in production code.
+srfi1 is a Javascript implementation of the SRFI-1 linked list library for Scheme.  This is a 'just for fun' implementation and probably shouldn't be used in production work.
 
-random.js
----------
+[Documentation for SRFI-1 can be found here.]()
 
-A library for psudo-random selection of numbers or elements in a collection (currently focusing on array objects, but will be extended to work on objects as well).
+*** Naming ***
 
-collections.js
---------------
+Javascript allows far fewer special characters in variable/property names, therefore the following conventions have been used:
 
-A library for operations on collections (arrays and object properties).
+* '-' characters in procedure names have been changed to '_'
+* procedures which end in a '?' use the 'is_' prefix and do not have a '?'
+* procedures which end in a '!' use the '_d' suffix to signal a potentially destructive operation, and do not have a '!'
 
-srfi1.js
---------
 
-A 'just for fun' implementation of the Scheme SRFI-1 linked list library in Javascript.
+*** Differences ***
+
+length/length_plus
+Both length and length_plus allow operations on improper lists, where they return the number of Pairs in the list.  For example the list (1 2 3) is length 3 while the list (1 2 . 3) is length 2.
+
+
+
+*** Additions ***
+
+to_array
+Convert a list into a Javascript array.
+
+to_string
+Return a string representation of a list.
+
+array_to_list
+Convert an array into a list.

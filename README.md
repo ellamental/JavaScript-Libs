@@ -14,7 +14,7 @@ Javascript allows far fewer special characters in variable/property names, there
 * '-' characters in procedure names have been changed to '_'
 * procedures which end in a '?' use the 'is_' prefix and do not have a '?'
 * procedures which end in a '!' use the '_d' suffix to signal a potentially destructive operation, and do not have a '!'
-* Misc: length+ has been renamed to length_plus and cons* has been renamed to cons_list
+* Misc: length+ has been renamed to length\_plus and cons* has been renamed to cons\_list
 
 
 
@@ -41,6 +41,6 @@ Convert an array into a list.
 
 
 
-### Tests ###
+## Tests ##
 
 A test suite is included in the library.  Currently it is part of the main srfi1.js file and is run upon loading the library.

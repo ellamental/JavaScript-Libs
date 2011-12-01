@@ -394,10 +394,10 @@ var srfi1 = {
   //________________________________________________________________________//
   // Miscellaneous
   //
-  // Implemented:  length  length_plus  append  concatenate  reverse  zip
-  //               unzip1  unzip2  unzip3  unzip4  unzip5
+  // Implemented:  length  length_plus  append  concatenate  reverse
+  //               append-reverse  zip  unzip1  unzip2  unzip3  unzip4  unzip5
   //
-  // Not yet implemented: append!  concatenate!  reverse!  append-reverse
+  // Not yet implemented: append!  concatenate!  reverse!
   //                      append-reverse!  count
   //________________________________________________________________________//
   
@@ -495,6 +495,15 @@ var srfi1 = {
     // reverse returns a newly allocated list consisting of the elements 
     // of list in reverse order. 
     var l = null;
+    while (list !== null) {
+      l = this.cons(list.car, l);
+      list = list.cdr;
+    }
+    return l;
+  },
+  
+  append_reverse: function (list, tail) {
+    var l = tail;
     while (list !== null) {
       l = this.cons(list.car, l);
       list = list.cdr;
@@ -1739,7 +1748,19 @@ var srfi1 = {
   // 0
   t(s.reverse(s.list(1, 2, 3)),
     s.list(3, 2, 1));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.append_reverse
+  //________________________________________________________________________//
 
+  current_method = "append_reverse";
+  counter = 0;
+  
+  // 0
+  t(s.append_reverse(s.list(1, 2, 3), s.list(4, 5, 6)),
+    s.list(3, 2, 1, 4, 5, 6));
+  
   
   //________________________________________________________________________//
   // srfi1.zip

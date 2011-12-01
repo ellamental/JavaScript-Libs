@@ -396,9 +396,9 @@ var srfi1 = {
   //
   // Implemented:  length  length_plus  append  concatenate  reverse
   //               append-reverse  zip  unzip1  unzip2  unzip3  unzip4  unzip5
+  //               count
   //
-  // Not yet implemented: append!  concatenate!  reverse!
-  //                      append-reverse!  count
+  // Not yet implemented: append!  concatenate!  reverse!  append-reverse!
   //________________________________________________________________________//
   
   length: function (list) {
@@ -653,7 +653,7 @@ var srfi1 = {
         i;
     while (true) {
       values = [];
-      for (i=num_args-1; i >= 0; i--) {
+      for (i = 0; i < num_args; i++) {
         if (args[i] !== null) {
           values.push(args[i].car);
           args[i] = args[i].cdr;
@@ -1884,8 +1884,6 @@ var srfi1 = {
   // 1 - 2 arguments
   t(s.count(function (x, y) { return x < y; }, s.list(1, 3, 7), s.list(2, 4, 6)),
     2);
-  
-  console.log(s.count(function (x, y) { return x < y; }, s.list(1, 3, 7), s.list(2, 4, 6)));
   
   
   //________________________________________________________________________//

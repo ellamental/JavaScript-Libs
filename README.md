@@ -7,7 +7,7 @@ srfi1 is a Javascript implementation of the SRFI-1 linked list library for Schem
 
 
 
-### Naming ###
+## Naming ##
 
 Javascript allows far fewer special characters in variable/property names, therefore the following conventions have been used:
 
@@ -18,30 +18,25 @@ Javascript allows far fewer special characters in variable/property names, there
 
 
 
-### Differences ###
+## Differences ##
 
-**length/length_plus**
-
+**length/length_plus**  
 Both length and length_plus allow operations on improper lists, where they return the number of Pairs in the list.  For example the list (1 2 3) is length 3 while the list (1 2 . 3) is length 2.
 
 
 
-### Additions ###
+## Additions ##
 
-**length_circular**
-
+**length_circular**  
 Calculate the number of elements in a circular list.
 
-**to_array**
-
+**to_array**  
 Convert a list into a Javascript array.
 
-**to_string**
-
+**to_string**  
 Return a string representation of a list.
 
-**array_to_list**
-
+**array_to_list**  
 Convert an array into a list.
 
 

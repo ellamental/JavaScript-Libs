@@ -602,6 +602,34 @@ var srfi1 = {
     return this.list(l1, l2, l3, l4, l5);
   },
   
+  count: function (pred /* list, ..., list-n */) {
+    // pred is a function taking as many arguments as there are list arguments
+    // and returning a single value. It is applied element-wise to the elements
+    // of the lists, and a count is tallied of the number of elements that
+    // produce a true value. This count is returned.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        count = 0,
+        values,
+        i, r;
+    while (true) {
+      values = [];
+      for (i = 0; i < num_args; i++) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return count;
+        }
+      }
+      r = pred.apply(pred, values);
+      if (r) {
+        count += 1;
+      }
+    }
+  },
+  
   
   //________________________________________________________________________//
   // Fold, unfold & map
@@ -1841,6 +1869,24 @@ var srfi1 = {
   t(s.unzip5(s.list(1, 2, 3, 4, 5), s.list(6, 7, 8, 9, 10)),
     s.list(s.list(1, 6), s.list(2, 7), s.list(3, 8), s.list(4, 9), s.list(5, 10)));
 
+  
+  //________________________________________________________________________//
+  // srfi1.count
+  //________________________________________________________________________//
+
+  current_method = "count";
+  counter = 0;
+  
+  // 0 - 1 argument
+  t(s.count(function (x) { return x < 3; }, s.list(1, 2, 3, 4)),
+    2);
+  
+  // 1 - 2 arguments
+  t(s.count(function (x, y) { return x < y; }, s.list(1, 3, 7), s.list(2, 4, 6)),
+    2);
+  
+  console.log(s.count(function (x, y) { return x < y; }, s.list(1, 3, 7), s.list(2, 4, 6)));
+  
   
   //________________________________________________________________________//
   // srfi1.map

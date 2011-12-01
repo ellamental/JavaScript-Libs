@@ -179,9 +179,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Predicates
   //
-  // Implemented: isPair(pair?)  null?  not-pair?
+  // Implemented: isPair(pair?)  isNull  notPair  is_proper_list?
   //
-  // Not yet implemented: proper-list?  circular-list?  dotted-list?
+  // Not yet implemented: circular-list?  dotted-list?
   //                      null-list?  list=
   //________________________________________________________________________//
   
@@ -195,6 +195,27 @@ var srfi1 = {
   
   isNull: function (elem) {
     return elem === null;
+  },
+  
+  is_proper_list: function (list) {
+    var first_node = list;
+    if (list === null || list.cdr === null) {
+      return true;
+    }
+    else if (!(list.cdr instanceof this.Pair)) {
+      return false;
+    }
+    list = list.cdr;
+    while (list !== null) {
+      if (list === first_node) {
+        return false;
+      }
+      else if (!(list instanceof this.Pair)) {
+        return false;
+      }
+      list = list.cdr;
+    }
+    return true;
   },
   
   
@@ -1068,6 +1089,34 @@ var srfi1 = {
   
   // 1 - pair
   t(s.isNull(s.cons(1, 2)),
+    false);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.is_proper_list
+  //________________________________________________________________________//
+
+  current_method = "is_proper_list";
+  counter = 0;
+  
+  // 0 - empty list is a proper list
+  t(s.is_proper_list(null),
+    true);
+  
+  // 1 - dotted list
+  t(s.is_proper_list(s.cons(1, 2)),
+    false);
+  
+  // 2 - proper list
+  t(s.is_proper_list(s.list(1, 2, 3)),
+    true);
+  
+  // 3 - improper list
+  t(s.is_proper_list(s.cons(1, s.cons(2, 3))),
+    false);
+  
+  // 4 - circular_list
+  t(s.is_proper_list(s.circular_list(1, 2, 3)),
     false);
   
   

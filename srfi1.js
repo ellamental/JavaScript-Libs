@@ -180,9 +180,9 @@ var srfi1 = {
   // Predicates
   //
   // Implemented: isPair(pair?)  isNull  notPair  is_proper_list?
+  //                             is_circular_list
   //
-  // Not yet implemented: circular-list?  dotted-list?
-  //                      null-list?  list=
+  // Not yet implemented: dotted-list?  null-list?  list=
   //________________________________________________________________________//
   
   isPair: function (elem) {
@@ -216,6 +216,19 @@ var srfi1 = {
       list = list.cdr;
     }
     return true;
+  },
+  
+  is_circular_list: function (list) {
+    var first_node = list;
+    if (!(list instanceof this.Pair)) { return false; }
+    list = list.cdr;
+    while (list instanceof this.Pair) {
+      if (list === first_node) {
+        return true;
+      }
+      list = list.cdr;
+    }
+    return false;
   },
   
   
@@ -1118,6 +1131,30 @@ var srfi1 = {
   // 4 - circular_list
   t(s.is_proper_list(s.circular_list(1, 2, 3)),
     false);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.is_circular_list
+  //________________________________________________________________________//
+
+  current_method = "is_circular_list";
+  counter = 0;
+  
+  // 0 - empty list is not a circular list
+  t(s.is_circular_list(null),
+    false);
+  
+  // 1 - cons cells are not circular lists
+  t(s.is_circular_list(s.cons(1, 2)),
+    false);
+  
+  // 2 - proper lists are not circular lists
+  t(s.is_circular_list(s.list(1)),
+    false);
+  
+  // 3 - circular lists are circular lists
+  t(s.is_circular_list(s.circular_list(0, 1, 2)),
+    true);
   
   
   //________________________________________________________________________//

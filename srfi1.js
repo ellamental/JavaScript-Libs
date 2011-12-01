@@ -389,9 +389,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Fold, unfold & map
   //
-  // Implemented: map
+  // Implemented: map  fold
   //
-  // Not yet implemented: for-each  fold  unfold  pair-fold  reduce
+  // Not yet implemented: for-each  unfold  pair-fold  reduce
   //                      fold-right  unfold-right  pair-fold-right
   //                      reduce-right  append-map  append-map!  map!
   //                      pair-for-each  filter-map  map-in-order
@@ -441,8 +441,8 @@ var srfi1 = {
       values.push(temp);
       temp = kons.apply(kons, values);
     }
-
   },
+  
   
   //________________________________________________________________________//
   // Filtering & partitioning
@@ -649,9 +649,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Association lists
   //
-  // Implemented: assoc
+  // Implemented: assoc  alist_cons
   //
-  // Not yet implemented: assq  assv  alist-cons  alist-copy
+  // Not yet implemented: assq  assv  alist-copy
   //                      alist-delete  alist-delete!
   //________________________________________________________________________//
   
@@ -668,6 +668,11 @@ var srfi1 = {
       alist = alist.cdr;
     }
     return false;
+  },
+  
+  alist_cons: function (key, value, alist) {
+    // Cons a new alist entry mapping key -> value onto alist.
+    return this.cons(this.cons(key, value), alist);
   },
   
   
@@ -1585,6 +1590,18 @@ var srfi1 = {
             function (a, b) { return a+1 === b; }),
     s.cons(2, 5));
 
+  
+  //________________________________________________________________________//
+  // srfi1.alist_cons
+  //________________________________________________________________________//
+
+  current_method = "alist_cons";
+  counter = 0;
+  
+  // 0
+  t(s.alist_cons(3, 6, s.list(s.cons(1, 4), s.cons(2, 5))),
+    s.list(s.cons(3, 6), s.cons(1, 4), s.cons(2, 5)));
+  
   
   //________________________________________________________________________//
   // srfi1.lset_union

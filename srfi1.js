@@ -180,9 +180,9 @@ var srfi1 = {
   // Predicates
   //
   // Implemented: isPair(pair?)  isNull  notPair  is_proper_list?
-  //                             is_circular_list
+  //                             is_circular_list  is_dotted_list
   //
-  // Not yet implemented: dotted-list?  null-list?  list=
+  // Not yet implemented: null-list?  list=
   //________________________________________________________________________//
   
   isPair: function (elem) {
@@ -229,6 +229,22 @@ var srfi1 = {
       list = list.cdr;
     }
     return false;
+  },
+  
+  is_dotted_list: function (list) {
+    var first_node = list;
+    if (!(list instanceof this.Pair) || list.cdr === null) { return false; }
+    list = list.cdr;
+    while (list instanceof this.Pair) {
+      if (list === first_node) {
+        return false;
+      }
+      else if (list.cdr === null) {
+        return false;
+      }
+      list = list.cdr;
+    }
+    return true;
   },
   
   
@@ -1024,6 +1040,10 @@ var srfi1 = {
   t(s.circular_list(0, 1).cdr.cdr.car,
     0);
   
+  // 1 - circular list of length 1
+  t(s.circular_list(1).cdr.cdr.car,
+    1);
+  
 
   //________________________________________________________________________//
   // srfi1.iota
@@ -1156,6 +1176,37 @@ var srfi1 = {
   t(s.is_circular_list(s.circular_list(0, 1, 2)),
     true);
   
+  
+  //________________________________________________________________________//
+  // srfi1.is_dotted_list
+  //________________________________________________________________________//
+
+  current_method = "is_dotted_list";
+  counter = 0;
+  
+  // 0 - empty list is not a dotted list
+  t(s.is_dotted_list(null),
+    false);
+  
+  // 1 - proper list of length 1 is not a dotted list
+  t(s.is_dotted_list(s.list(1)),
+    false);
+  
+  // 2 - proper list is not a dotted list
+  t(s.is_dotted_list(s.list(1, 2, 3)),
+    false);
+  
+  // 3 - circular list is not dotted list
+  t(s.is_dotted_list(s.circular_list(1)),
+    false);
+  
+  // 4 - pair whose cdr is not a list is a dotted list
+  t(s.is_dotted_list(s.cons(1, 2)),
+    true);
+  
+  // 5 - improper lists are dotted lists
+  t(s.is_dotted_list(s.cons(1, s.cons(2, 3))),
+    true);
   
   //________________________________________________________________________//
   // srfi1.car and srfi1.first

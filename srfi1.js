@@ -675,6 +675,17 @@ var srfi1 = {
     return this.cons(this.cons(key, value), alist);
   },
   
+  alist_copy: function (alist) {
+    if (alist instanceof this.Pair) {
+      return this.cons(this.cons(alist.car.car, alist.car.cdr),
+                       this.list_copy(alist.cdr));
+    }
+    else {
+      return alist;
+    }
+
+  },
+  
   
   //________________________________________________________________________//
   // Set operations on lists
@@ -1601,6 +1612,18 @@ var srfi1 = {
   // 0
   t(s.alist_cons(3, 6, s.list(s.cons(1, 4), s.cons(2, 5))),
     s.list(s.cons(3, 6), s.cons(1, 4), s.cons(2, 5)));
+
+  
+  //________________________________________________________________________//
+  // srfi1.alist_copy
+  //________________________________________________________________________//
+
+  current_method = "alist_copy";
+  counter = 0;
+  
+  // 0
+  t(s.alist_copy(s.list(s.cons(1, 3), s.cons(2, 4))),
+    s.list(s.cons(1, 3), s.cons(2, 4)));
   
   
   //________________________________________________________________________//
@@ -1652,12 +1675,12 @@ var srfi1 = {
 
 
   console.log("Tests completed!");
-  counter = 0
+  counter = 0;
   for(var i in srfi1) {
     if (srfi1.hasOwnProperty(i)) {
       counter += 1; // only logs 'moo'
     }
   }
-  return counter + " functions implemented"
+  return counter + " functions implemented";
 
 })();

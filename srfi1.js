@@ -179,21 +179,21 @@ var srfi1 = {
   //________________________________________________________________________//
   // Predicates
   //
-  // Implemented: isPair(pair?)  isNull  notPair  is_proper_list?
-  //                             is_circular_list  is_dotted_list
+  // Implemented: is_pair(pair?)  is_null  not_pair  is_proper_list?
+  //                             is_circular_list  is_dotted_list  is_null_list
   //
-  // Not yet implemented: null-list?  list=
+  // Not yet implemented: list=
   //________________________________________________________________________//
   
-  isPair: function (elem) {
+  is_pair: function (elem) {
     return (elem instanceof this.Pair);
   },
   
-  notPair: function (elem) {
+  not_pair: function (elem) {
     return !(elem instanceof this.Pair);
   },
   
-  isNull: function (elem) {
+  is_null: function (elem) {
     return elem === null;
   },
   
@@ -331,7 +331,7 @@ var srfi1 = {
     // take-right returns the last i elements of list.
     var return_value;
     function loop(lag, lead) {
-      if (srfi1.isPair(lead)) {
+      if (srfi1.is_pair(lead)) {
         loop(lag.cdr, lead.cdr);
       }
       else {
@@ -345,7 +345,7 @@ var srfi1 = {
   drop_right: function (list, n) {
     // drop-right returns all but the last i elements of list.
     function loop(lag, lead) {
-      if (srfi1.isPair(lead)) {
+      if (srfi1.is_pair(lead)) {
         return srfi1.cons(lag.car, loop(lag.cdr, lead.cdr));
       }
       else {
@@ -1079,58 +1079,58 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
-  // srfi1.isPair and srfi1.notPair
+  // srfi1.is_pair and srfi1.not_pair
   //________________________________________________________________________//
 
-  current_method = "isPair";
+  current_method = "is_pair";
   counter = 0;
   
   // 0 - pair
-  t(s.isPair(s.cons(1, 2)),
+  t(s.is_pair(s.cons(1, 2)),
     true);
   
   // 1 - list
-  t(s.isPair(s.list(1, 2, 3)),
+  t(s.is_pair(s.list(1, 2, 3)),
     true);
   
   // 2 - null
-  t(s.isPair(null),
+  t(s.is_pair(null),
     false);
   
   // 3 - integer
-  t(s.isPair(42),
+  t(s.is_pair(42),
     false);
   
   // 4 - pair
-  t(s.notPair(s.cons(1, 2)),
+  t(s.not_pair(s.cons(1, 2)),
     false);
   
   // 5 - list
-  t(s.notPair(s.list(1, 2, 3)),
+  t(s.not_pair(s.list(1, 2, 3)),
     false);
   
   // 6 - null
-  t(s.notPair(null),
+  t(s.not_pair(null),
     true);
   
   // 7 - integer
-  t(s.notPair(42),
+  t(s.not_pair(42),
     true);
   
   
   //________________________________________________________________________//
-  // srfi1.isNull
+  // srfi1.is_null
   //________________________________________________________________________//
 
-  current_method = "isNull";
+  current_method = "is_null";
   counter = 0;
   
   // 0 - null
-  t(s.isNull(null),
+  t(s.is_null(null),
     true);
   
   // 1 - pair
-  t(s.isNull(s.cons(1, 2)),
+  t(s.is_null(s.cons(1, 2)),
     false);
   
   

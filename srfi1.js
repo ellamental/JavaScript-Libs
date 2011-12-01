@@ -622,6 +622,29 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // Set operations on lists
+  //
+  // Implemented: lset_union
+  //
+  // Not yet implemented: lset<=  lset=  lset_adjoin  lset_union!
+  //                      lset_intersection  lset_intersection!  lset_difference
+  //                      lset_difference!  lset_xor  lset_xor!
+  //                      lset_diff+intersection  lset_diff+intersection!
+  //________________________________________________________________________//
+  
+  lset_union: function (eq, a, b) {
+    var r = this.list_copy(a);
+    while (b !== null) {
+      if (!this.member(b.car, a, eq)) {
+        r = this.cons(b.car, r);
+      }
+      b = b.cdr;
+    }
+    return r;
+  },
+  
+  
+  //________________________________________________________________________//
   // Primitive side-effects
   //
   // Implemented: set_car  set_cdr
@@ -1460,7 +1483,20 @@ var srfi1 = {
   t(s.assoc(2, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6)),
             function (a, b) { return a+1 === b; }),
     s.cons(2, 5));
+
   
+  //________________________________________________________________________//
+  // srfi1.lset_union
+  //________________________________________________________________________//
+
+  current_method = "lset_union";
+  counter = 0;
+  
+  // 0
+  t(s.lset_union(function (a, b) { return a === b; },
+                 s.list(1, 2, 3),
+                 s.list(2, 3, 4, 5)),
+    s.list(5, 4, 1, 2, 3));
   
   
   

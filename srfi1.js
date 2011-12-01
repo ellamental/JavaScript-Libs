@@ -379,12 +379,11 @@ var srfi1 = {
   //________________________________________________________________________//
   // Miscellaneous
   //
-  // Implemented:  length  length_plus  append  reverse  zip  unzip1
+  // Implemented:  length  length_plus  append  concatenate  reverse  zip
+  //               unzip1  unzip2  unzip3  unzip4  unzip5
   //
-  // Not yet implemented: concatenate
-  //                      append!  concatenate!  reverse!  append-reverse
-  //                      append-reverse!  unzip2  unzip3
-  //                      unzip4  unzip5  count
+  // Not yet implemented: append!  concatenate!  reverse!  append-reverse
+  //                      append-reverse!  count
   //________________________________________________________________________//
   
   length: function (list) {
@@ -462,7 +461,21 @@ var srfi1 = {
       return this.append.apply(this, args);
     }
   },
-
+  
+  concatenate: function (lists) {
+    var temp = [],
+        current_list;
+    while (lists !== null) {
+      current_list = lists.car;
+      while (current_list !== null) {
+        temp.push(current_list.car);
+        current_list = current_list.cdr;
+      }
+      lists = lists.cdr;
+    }
+    return this.array_to_list(temp);
+  },
+  
   reverse: function (list) {
     // reverse returns a newly allocated list consisting of the elements 
     // of list in reverse order. 
@@ -499,12 +512,70 @@ var srfi1 = {
   unzip1: function (/* list, ..., list-n */) {
     // unzip1 takes a list of lists, where every list must contain at least
     // one element, and returns a list containing the initial element of each
-    // such list. That is, it returns (map car lists)
+    // such list. That is, it returns map(car, lists)
     var l = null;
     for (var i=arguments.length-1; i >= 0; i--) {
       l = this.cons(arguments[i].car, l);
     }
     return l;
+  },
+  
+  unzip2: function (/* list, ..., list-n */) {
+    // unzip2 takes a list of lists, where every list must contain at least
+    // two elements, and returns a list containing the initial element of each
+    // such list. That is, it returns list(map(car, lists), map(cadr, lists))
+    var l1 = null,
+        l2 = null;
+    for (var i=arguments.length-1; i >= 0; i--) {
+      l1 = this.cons(arguments[i].car, l1);
+      l2 = this.cons(arguments[i].cdr.car, l2);
+    }
+    return this.list(l1, l2);
+  },
+  
+  unzip3: function (/* list, ..., list-n */) {
+    // returns list(map(car, lists), map(cadr, lists), map(caddr, lists))
+    var l1 = null,
+        l2 = null,
+        l3 = null;
+    for (var i=arguments.length-1; i >= 0; i--) {
+      l1 = this.cons(arguments[i].car, l1);
+      l2 = this.cons(arguments[i].cdr.car, l2);
+      l3 = this.cons(arguments[i].cdr.cdr.car, l3);
+    }
+    return this.list(l1, l2, l3);
+  },
+  
+  unzip4: function (/* list, ..., list-n */) {
+    // returns list(map(car, lists), map(cadr, lists), map(caddr, lists), ...)
+    var l1 = null,
+        l2 = null,
+        l3 = null,
+        l4 = null;
+    for (var i=arguments.length-1; i >= 0; i--) {
+      l1 = this.cons(arguments[i].car, l1);
+      l2 = this.cons(arguments[i].cdr.car, l2);
+      l3 = this.cons(arguments[i].cdr.cdr.car, l3);
+      l4 = this.cons(arguments[i].cdr.cdr.cdr.car, l4);
+    }
+    return this.list(l1, l2, l3, l4);
+  },
+  
+  unzip5: function (/* list, ..., list-n */) {
+    // returns list(map(car, lists), map(cadr, lists), map(caddr, lists), ...)
+    var l1 = null,
+        l2 = null,
+        l3 = null,
+        l4 = null,
+        l5 = null;
+    for (var i=arguments.length-1; i >= 0; i--) {
+      l1 = this.cons(arguments[i].car, l1);
+      l2 = this.cons(arguments[i].cdr.car, l2);
+      l3 = this.cons(arguments[i].cdr.cdr.car, l3);
+      l4 = this.cons(arguments[i].cdr.cdr.cdr.car, l4);
+      l5 = this.cons(arguments[i].cdr.cdr.cdr.cdr.car, l5);
+    }
+    return this.list(l1, l2, l3, l4, l5);
   },
   
   
@@ -1572,34 +1643,34 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
-  // srfi1.length_plus
+  // srfi1.length_circular
   //________________________________________________________________________//
 
-  current_method = "length_plus";
+  current_method = "length_circular";
   counter = 0;
   
   // 0 - the empty list
-  t(s.length_plus(null),
+  t(s.length_circular(null),
     0);
   
   // 1 - list of length 3
-  t(s.length_plus(s.list(1, 2, 3)),
+  t(s.length_circular(s.list(1, 2, 3)),
     3);
   
   // 2 - length of a pair
-  t(s.length_plus(s.cons(1, 2)),
+  t(s.length_circular(s.cons(1, 2)),
     1);
   
   // 3 - length of an improper list
-  t(s.length_plus(s.cons(1, s.cons(2, 3))),
+  t(s.length_circular(s.cons(1, s.cons(2, 3))),
     2);
   
   // 4 - length of a circular list
-  t(s.length_plus(s.circular_list(1)),
+  t(s.length_circular(s.circular_list(1)),
     1);
   
   // 5 - length of a circular list
-  t(s.length_plus(s.circular_list(1, 2, 3)),
+  t(s.length_circular(s.circular_list(1, 2, 3)),
     3);
   
   
@@ -1621,6 +1692,26 @@ var srfi1 = {
   // 2 - append 2 lists and an atom (should return an improper list)
   t(s.append(s.list(1), s.list(2), 3),
     s.cons(1, s.cons(2, 3)));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.concatenate
+  //________________________________________________________________________//
+
+  current_method = "concatenate";
+  counter = 0;
+  
+  // 0 - concatenate 2 lists
+  t(s.concatenate(s.list(s.list(1, 2), s.list(3, 4))),
+    s.list(1, 2, 3, 4));
+  
+  // 1 - concatenate 3 lists
+  t(s.concatenate(s.list(s.list(1, 2), s.list(3, 4), s.list(5, 6))),
+    s.list(1, 2, 3, 4, 5, 6));
+  
+  // 2 - concatenate with an empty list
+  t(s.concatenate(s.list(s.list(1, 2), null, s.list(3, 4))),
+    s.list(1, 2, 3, 4));
   
   
   //________________________________________________________________________//
@@ -1665,6 +1756,54 @@ var srfi1 = {
   // 0
   t(s.unzip1(s.list(1, 2), s.list(3, 4)),
     s.list(1, 3));
+
+  
+  //________________________________________________________________________//
+  // srfi1.unzip2
+  //________________________________________________________________________//
+
+  current_method = "unzip2";
+  counter = 0;
+  
+  // 0
+  t(s.unzip2(s.list(1, 2), s.list(3, 4)),
+    s.list(s.list(1, 3), s.list(2, 4)));
+
+  
+  //________________________________________________________________________//
+  // srfi1.unzip3
+  //________________________________________________________________________//
+
+  current_method = "unzip3";
+  counter = 0;
+  
+  // 0
+  t(s.unzip3(s.list(1, 2, 3), s.list(4, 5, 6)),
+    s.list(s.list(1, 4), s.list(2, 5), s.list(3, 6)));
+
+  
+  //________________________________________________________________________//
+  // srfi1.unzip4
+  //________________________________________________________________________//
+
+  current_method = "unzip4";
+  counter = 0;
+  
+  // 0
+  t(s.unzip4(s.list(1, 2, 3, 4), s.list(5, 6, 7, 8)),
+    s.list(s.list(1, 5), s.list(2, 6), s.list(3, 7), s.list(4, 8)));
+
+  
+  //________________________________________________________________________//
+  // srfi1.unzip5
+  //________________________________________________________________________//
+
+  current_method = "unzip5";
+  counter = 0;
+  
+  // 0
+  t(s.unzip5(s.list(1, 2, 3, 4, 5), s.list(6, 7, 8, 9, 10)),
+    s.list(s.list(1, 6), s.list(2, 7), s.list(3, 8), s.list(4, 9), s.list(5, 10)));
 
   
   //________________________________________________________________________//

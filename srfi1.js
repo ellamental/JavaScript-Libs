@@ -180,7 +180,7 @@ var srfi1 = {
   // Predicates
   //
   // Implemented: is_pair(pair?)  is_null  not_pair  is_proper_list?
-  //                             is_circular_list  is_dotted_list  is_null_list
+  //              is_circular_list  is_dotted_list  is_null_list
   //
   // Not yet implemented: list=
   //________________________________________________________________________//
@@ -390,7 +390,7 @@ var srfi1 = {
   // should raise an error if passed a circular list
   length: function (list) {
     var len = 0;
-    while (list !== null) {
+    while (list instanceof this.Pair) {
       len += 1;
       list = list.cdr;
     }
@@ -1491,6 +1491,18 @@ var srfi1 = {
   // 0
   t(s.length(s.list(0, 1, 2)),
     3);
+  
+  // 1 - length of the empty list
+  t(s.length(null),
+    0);
+  
+  // 2 - length of a pair
+  t(s.length(s.cons(1, 2)),
+    1);
+  
+  // 3 - length of an improper list
+  t(s.length(s.cons(1, s.cons(2, 3))),
+    2);
   
   
   //________________________________________________________________________//

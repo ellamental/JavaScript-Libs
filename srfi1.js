@@ -1635,4 +1635,12 @@ var srfi1 = {
 
 
   console.log("Tests completed!");
+  counter = 0
+  for(var i in srfi1) {
+    if (srfi1.hasOwnProperty(i)) {
+      counter += 1; // only logs 'moo'
+    }
+  }
+  return counter + " functions implemented"
+
 })();

@@ -634,12 +634,11 @@ var srfi1 = {
   //________________________________________________________________________//
   // Fold, unfold & map
   //
-  // Implemented: map  fold  for_each  map_in_order  filter_map
+  // Implemented: map  fold  for_each  map_in_order  filter_map  reduce
   //
-  // Not yet implemented: unfold  pair-fold  reduce
-  //                      fold-right  unfold-right  pair-fold-right
-  //                      reduce-right  append-map  append-map!  map!
-  //                      pair-for-each
+  // Not yet implemented: unfold  pair-fold  fold-right  unfold-right
+  //                      pair-fold-right  reduce-right  append-map
+  //                      append-map!  map!  pair-for-each
   //________________________________________________________________________//
   
   map: function (fn /* list, ..., list-n */) {
@@ -761,6 +760,14 @@ var srfi1 = {
         temp_array.push(r);
       }
     }
+  },
+  
+  reduce: function (fn, init, list) {
+    while (list !== null) {
+      init = fn(list.car, init);
+      list = list.cdr;
+    }
+    return init;
   },
   
   
@@ -2068,7 +2075,22 @@ var srfi1 = {
   // 0
   t(s.filter_map(function (x) { return x < 5 && x + 1; }, s.list(1, 3, 5, 7)),
     s.list(2, 4));
+
   
+  //________________________________________________________________________//
+  // srfi1.reduce
+  //________________________________________________________________________//
+
+  current_method = "reduce";
+  counter = 0;
+  
+  // 0 - add all numbers in a list
+  t(s.reduce(function (x, y) { return x+y; }, 0, s.list(1, 2, 3)),
+    6);
+  
+  // 1 - find the max value in a list
+  t(s.reduce(function (x, y) { return Math.max(x, y); }, 0, s.list(1, 2, 3, 2, 1)),
+    3);
   
   
   //________________________________________________________________________//

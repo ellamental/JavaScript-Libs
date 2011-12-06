@@ -634,9 +634,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Fold, unfold & map
   //
-  // Implemented: map  fold
+  // Implemented: map  fold  for_each
   //
-  // Not yet implemented: for-each  unfold  pair-fold  reduce
+  // Not yet implemented: unfold  pair-fold  reduce
   //                      fold-right  unfold-right  pair-fold-right
   //                      reduce-right  append-map  append-map!  map!
   //                      pair-for-each  filter-map  map-in-order
@@ -685,6 +685,31 @@ var srfi1 = {
       }
       values.push(temp);
       temp = kons.apply(kons, values);
+    }
+  },
+  
+  for_each: function (fn /* list, ..., list-n */) {
+    // The arguments to for-each are like the arguments to map, but for-each
+    // calls proc for its side effects rather than for its values. Unlike map,
+    // for-each is guaranteed to call proc on the elements of the lists in
+    // order from the first element(s) to the last, and the value returned by
+    // for-each is undefined.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        values,
+        i;
+    while (true) {
+      values = [];
+      for (i = 0; i < num_args; i++) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return undefined;
+        }
+      }
+      fn.apply(fn, values);
     }
   },
   
@@ -1949,6 +1974,22 @@ var srfi1 = {
            s.list(4, 5, 6)),
     s.list(5, 7, 9));
 
+  
+  //________________________________________________________________________//
+  // srfi1.for_each
+  //________________________________________________________________________//
+
+  (function () {
+    var a = [],
+        list = s.list(1, 2, 3);
+    
+    s.for_each(function (x) { a.push(x); }, list);
+    
+    if (a<[1, 2, 3] || [1, 2, 3]<a) {
+      console.log("Test Failed! for_each");
+    }
+  })();
+  
   
   //________________________________________________________________________//
   // srfi1.filter

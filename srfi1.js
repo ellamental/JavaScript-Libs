@@ -736,6 +736,33 @@ var srfi1 = {
     }
   },
   
+  filter_map: function (fn /* list, ..., list-n */) {
+    // fn is a function taking as many arguments as there are list arguments
+    // and returning a single value. map applies fn element-wise to the
+    // elements of the lists and returns a list of the results, in order.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        temp_array = [],
+        values,
+        i;
+    while (true) {
+      values = [];
+      for (i = 0; i < num_args; i++) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return this.list.apply(this, temp_array);
+        }
+      }
+      r = fn.apply(fn, values);
+      if (r) {
+        temp_array.push(r);
+      }
+    }
+  },
+  
   
   //________________________________________________________________________//
   // Filtering & partitioning
@@ -2029,6 +2056,19 @@ var srfi1 = {
       console.log("Test Failed! map_in_order");
     }
   })();
+
+  
+  //________________________________________________________________________//
+  // srfi1.filter_map
+  //________________________________________________________________________//
+
+  current_method = "filter_map";
+  counter = 0;
+  
+  // 0
+  t(s.filter_map(function (x) { return x < 5 && x + 1; }, s.list(1, 3, 5, 7)),
+    s.list(2, 4));
+  
   
   
   //________________________________________________________________________//
@@ -2329,7 +2369,7 @@ var srfi1 = {
   counter = 0;
   for(var i in srfi1) {
     if (srfi1.hasOwnProperty(i)) {
-      counter += 1; // only logs 'moo'
+      counter += 1;
     }
   }
   return counter + " functions implemented";

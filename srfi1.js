@@ -634,12 +634,12 @@ var srfi1 = {
   //________________________________________________________________________//
   // Fold, unfold & map
   //
-  // Implemented: map  fold  for_each
+  // Implemented: map  fold  for_each  map_in_order
   //
   // Not yet implemented: unfold  pair-fold  reduce
   //                      fold-right  unfold-right  pair-fold-right
   //                      reduce-right  append-map  append-map!  map!
-  //                      pair-for-each  filter-map  map-in-order
+  //                      pair-for-each  filter-map
   //________________________________________________________________________//
   
   map: function (fn /* list, ..., list-n */) {
@@ -710,6 +710,29 @@ var srfi1 = {
         }
       }
       fn.apply(fn, values);
+    }
+  },
+  
+  map_in_order: function (fn /* list, ..., list-n */) {
+    // A variant of the map procedure that guarantees to apply f across the 
+    // elements of the list arguments in a left-to-right order.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        temp_array = [],
+        values,
+        i;
+    while (true) {
+      values = [];
+      for (i = 0; i < num_args; i++) {
+        if (args[i] !== null) {
+          values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return this.list.apply(this, temp_array);
+        }
+      }
+      temp_array.push(fn.apply(fn, values));
     }
   },
   
@@ -1987,6 +2010,23 @@ var srfi1 = {
     
     if (a<[1, 2, 3] || [1, 2, 3]<a) {
       console.log("Test Failed! for_each");
+    }
+  })();
+
+  
+  //________________________________________________________________________//
+  // srfi1.map_in_order
+  //________________________________________________________________________//
+
+  (function () {
+    var a = [],
+        list = s.list(1, 2, 3),
+        r;
+    
+    r = s.map_in_order(function (x) { a.push(x); return x+1; }, list);
+    
+    if ( (a<[1, 2, 3] || [1, 2, 3]<a) || !s.equal(r, s.list(2, 3, 4)) ) {
+      console.log("Test Failed! map_in_order");
     }
   })();
   

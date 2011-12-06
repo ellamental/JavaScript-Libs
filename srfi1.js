@@ -634,12 +634,12 @@ var srfi1 = {
   //________________________________________________________________________//
   // Fold, unfold & map
   //
-  // Implemented: map  fold  for_each  map_in_order
+  // Implemented: map  fold  for_each  map_in_order  filter_map
   //
   // Not yet implemented: unfold  pair-fold  reduce
   //                      fold-right  unfold-right  pair-fold-right
   //                      reduce-right  append-map  append-map!  map!
-  //                      pair-for-each  filter-map
+  //                      pair-for-each
   //________________________________________________________________________//
   
   map: function (fn /* list, ..., list-n */) {
@@ -744,7 +744,7 @@ var srfi1 = {
         num_args = args.length,
         temp_array = [],
         values,
-        i;
+        i, r;
     while (true) {
       values = [];
       for (i = 0; i < num_args; i++) {

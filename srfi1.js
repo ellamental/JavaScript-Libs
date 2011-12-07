@@ -396,9 +396,9 @@ var srfi1 = {
   //
   // Implemented:  length  length_plus  append  concatenate  reverse
   //               append-reverse  zip  unzip1  unzip2  unzip3  unzip4  unzip5
-  //               count
+  //               count  append_d
   //
-  // Not yet implemented: append!  concatenate!  reverse!  append-reverse!
+  // Not yet implemented: concatenate!  reverse!  append-reverse!
   //________________________________________________________________________//
   
   length: function (list) {
@@ -502,6 +502,19 @@ var srfi1 = {
       lists = lists.cdr;
     }
     return this.array_to_list(temp);
+  },
+  
+  concatenate_d: function (lists) {
+    var first_node = lists.car,
+        current_node = first_node;
+    while (lists.cdr !== null) {
+      while (current_node.cdr !== null) {
+        current_node = current_node.cdr;
+      }
+      current_node.cdr = lists.cdr.car;
+      lists = lists.cdr;
+    }
+    return first_node;
   },
   
   reverse: function (list) {
@@ -648,9 +661,10 @@ var srfi1 = {
   // Fold, unfold & map
   //
   // Implemented: map  fold  for_each  map_in_order  filter_map  reduce
+  //              reduce-right
   //
   // Not yet implemented: unfold  pair-fold  fold-right  unfold-right
-  //                      pair-fold-right  reduce-right  append-map
+  //                      pair-fold-right  append-map
   //                      append-map!  map!  pair-for-each
   //________________________________________________________________________//
   
@@ -1865,7 +1879,6 @@ var srfi1 = {
   })();
     
   
-  
   //________________________________________________________________________//
   // srfi1.concatenate
   //________________________________________________________________________//
@@ -1884,7 +1897,25 @@ var srfi1 = {
   // 2 - concatenate with an empty list
   t(s.concatenate(s.list(s.list(1, 2), null, s.list(3, 4))),
     s.list(1, 2, 3, 4));
+    
   
+  //________________________________________________________________________//
+  // srfi1.concatenate_d
+  //________________________________________________________________________//
+
+  (function () {
+    var a = s.list(1, 2),
+        b = s.list(3, 4),
+        c = s.list(5, 6),
+        d = s.list(a, b, c),
+        e = s.concatenate_d(d);
+    if ( !s.equal(e, s.list(1, 2, 3, 4, 5, 6)) ) {
+      console.log("Test Failed! concatenate_d");
+    }
+    if ( !s.equal(a, s.list(1, 2, 3, 4, 5, 6)) ) {
+      console.log("Test Failed! concatenate_d");
+    }
+  })();
   
   //________________________________________________________________________//
   // srfi1.reverse

@@ -477,6 +477,19 @@ var srfi1 = {
     }
   },
   
+  append_d: function (/* list ... list-n */) {
+    var first_node = arguments[0],
+        current_node = first_node,
+        i;
+    for (i=0; i < arguments.length-1; i++) {
+      while (current_node.cdr !== null) {
+        current_node = current_node.cdr;
+      }
+      current_node.cdr = arguments[i+1];
+    }
+    return first_node;
+  },
+  
   concatenate: function (lists) {
     var temp = [],
         current_list;
@@ -768,6 +781,12 @@ var srfi1 = {
       list = list.cdr;
     }
     return init;
+  },
+  
+  // Not sure if it's valid to simply reverse the list then do reduce on the
+  // reversed list, but it will avoid recursion errors on huge lists
+  reduce_right: function (fn, init, list) {
+    return this.reduce(fn, init, this.reverse(list));
   },
   
   
@@ -1829,6 +1848,25 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // srfi1.append_d
+  //________________________________________________________________________//
+
+  (function () {
+    var a = s.list(1, 2),
+        b = s.list(3, 4),
+        c = s.list(5, 6),
+        d = s.append_d(a, b, c);
+    if ( !s.equal(d, s.list(1, 2, 3, 4, 5, 6)) ) {
+      console.log("Test Failed! append_d");
+    }
+    if ( !s.equal(a, s.list(1, 2, 3, 4, 5, 6)) ) {
+      console.log("Test Failed! append_d");
+    }
+  })();
+    
+  
+  
+  //________________________________________________________________________//
   // srfi1.concatenate
   //________________________________________________________________________//
 
@@ -2091,6 +2129,22 @@ var srfi1 = {
   // 1 - find the max value in a list
   t(s.reduce(function (x, y) { return Math.max(x, y); }, 0, s.list(1, 2, 3, 2, 1)),
     3);
+  
+  // 2 - string
+  t(s.reduce(function (x, y) { return x+y; }, "", s.list("a", "b", "c")),
+    "cba");
+
+  
+  //________________________________________________________________________//
+  // srfi1.reduce_right
+  //________________________________________________________________________//
+
+  current_method = "reduce_right";
+  counter = 0;
+  
+  // 0
+  t(s.reduce_right(function (x, y) { return x+y; }, "", s.list("a", "b", "c")),
+    "abc");
   
   
   //________________________________________________________________________//

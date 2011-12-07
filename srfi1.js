@@ -396,9 +396,9 @@ var srfi1 = {
   //
   // Implemented:  length  length_plus  append  concatenate  reverse
   //               append-reverse  zip  unzip1  unzip2  unzip3  unzip4  unzip5
-  //               count  append_d
+  //               count  append_d  concatenate_d
   //
-  // Not yet implemented: concatenate!  reverse!  append-reverse!
+  // Not yet implemented:  reverse!  append-reverse!
   //________________________________________________________________________//
   
   length: function (list) {

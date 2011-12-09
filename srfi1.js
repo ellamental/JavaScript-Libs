@@ -2614,31 +2614,34 @@ var srfi1 = {
   //________________________________________________________________________//
   // srfi1.to_array
   //________________________________________________________________________//
-
-  (function () {
-    var a = s.to_array(s.list(1, 2, 3)),
-        b = [1, 2, 3];
-    if (a<b || b<a) {
-      console.log("Test Failed! to_array");
-    }
-  })();
+  
+  current_method = "to_array";
+  counter = 0;
+  
+  // 0
+  t(s.to_array(s.list(1, 2, 3)),
+    [1, 2, 3]);
   
   
   //________________________________________________________________________//
   // srfi1.to_string
   //________________________________________________________________________//
   
-  if (s.to_string(s.list(1, 2, 3)) !== "(1 2 3)") {
-    console.log("Test Failed! to_string: (1 2 3)");
-  }
   
-  if (s.to_string(s.cons(1, 2)) !== "(1 . 2)") {
-    console.log("Test Failed! to_string: (1 . 2)");
-  }
+  current_method = "to_string";
+  counter = 0;
   
-  if (s.to_string(s.cons(1, s.cons(2, 3))) !== "(1 2 . 3)") {
-    console.log("Test Failed! to_string: (1 2 . 3)");
-  }
+  // 0
+  t(s.to_string(s.list(1, 2, 3)),
+    "(1 2 3)");
+  
+  // 1
+  t(s.to_string(s.cons(1, 2)),
+    "(1 . 2)");
+  
+  // 2
+  t(s.to_string(s.cons(1, s.cons(2, 3))),
+    "(1 2 . 3)");
   
   
   //________________________________________________________________________//

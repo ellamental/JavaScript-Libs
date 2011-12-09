@@ -65,9 +65,17 @@ var srfi1 = {
         return false;
       }
     }
-    // Array equality returns true if elements are ===
+    // Array equality returns true if is_equal returns true for all elements
     else if (a instanceof Array && b instanceof Array) {
-      return !(a<b || b<a);
+      if (a.length === b.length) {
+        for (var i=0,j=a.length; i < j; i++) {
+          if (!this.is_equal(a[i], b[i])) {
+            return false;
+          }
+        }
+        return true;
+      }
+      return false;
     }
     else {
       return a === b;
@@ -257,9 +265,7 @@ var srfi1 = {
   // Selectors
   //
   // Implemented: car  cdr  rest(not srfi-1)  c...r  list_ref  first...tenth
-  //              take/drop  take/drop-right  split_at  last  last_pair
-  //
-  // Not yet implemented: car_cdr(car+cdr)
+  //              take/drop  take/drop-right  split_at  last  last_pair car_cdr
   //________________________________________________________________________//
   
   // Canonical Lisp accessor functions
@@ -300,6 +306,14 @@ var srfi1 = {
   eighth:  function (p) { return this.list_ref(p, 7); },
   ninth:   function (p) { return this.list_ref(p, 8); },
   tenth:   function (p) { return this.list_ref(p, 9); },
+  
+  car_cdr: function (list) {
+    // Javascript does not have a standardized way to return multiple values.
+    // Some implementations (Mozilla) provide destructuring assignment using
+    // arrays.  So the value returned by this function will be an array where:
+    // [(car list), (cdr list)] instead of (values (car list) (cdr list))
+    return [list.car, list.cdr];
+  },
   
   take: function (list, n) {
     // take returns the first n elements of list x.  take is guaranteed to
@@ -1175,9 +1189,83 @@ var srfi1 = {
     }
   })();
 
+  
+  //________________________________________________________________________//
+  // srfi1.is_equal
+  //________________________________________________________________________//
+
+  current_method = "is_equal";
+  counter = 0;
+  
+  // is_equal should return false:
+  
+  // 0
+  t(s.is_equal( 7, 42 ),
+    false);
+  
+  // 1
+  t(s.is_equal( "a", "b" ),
+    false);
+  
+  // 2
+  t(s.is_equal( s.cons(1, 2), s.cons(1, 3) ),
+    false);
+  
+  // 3
+  t(s.is_equal( s.cons(1, 2), s.cons(3, 4) ),
+    false);
+  
+  // 4
+  t(s.is_equal( s.cons(1, null), s.cons(2, null) ),
+    false);
+  
+  // 5
+  t(s.is_equal( s.cons(1, s.cons(2, 3)), s.cons(1, s.cons(2, 4)) ),
+    false);
+  
+  // 6
+  t(s.is_equal( s.cons(1, s.cons(2, null)), s.cons(1, s.cons(3, null)) ),
+    false);
+  
+  // 7
+  t(s.is_equal( [1, 2, 3], [1, 2, 4] ),
+    false);
+  
+  // 8
+  t(s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [4, 3]) ),
+    false);
+  
+  // is_equal should return true:
+  
+  // 9
+  t(s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] ),
+    true);
+  
+  // 10
+  t(s.is_equal( [1, 2, 3], [1, 2, 3] ),
+    true);
+  
+  // 11
+  t(s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [3, 4]) ),
+    true);
+  
+  // 12
+  t(s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] ),
+    true);
+  
+  // 13
+  t(s.is_equal( s.cons(1, s.cons(2, s.cons(3, null))), 
+                s.cons(1, s.cons(2, s.cons(3, null))) ),
+    true);
+  
+  // 14 - Deep equality lots of nested Arrays and Pairs
+  t(s.is_equal( [s.cons(1, [s.cons(2, [s.cons(3, 4)])])],
+                [s.cons(1, [s.cons(2, [s.cons(3, 4)])])] ),
+    true);
+
 
   //________________________________________________________________________//
-  // srfi1.cons (also tests srfi1.is_equal)
+  // srfi1.cons
   //________________________________________________________________________//
 
   current_method = "cons";
@@ -1210,56 +1298,6 @@ var srfi1 = {
   // 6 - make a list of length 2 with improper lists in both car and cdr
   t(s.cons(s.cons(1, 2), s.cons(3, 4)),
     new s.Pair(new s.Pair(1, 2), new s.Pair(3, 4)));
-  
-  // is_equal
-  (function () {
-    // These tests should fail
-    if (s.is_equal( 7, 42 )) {
-      console.log("Test failed! is_equal #0");
-    }
-    if (s.is_equal( "a", "b" )) {
-      console.log("Test failed! is_equal #1");
-    }
-    if (s.is_equal( s.cons(1, 2), s.cons(1, 3) )) {
-      console.log("Test failed! is_equal #2");
-    }
-    if (s.is_equal( s.cons(1, 2), s.cons(3, 4) )) {
-      console.log("Test failed! is_equal #3");
-    }
-    if (s.is_equal( s.cons(1, null), s.cons(2, null) )) {
-      console.log("Test failed! is_equal #4");
-    }
-    if (s.is_equal( s.cons(1, s.cons(2, 3)), s.cons(1, s.cons(2, 4)) )) {
-      console.log("Test failed! is_equal #5");
-    }
-    if (s.is_equal( s.cons(1, s.cons(2, null)), s.cons(1, s.cons(3, null)) )) {
-      console.log("Test failed! is_equal #6");
-    }
-    if (s.is_equal([1, 2, 3], [1, 2, 4]) ) {
-      console.log("Test failed! is_equal #7");
-    }
-    if (s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [4, 3]) )) {
-      console.log("Test failed! is_equal #8");
-    }
-    if (s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] )) {
-      console.log("Test failed! is_equal #9");
-    }
-    
-    // These tests should pass
-    if (!s.is_equal( [1, 2, 3], [1, 2, 3] )) {
-      console.log("Test failed! is_equal #10");
-    }
-    if (!s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [3, 4]) )) {
-      console.log("Test failed! is_equal #11");
-    }
-    if (!s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] )){
-      console.log("Test failed! is_equal #12");
-    }
-    if (!s.is_equal( s.cons(1, s.cons(2, s.cons(3, null))), 
-                     s.cons(1, s.cons(2, s.cons(3, null))) )) {
-      console.log("Test failed! is_equal #13");
-    }
-  })();
   
   
   //________________________________________________________________________//
@@ -1711,6 +1749,18 @@ var srfi1 = {
     9);
   t(s.tenth(s.list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)),
     10);
+  
+  
+  //________________________________________________________________________//
+  // srfi1.car_cdr
+  //________________________________________________________________________//
+
+  current_method = "car_cdr";
+  counter = 0;
+  
+  // 0
+  t(s.car_cdr(s.list(1, 2, 3)),
+    [1, s.list(2, 3)]);
   
   
   //________________________________________________________________________//
@@ -2609,6 +2659,11 @@ var srfi1 = {
   
   
   
+  
+  //________________________________________________________________________//
+  // Finish tests and display # of functions implemented
+  //________________________________________________________________________//
+  
   console.log("Tests completed!");
   counter = 0;
   for(var i in srfi1) {
@@ -2616,6 +2671,6 @@ var srfi1 = {
       counter += 1;
     }
   }
-  return counter + " functions implemented";
+  return counter + " functions implemented (of 128)";
 
 })();

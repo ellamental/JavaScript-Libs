@@ -56,26 +56,8 @@ var srfi1 = {
   //________________________________________________________________________//
   
   is_equal: function (a, b) {
-    // handle end of list
-    if (a === null || b === null) {
-      if (a === b) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-    // handle improper lists
-    else if (typeof a === "undefined" || typeof b === "undefined") {
-      if (a === b) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-    // handle nested lists
-    else if (a instanceof this.Pair && b instanceof this.Pair) {
+    // General equality that works on Pair, Array and any type === works for.
+    if (a instanceof this.Pair && b instanceof this.Pair) {
       if (this.is_equal(a.car, b.car)) {
         return this.is_equal(a.cdr, b.cdr);
       }
@@ -83,17 +65,15 @@ var srfi1 = {
         return false;
       }
     }
-    // if cars are atoms and equal recurse
-    else if (a.car === b.car) {
-      return this.is_equal(a.cdr, b.cdr);
+    // Array equality returns true if elements are ===
+    else if (a instanceof Array && b instanceof Array) {
+      return !(a<b || b<a);
     }
-    // if cars are not equal return false
     else {
-      return false;
+      return a === b;
     }
   },
-  
-  
+
   //________________________________________________________________________//
   // Constructors
   //
@@ -1289,11 +1269,14 @@ var srfi1 = {
   current_method = "list_tabulate";
   counter = 0;
   
-  // 0 - (1 2 3)
+  // 0 - (0 1 2)
   t(s.list_tabulate(3, function (i) { return i; }),
-    s.list(1, 2, 3));
+    s.list(0, 1, 2));
   
-
+//   console.log("E: (0 1 2)");
+//   console.log("R: "+s.to_string(s.list_tabulate(3, function (i) { return i; })));
+  
+  
   //________________________________________________________________________//
   // srfi1.list_copy
   //________________________________________________________________________//
@@ -1350,10 +1333,11 @@ var srfi1 = {
     s.list(2, 3, 4));
   
   // 3 - start, stop and step arguments
+  // 1.2 !== 1.1+0.1 so we need to do the math to test for equality
   t(s.iota(1, 0.3, 0.1),
-    s.list(1, 1.1, 1.2));
+    s.list(1, 1+0.1, 1.1+0.1));
   
-  
+
   //________________________________________________________________________//
   // srfi1.is_pair and srfi1.not_pair
   //________________________________________________________________________//
@@ -2098,8 +2082,8 @@ var srfi1 = {
            null,
            s.list(1, 2, 3),
            s.list(4, 5, 6)),
-    s.list(5, 7, 9));
-
+    s.list(9, 7, 5));
+  
   
   //________________________________________________________________________//
   // srfi1.for_each
@@ -2389,8 +2373,8 @@ var srfi1 = {
   // 2 - custom equality function
   t(s.assoc(2, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6)),
             function (a, b) { return a+1 === b; }),
-    s.cons(2, 5));
-
+    s.cons(3, 6));
+  
   
   //________________________________________________________________________//
   // srfi1.alist_cons

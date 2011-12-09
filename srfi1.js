@@ -73,7 +73,8 @@ var srfi1 = {
       return a === b;
     }
   },
-
+  
+  
   //________________________________________________________________________//
   // Constructors
   //
@@ -1240,21 +1241,23 @@ var srfi1 = {
     if (s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [4, 3]) )) {
       console.log("Test failed! is_equal #8");
     }
-    if (s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] ))
+    if (s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] )) {
+      console.log("Test failed! is_equal #9");
+    }
     
     // These tests should pass
     if (!s.is_equal( [1, 2, 3], [1, 2, 3] )) {
-      console.log("Test failed! is_equal #9");
-    }
-    if (!s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [3, 4]) )) {
       console.log("Test failed! is_equal #10");
     }
-    if (!s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] )){
+    if (!s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [3, 4]) )) {
       console.log("Test failed! is_equal #11");
+    }
+    if (!s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] )){
+      console.log("Test failed! is_equal #12");
     }
     if (!s.is_equal( s.cons(1, s.cons(2, s.cons(3, null))), 
                      s.cons(1, s.cons(2, s.cons(3, null))) )) {
-      console.log("Test failed! is_equal #12");
+      console.log("Test failed! is_equal #13");
     }
   })();
   
@@ -2580,7 +2583,7 @@ var srfi1 = {
   }
   
   if (s.to_string(s.cons(1, 2)) !== "(1 . 2)") {
-    console.log("Test Failed! to_string: (1 . 2)")
+    console.log("Test Failed! to_string: (1 . 2)");
   }
   
   if (s.to_string(s.cons(1, s.cons(2, 3))) !== "(1 2 . 3)") {

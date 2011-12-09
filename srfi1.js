@@ -55,7 +55,7 @@ var srfi1 = {
   // Equality
   //________________________________________________________________________//
   
-  equal: function (a, b) {
+  is_equal: function (a, b) {
     // handle end of list
     if (a === null || b === null) {
       if (a === b) {
@@ -76,8 +76,8 @@ var srfi1 = {
     }
     // handle nested lists
     else if (a instanceof this.Pair && b instanceof this.Pair) {
-      if (this.equal(a.car, b.car)) {
-        return this.equal(a.cdr, b.cdr);
+      if (this.is_equal(a.car, b.car)) {
+        return this.is_equal(a.cdr, b.cdr);
       }
       else {
         return false;
@@ -85,7 +85,7 @@ var srfi1 = {
     }
     // if cars are atoms and equal recurse
     else if (a.car === b.car) {
-      return this.equal(a.cdr, b.cdr);
+      return this.is_equal(a.cdr, b.cdr);
     }
     // if cars are not equal return false
     else {
@@ -866,7 +866,7 @@ var srfi1 = {
     // returns the first sublist of list whose car is === to elem.
     // fn is an optional parameter to specify a different equality procedure
     // for example this.list(1, 2) === this.list(1, 2) returns false so an
-    // equailty procedure like this.equals is necessary to compare lists.
+    // equailty procedure like this.is_equal is necessary to compare lists.
     fn = (typeof fn === 'undefined') ? function (a, b) { return a === b; } : fn;
     while (list !== null) {
       if (fn(elem, list.car)) {
@@ -1140,7 +1140,7 @@ var srfi1 = {
     
   function t(expr, expected) {
     if (expected instanceof s.Pair) {
-      if (!s.equal(expr, expected)) {
+      if (!s.is_equal(expr, expected)) {
         console.log("Test Failed! "+current_method+": #"+counter);
       }
     }
@@ -1870,10 +1870,10 @@ var srfi1 = {
         b = s.list(3, 4),
         c = s.list(5, 6),
         d = s.append_d(a, b, c);
-    if ( !s.equal(d, s.list(1, 2, 3, 4, 5, 6)) ) {
+    if ( !s.is_equal(d, s.list(1, 2, 3, 4, 5, 6)) ) {
       console.log("Test Failed! append_d");
     }
-    if ( !s.equal(a, s.list(1, 2, 3, 4, 5, 6)) ) {
+    if ( !s.is_equal(a, s.list(1, 2, 3, 4, 5, 6)) ) {
       console.log("Test Failed! append_d");
     }
   })();
@@ -1909,10 +1909,10 @@ var srfi1 = {
         c = s.list(5, 6),
         d = s.list(a, b, c),
         e = s.concatenate_d(d);
-    if ( !s.equal(e, s.list(1, 2, 3, 4, 5, 6)) ) {
+    if ( !s.is_equal(e, s.list(1, 2, 3, 4, 5, 6)) ) {
       console.log("Test Failed! concatenate_d");
     }
-    if ( !s.equal(a, s.list(1, 2, 3, 4, 5, 6)) ) {
+    if ( !s.is_equal(a, s.list(1, 2, 3, 4, 5, 6)) ) {
       console.log("Test Failed! concatenate_d");
     }
   })();
@@ -2128,7 +2128,7 @@ var srfi1 = {
     
     r = s.map_in_order(function (x) { a.push(x); return x+1; }, list);
     
-    if ( (a<[1, 2, 3] || [1, 2, 3]<a) || !s.equal(r, s.list(2, 3, 4)) ) {
+    if ( (a<[1, 2, 3] || [1, 2, 3]<a) || !s.is_equal(r, s.list(2, 3, 4)) ) {
       console.log("Test Failed! map_in_order");
     }
   })();

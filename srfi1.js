@@ -1155,7 +1155,7 @@ var srfi1 = {
 
 
   //________________________________________________________________________//
-  // srfi1.cons (also tests srfi1.equal)
+  // srfi1.cons (also tests srfi1.is_equal)
   //________________________________________________________________________//
 
   current_method = "cons";
@@ -1189,7 +1189,55 @@ var srfi1 = {
   t(s.cons(s.cons(1, 2), s.cons(3, 4)),
     new s.Pair(new s.Pair(1, 2), new s.Pair(3, 4)));
   
-
+  // is_equal
+  (function () {
+    // These tests should fail
+    if (s.is_equal( 7, 42 )) {
+      console.log("Test failed! is_equal #0");
+    }
+    if (s.is_equal( "a", "b" )) {
+      console.log("Test failed! is_equal #1");
+    }
+    if (s.is_equal( s.cons(1, 2), s.cons(1, 3) )) {
+      console.log("Test failed! is_equal #2");
+    }
+    if (s.is_equal( s.cons(1, 2), s.cons(3, 4) )) {
+      console.log("Test failed! is_equal #3");
+    }
+    if (s.is_equal( s.cons(1, null), s.cons(2, null) )) {
+      console.log("Test failed! is_equal #4");
+    }
+    if (s.is_equal( s.cons(1, s.cons(2, 3)), s.cons(1, s.cons(2, 4)) )) {
+      console.log("Test failed! is_equal #5");
+    }
+    if (s.is_equal( s.cons(1, s.cons(2, null)), s.cons(1, s.cons(3, null)) )) {
+      console.log("Test failed! is_equal #6");
+    }
+    if (s.is_equal([1, 2, 3], [1, 2, 4]) ) {
+      console.log("Test failed! is_equal #7");
+    }
+    if (s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [4, 3]) )) {
+      console.log("Test failed! is_equal #8");
+    }
+    if (s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] ))
+    
+    // These tests should pass
+    if (!s.is_equal( [1, 2, 3], [1, 2, 3] )) {
+      console.log("Test failed! is_equal #9");
+    }
+    if (!s.is_equal( s.cons([1, 2], [3, 4]), s.cons([1, 2], [3, 4]) )) {
+      console.log("Test failed! is_equal #10");
+    }
+    if (!s.is_equal( [s.cons(1, 2)], [s.cons(1, 2)] )){
+      console.log("Test failed! is_equal #11");
+    }
+    if (!s.is_equal( s.cons(1, s.cons(2, s.cons(3, null))), 
+                     s.cons(1, s.cons(2, s.cons(3, null))) )) {
+      console.log("Test failed! is_equal #12");
+    }
+  })();
+  
+  
   //________________________________________________________________________//
   // srfi1.list
   //________________________________________________________________________//
@@ -1275,9 +1323,6 @@ var srfi1 = {
   // 0 - (0 1 2)
   t(s.list_tabulate(3, function (i) { return i; }),
     s.list(0, 1, 2));
-  
-//   console.log("E: (0 1 2)");
-//   console.log("R: "+s.to_string(s.list_tabulate(3, function (i) { return i; })));
   
   
   //________________________________________________________________________//

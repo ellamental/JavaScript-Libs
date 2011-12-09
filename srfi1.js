@@ -1088,7 +1088,7 @@ var srfi1 = {
   to_string: function (list) {
     // Return a string representation of list
     var s = "(";
-    while (list !== null) {
+    while (list instanceof this.Pair) {
       if (list.car instanceof this.Pair) {
         s += this.to_string(list.car);
         if (list.cdr !== null) { s += " "; }
@@ -1098,6 +1098,9 @@ var srfi1 = {
         if (list.cdr !== null) { s += " "; }
       }
       list = list.cdr;
+    }
+    if (list !== null) {
+      s += ". "+list;
     }
     return s + ")";
   },
@@ -2443,7 +2446,15 @@ var srfi1 = {
   //________________________________________________________________________//
   
   if (s.to_string(s.list(1, 2, 3)) !== "(1 2 3)") {
-    console.log("Test Failed! to_string");
+    console.log("Test Failed! to_string: (1 2 3)");
+  }
+  
+  if (s.to_string(s.cons(1, 2)) !== "(1 . 2)") {
+    console.log("Test Failed! to_string: (1 . 2)")
+  }
+  
+  if (s.to_string(s.cons(1, s.cons(2, 3))) !== "(1 2 . 3)") {
+    console.log("Test Failed! to_string: (1 2 . 3)");
   }
   
   
@@ -2453,9 +2464,9 @@ var srfi1 = {
   
   t(s.array_to_list([1, 2, 3]),
     s.list(1, 2, 3));
-
-
-
+  
+  
+  
   console.log("Tests completed!");
   counter = 0;
   for(var i in srfi1) {

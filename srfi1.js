@@ -1000,13 +1000,27 @@ var srfi1 = {
   //________________________________________________________________________//
   
   assoc: function (key, alist, eq) {
-    // alist must be an association list -- a list of pairs. assoc finds the 
-    // first pair in alist whose car field is key, and returns that pair. If 
+    // alist must be an association list -- a list of pairs. assoc finds the
+    // first pair in alist whose car field is key, and returns that pair. If
     // no pair in alist has key as its car, then false is returned.
-    eq = (typeof eq === 'undefined') ? function (a, b) { return a === b; } :
+    eq = (typeof eq === 'undefined') ? function (a, b) { return srfi1.is_equal(a, b); } :
                                        eq;
     while (alist !== null) {
       if (eq(key, alist.car.car)) {
+        return alist.car;
+      }
+      alist = alist.cdr;
+    }
+    return false;
+  },
+  
+  assv: function (key, alist) {
+    // alist must be an association list -- a list of pairs. assv finds the
+    // first pair in alist whose car field is key, and returns that pair. If
+    // no pair in alist has key as its car, then false is returned.
+    // assv uses === (eqv?) as the comparison operator.
+    while (alist !== null) {
+      if (key === alist.car.car) {
         return alist.car;
       }
       alist = alist.cdr;
@@ -2428,6 +2442,38 @@ var srfi1 = {
   t(s.assoc(2, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6)),
             function (a, b) { return a+1 === b; }),
     s.cons(3, 6));
+  
+  // 3 - pairs as keys
+  t(s.assoc(s.cons(0, 2), s.list(s.cons(s.cons(0, 1), 0), s.cons(s.cons(0, 2), 1))),
+    s.cons(s.cons(0, 2), 1));
+  
+  // 4 - arrays as keys
+  t(s.assoc([3, 4], s.list(s.cons([1, 2], 0), s.cons([3, 4], 1), s.cons([5, 6], 2))),
+    s.cons([3, 4], 1));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.assv
+  //________________________________________________________________________//
+
+  current_method = "assv";
+  counter = 0;
+  
+  // 0
+  t(s.assv(2, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6))),
+    s.cons(2, 5));
+  
+  // 1 - not found
+  t(s.assv(5, s.list(s.cons(1, 4), s.cons(2, 5), s.cons(3, 6))),
+    false);
+  
+  // 2 - pairs as keys (would return true with assoc)
+  t(s.assv(s.cons(0, 2), s.list(s.cons(s.cons(0, 1), 0), s.cons(s.cons(0, 2), 1))),
+    false);
+  
+  // 3 - arrays as keys
+  t(s.assv([3, 4], s.list(s.cons([1, 2], 0), s.cons([3, 4], 1), s.cons([5, 6], 2))),
+    false);
   
   
   //________________________________________________________________________//

@@ -836,20 +836,29 @@ var srfi1 = {
   //________________________________________________________________________//
   // Searching
   //
-  // Implemented: member  find  find-tail  any  every
+  // Implemented: member  memv  find  find-tail  any  every
   //
-  // Not yet implemented: memq  memv  list-index  take-while  drop-while
+  // Not yet implemented: memq  list-index  take-while  drop-while
   //                      take-while!  span  break  span!  break!
   //________________________________________________________________________//
   
-  member: function (elem, list, fn) {
+  member: function (elem, list, eq) {
     // returns the first sublist of list whose car is === to elem.
-    // fn is an optional parameter to specify a different equality procedure
-    // for example this.list(1, 2) === this.list(1, 2) returns false so an
-    // equailty procedure like this.is_equal is necessary to compare lists.
-    fn = (typeof fn === 'undefined') ? function (a, b) { return a === b; } : fn;
+    // eq is an optional parameter to specify a different equality procedure
+    eq = (typeof eq === 'undefined') ? function (a, b) { return srfi1.is_equal(a, b); } : eq;
     while (list !== null) {
-      if (fn(elem, list.car)) {
+      if (eq(elem, list.car)) {
+        return list;
+      }
+      list = list.cdr;
+    }
+    return false;
+  },
+  
+  memv: function (elem, list) {
+    // returns the first sublist of list whose car is === (eqv?) to elem.
+    while (list !== null) {
+      if (elem === list.car) {
         return list;
       }
       list = list.cdr;
@@ -993,10 +1002,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Association lists
   //
-  // Implemented: assoc  alist_cons  alist-copy
+  // Implemented: assoc  assv  alist_cons  alist-copy
   //
-  // Not yet implemented: assq  assv
-  //                      alist-delete  alist-delete!
+  // Not yet implemented: assq  alist-delete  alist-delete!
   //________________________________________________________________________//
   
   assoc: function (key, alist, eq) {
@@ -1142,15 +1150,8 @@ var srfi1 = {
       counter, current_method;
     
   function t(expr, expected) {
-    if (expected instanceof s.Pair) {
-      if (!s.is_equal(expr, expected)) {
-        console.log("Test Failed! "+current_method+": #"+counter);
-      }
-    }
-    else {
-      if (expr !== expected) {
-        console.log("Test Failed! "+current_method+": #"+counter);
-      }
+    if (!s.is_equal(expr, expected)) {
+      console.log("Test Failed! "+current_method+": #"+counter);
     }
     counter++;
   }
@@ -2284,6 +2285,38 @@ var srfi1 = {
   // 2 - using optional equality procedure (subtract 2 from elem and compare)
   t(s.member(5, s.list(1, 2, 3), function (x, y) { return (x-3) === y; }),
     s.list(2, 3));
+  
+  // 3 - pairs as elements
+  t(s.member(s.cons(3, 4), s.list(s.cons(1, 2), s.cons(3, 4), s.cons(5, 6))),
+    s.list(s.cons(3, 4), s.cons(5, 6)));
+  
+  // 4 - arrays as elements
+  t(s.member([3, 4], s.list([1, 2], [3, 4], [5, 6])),
+    s.list([3, 4], [5, 6]));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.memv
+  //________________________________________________________________________//
+
+  current_method = "memv";
+  counter = 0;
+  
+  // 0 - is 2 in (1 2 3)
+  t(s.memv(2, s.list(1, 2, 3)),
+    s.list(2, 3));
+  
+  // 1 - is 5 in (1 2 3)
+  t(s.memv(5, s.list(1, 2, 3)),
+    false);
+  
+  // 2 - pairs as elements
+  t(s.memv(s.cons(3, 4), s.list(s.cons(1, 2), s.cons(3, 4), s.cons(5, 6))),
+    false);
+  
+  // 3 - arrays as elements
+  t(s.memv([3, 4], s.list([1, 2], [3, 4], [5, 6])),
+    false);
   
   
   //________________________________________________________________________//

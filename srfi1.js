@@ -1099,6 +1099,7 @@ var srfi1 = {
       }
       list = list.cdr;
     }
+    // Handle dotted pairs and improper lists
     if (list !== null) {
       s += ". "+list;
     }
@@ -1106,7 +1107,12 @@ var srfi1 = {
   },
   
   array_to_list: function (a) {
-    return this.list.apply(this, a);
+    var list = null,
+        i = a.length - 1;
+    for (i; i >= 0; i--) {
+      list = this.cons(a[i], list);
+    }
+    return list;
   }
 
 };
@@ -2507,8 +2513,17 @@ var srfi1 = {
   // srfi1.array_to_list
   //________________________________________________________________________//
   
+
+  current_method = "array_to_list";
+  counter = 0;
+  
+  // 0
   t(s.array_to_list([1, 2, 3]),
     s.list(1, 2, 3));
+  
+  // 1
+  t(s.array_to_list([]),
+    null);
   
   
   

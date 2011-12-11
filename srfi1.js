@@ -861,9 +861,8 @@ var srfi1 = {
   //________________________________________________________________________//
   // Filtering & partitioning
   //
-  // Implemented: filter  partition  remove
-  //
-  // Not yet implemented: filter!  partition!  remove! //________________________________________________________________________//
+  // Implemented: filter  filter_d  partition  partition_d  remove  remove_d
+ //________________________________________________________________________//
   
   filter: function (pred, list) {
     // Return all the elements of list that satisfy predicate pred.
@@ -875,6 +874,25 @@ var srfi1 = {
       list = list.cdr;
     }
     return this.reverse(l);
+  },
+  
+  filter_d: function (pred, list) {
+    var head = null,
+        last_pair = null;
+    while (list !== null) {
+      if (!pred(list.car)) {
+        if (head === null) {
+          head = list;
+        }
+        last_pair = list;
+        list = list.cdr;
+        last_pair.cdr = list;
+      }
+      else {
+        list = list.cdr;
+      }
+    }
+    return head;
   },
   
   partition: function (pred, list) {
@@ -894,6 +912,27 @@ var srfi1 = {
     return this.cons(this.reverse(in_list), this.reverse(out_list));
   },
   
+  partition_d: function (pred, list) {
+    var head = null,
+        last_pair = null,
+        out_list = null;
+    while (list !== null) {
+      if (pred(list.car)) {
+        if (head === null) {
+          head = list;
+        }
+        last_pair = list;
+        list = list.cdr;
+        last_pair.cdr = list;
+      }
+      else {
+        out_list = this.cons(list.car, out_list);
+        list = list.cdr;
+      }
+    }
+    return this.cons(head, this.reverse(out_list));
+  },
+  
   remove: function (pred, list) {
     // Returns list without the elements that satisfy predicate pred
     var l = null;
@@ -904,6 +943,25 @@ var srfi1 = {
       list = list.cdr;
     }
     return this.reverse(l);
+  },
+  
+  remove_d: function (pred, list) {
+    var head = null,
+        last_pair = null;
+    while (list !== null) {
+      if (pred(list.car)) {
+        if (head === null) {
+          head = list;
+        }
+        last_pair = list;
+        list = list.cdr;
+        last_pair.cdr = list;
+      }
+      else {
+        list = list.cdr;
+      }
+    }
+    return head;
   },
   
   
@@ -2433,10 +2491,34 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // srfi1.filter_d
+  //________________________________________________________________________//
+
+  current_method = "filter_d";
+  counter = 0;
+  
+  // 0 - return list of values less than 3
+  t(s.filter(function (x) { return x < 3; }, s.list(1, 2, 3, 4, 1)),
+    s.list(1, 2, 1));
+  
+  
+  //________________________________________________________________________//
   // srfi1.partition
   //________________________________________________________________________//
 
   current_method = "partition";
+  counter = 0;
+  
+  // 0 - partition on even?
+  t(s.partition(function (x) { return (x % 2) === 0; }, s.list(1, 2, 3, 4)),
+    s.cons(s.list(2, 4), s.list(1, 3)));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.partition_d
+  //________________________________________________________________________//
+
+  current_method = "partition_d";
   counter = 0;
   
   // 0 - partition on even?
@@ -2453,6 +2535,18 @@ var srfi1 = {
   
   // 0 - remove < 3
   t(s.remove(function (x) { return x < 3; }, s.list(1, 2, 3, 4)),
+    s.list(3, 4));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.remove_d
+  //________________________________________________________________________//
+
+  current_method = "remove_d";
+  counter = 0;
+  
+  // 0 - remove < 3
+  t(s.remove(function (x) { return x < 3; }, s.list(1, 2, 3, 4, 1)),
     s.list(3, 4));
   
   

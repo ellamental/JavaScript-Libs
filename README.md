@@ -3,6 +3,8 @@ srfi1
 
 srfi1 is a Javascript implementation of the SRFI-1 linked list library for Scheme.  This is a 'just for fun' implementation and probably shouldn't be used in production work.
 
+This implementation is about 80% complete and has been tested in Firefox 8 and Chromium 15.  There are no dependencies for this project.
+
 [The spec for SRFI-1 can be found here.](http://srfi.schemers.org/srfi-1/srfi-1.html)
 
 

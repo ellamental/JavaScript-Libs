@@ -709,6 +709,17 @@ var srfi1 = {
     }
   },
   
+  unfold: function (p, f, g, seed, tail_gen) {
+    tail_gen = (typeof tail_gen === 'undefined') ? function (x) { return null; } : tail_gen;
+    if (p(seed)) {
+      return tail_gen(seed);
+    }
+    else {
+      return this.cons(f(seed),
+                    this.unfold(p, f, g, g(seed), tail_gen));
+    }
+  },
+  
   for_each: function (fn /* list, ..., list-n */) {
     // The arguments to for-each are like the arguments to map, but for-each
     // calls proc for its side effects rather than for its values. Unlike map,
@@ -2205,6 +2216,21 @@ var srfi1 = {
            s.list(1, 2, 3),
            s.list(4, 5, 6)),
     s.list(9, 7, 5));
+
+  
+  //________________________________________________________________________//
+  // srfi1.unfold
+  //________________________________________________________________________//
+
+  current_method = "unfold";
+  counter = 0;
+  
+  // 0 - create (0 1 2)
+  t(s.unfold(function (n) { return n === 3; },
+             function (n) { return 0 + n * 1; },
+             function (n) { return n + 1; },
+             0),
+    s.list(0, 1, 2));
   
   
   //________________________________________________________________________//

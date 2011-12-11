@@ -862,7 +862,7 @@ var srfi1 = {
   // Filtering & partitioning
   //
   // Implemented: filter  filter_d  partition  partition_d  remove  remove_d
- //________________________________________________________________________//
+  //________________________________________________________________________//
   
   filter: function (pred, list) {
     // Return all the elements of list that satisfy predicate pred.
@@ -1226,7 +1226,7 @@ var srfi1 = {
   //________________________________________________________________________//
   // Implementation specific helper functions (not in srfi-1)
   //
-  // Implemented: to_array  to_string
+  // Implemented: to_array  to_string  array_to_list
   //________________________________________________________________________//
   
   to_array: function (list) {

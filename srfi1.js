@@ -391,9 +391,7 @@ var srfi1 = {
   //
   // Implemented:  length  length_plus  append  concatenate  reverse
   //               append-reverse  zip  unzip1  unzip2  unzip3  unzip4  unzip5
-  //               count  append_d  concatenate_d
-  //
-  // Not yet implemented:  reverse!  append-reverse!
+  //               count  append_d  concatenate_d  reverse_d  append-reverse_d
   //________________________________________________________________________//
   
   length: function (list) {
@@ -670,11 +668,10 @@ var srfi1 = {
   //________________________________________________________________________//
   // Fold, unfold & map
   //
-  // Implemented: map  fold  for_each  map_in_order  filter_map  reduce
-  //              reduce_right  unfold  unfold_right
+  // Implemented: map  fold  pair-fold  unfold  unfold_right  for_each
+  //              map_in_order  filter_map  reduce  reduce_right
   //
-  // Not yet implemented: pair-fold  fold-right
-  //                      pair-fold-right  append-map
+  // Not yet implemented: fold-right  pair-fold-right  append-map
   //                      append-map!  map!  pair-for-each
   //________________________________________________________________________//
   
@@ -713,6 +710,28 @@ var srfi1 = {
       for (i=num_args-1; i >= 0; i--) {
         if (args[i] !== null) {
           values.push(args[i].car);
+          args[i] = args[i].cdr;
+        }
+        else {
+          return temp;
+        }
+      }
+      values.push(temp);
+      temp = kons.apply(kons, values);
+    }
+  },
+  
+  pair_fold: function (kons, nil /* list, ..., list-n */) {
+    var args = Array.prototype.slice.call(arguments, 2),
+        num_args = args.length,
+        temp = nil,
+        values,
+        i;
+    while (true) {
+      values = [];
+      for (i=num_args-1; i >= 0; i--) {
+        if (args[i] !== null) {
+          values.push(args[i]);
           args[i] = args[i].cdr;
         }
         else {
@@ -2271,6 +2290,28 @@ var srfi1 = {
            s.list(4, 5, 6)),
     s.list(9, 7, 5));
 
+  
+  //________________________________________________________________________//
+  // srfi1.pair_fold
+  //________________________________________________________________________//
+
+  current_method = "pair_fold";
+  counter = 0;
+  
+  // 0 - add
+  t(s.pair_fold(function (a, b) { return s.car(a) + b; },
+                0,
+                s.list(1, 2, 3)),
+    6);
+  
+  // 1 - add car to cadr
+  t(s.pair_fold(function (a, b) {
+                  if (a.cdr !== null) { return a.car + a.cdr.car + b; }
+                  else { return a.car + b; } },
+                0,
+                s.list(1, 2, 3)),
+    11);
+  
   
   //________________________________________________________________________//
   // srfi1.unfold

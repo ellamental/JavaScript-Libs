@@ -656,9 +656,9 @@ var srfi1 = {
   // Fold, unfold & map
   //
   // Implemented: map  fold  for_each  map_in_order  filter_map  reduce
-  //              reduce-right
+  //              reduce_right  unfold  unfold_right
   //
-  // Not yet implemented: unfold  pair-fold  fold-right  unfold-right
+  // Not yet implemented: pair-fold  fold-right
   //                      pair-fold-right  append-map
   //                      append-map!  map!  pair-for-each
   //________________________________________________________________________//
@@ -716,7 +716,21 @@ var srfi1 = {
     }
     else {
       return this.cons(f(seed),
-                    this.unfold(p, f, g, g(seed), tail_gen));
+                       this.unfold(p, f, g, g(seed), tail_gen));
+    }
+  },
+  
+  unfold_right: function (p, f, g, seed, tail) {
+    tail = (typeof tail === 'undefined') ? null : tail;
+    var list = tail;
+    while (true) {
+      if (p(seed)) {
+        return tail;
+      }
+      else {
+        tail = this.cons(f(seed), tail);
+        seed = g(seed);
+      }
     }
   },
   
@@ -2225,11 +2239,26 @@ var srfi1 = {
   current_method = "unfold";
   counter = 0;
   
-  // 0 - create (0 1 2)
+  // 0 - create (0 1 2) (iota start stop step) where start=0 stop=3 step=1
   t(s.unfold(function (n) { return n === 3; },
              function (n) { return 0 + n * 1; },
              function (n) { return n + 1; },
              0),
+    s.list(0, 1, 2));
+
+  
+  //________________________________________________________________________//
+  // srfi1.unfold_right
+  //________________________________________________________________________//
+
+  current_method = "unfold_right";
+  counter = 0;
+  
+  // 0 - create (0 1 2) (iota start stop step) where start=0 stop=3 step=1
+  t(s.unfold_right(function (n) { return n === 0; },
+                   function (n) { return 0 + ((n - 1) * 1); },
+                   function (n) { return n - 1; },
+                   3),
     s.list(0, 1, 2));
   
   

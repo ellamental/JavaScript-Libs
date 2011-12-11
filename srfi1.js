@@ -523,6 +523,14 @@ var srfi1 = {
     return l;
   },
   
+  reverse_d: function (list) {
+    // reverse_d is the linear-update variant of reverse. It is permitted, but
+    // not required, to alter the argument's cons cells to produce the reversed
+    // list.
+    // Calls this.reverse as there is no benefit to destroying list.
+    return this.reverse(list);
+  },
+  
   append_reverse: function (list, tail) {
     var l = tail;
     while (list !== null) {
@@ -530,6 +538,13 @@ var srfi1 = {
       list = list.cdr;
     }
     return l;
+  },
+  
+  append_reverse_d: function (list, tail) {
+    // append-reverse! is just the linear-update variant -- it is allowed, but
+    // not required, to alter rev-head's cons cells to construct the result.
+    // Calls this.append_reverse as there is no benefit to destroying list.
+    return this.append_reverse(list, tail);
   },
   
   zip: function (/* list, ..., list-n */) {
@@ -2048,6 +2063,7 @@ var srfi1 = {
     }
   })();
   
+  
   //________________________________________________________________________//
   // srfi1.reverse
   //________________________________________________________________________//
@@ -2061,6 +2077,18 @@ var srfi1 = {
   
   
   //________________________________________________________________________//
+  // srfi1.reverse_d
+  //________________________________________________________________________//
+
+  current_method = "reverse_d";
+  counter = 0;
+  
+  // 0
+  t(s.reverse_d(s.list(1, 2, 3)),
+    s.list(3, 2, 1));
+  
+  
+  //________________________________________________________________________//
   // srfi1.append_reverse
   //________________________________________________________________________//
 
@@ -2069,6 +2097,18 @@ var srfi1 = {
   
   // 0
   t(s.append_reverse(s.list(1, 2, 3), s.list(4, 5, 6)),
+    s.list(3, 2, 1, 4, 5, 6));
+  
+  
+  //________________________________________________________________________//
+  // srfi1.append_reverse_d
+  //________________________________________________________________________//
+
+  current_method = "append_reverse_d";
+  counter = 0;
+  
+  // 0
+  t(s.append_reverse_d(s.list(1, 2, 3), s.list(4, 5, 6)),
     s.list(3, 2, 1, 4, 5, 6));
   
   

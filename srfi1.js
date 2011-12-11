@@ -968,9 +968,9 @@ var srfi1 = {
   //________________________________________________________________________//
   // Searching
   //
-  // Implemented: member  memv  find  find-tail  any  every
+  // Implemented: member  memv  find  find-tail  any  every  list_index
   //
-  // Not yet implemented: memq  list-index  take-while  drop-while
+  // Not yet implemented: memq  take-while  drop-while
   //                      take-while!  span  break  span!  break!
   //________________________________________________________________________//
   
@@ -1077,10 +1077,10 @@ var srfi1 = {
   },
   
   list_index: function (pred /* list1, ..., listn */) {
-    // Applies the predicate across the lists, returning the return value of
-    // pred if the predicate returns a truthy value on any application.
+    // Applies the predicate across the lists, returning the count if the
+    // predicate returns a truthy value on any application.
     // pred must be a function taking n arguments and returning a boolean
-    // result, where n is the number of list arguments passed to any.
+    // result, where n is the number of list arguments passed to list_index.
     var args = Array.prototype.slice.call(arguments, 1),
         num_args = args.length,
         temp_array = [],

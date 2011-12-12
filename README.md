@@ -20,7 +20,7 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 
 ## Documentation ##
 
-
+\* GitHub does not yet support internal reference links in README files, so the TOC is non-working.
 
 ### Equality and comparison ###
 

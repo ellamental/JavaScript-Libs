@@ -220,6 +220,39 @@ var array_lib = (function () {
     return array;
   };
   
+  a.partition = function (pred, array) {
+    // Returns an array consisting of two arrays, one containing elements for
+    // which pred(element) returns true (return[0]) and one with elements for
+    // which pred(element) returns false (return[1]).
+    var temp_in = [],
+        temp_out = [],
+        i, j;
+    for (i=0, j=array.length; i < j; i++) {
+      if (pred(array[i])) {
+        temp_in.push(array[i]);
+      }
+      else {
+        temp_out.push(array[i]);
+      }
+    }
+    return [temp_in, temp_out];
+  };
+  
+  a.partition$ = function (pred, array) {
+    // Like partition except partition$ is allowed, but not required, to
+    // destructively update array to produce a result.
+    var temp_out = [],
+        i, j;
+    for (i=0, j=array.length; i < j; i++) {
+      if (!pred(array[i])) {
+        temp_out.push(array[i]);
+        array.splice(i, 1);
+        i -= 1;
+        j -= 1;
+      }
+    }
+    return [array, temp_out];
+  };
   
   
   //________________________________________________________________________//
@@ -402,6 +435,31 @@ var array_lib = (function () {
   // 2 - Remove only 2 elements less than 5
   t(a.remove$(function (x) { return x < 5; }, [1, 2, 3, 4, 5, 6, 7], 2),
     [3, 4, 5, 6, 7]);
+  
+  
+  //________________________________________________________________________//
+  // partition
+  //________________________________________________________________________//
+  
+  current_method = "partition"
+  counter = 0;
+  
+  // 0 - less than 3
+  t(a.partition(function (x) { return x < 3; }, [1, 3, 2, 4]),
+    [[1, 2], [3, 4]]);
+  
+  
+  //________________________________________________________________________//
+  // partition$
+  //________________________________________________________________________//
+  
+  current_method = "partition$"
+  counter = 0;
+  
+  // 0 - less than 3
+  t(a.partition$(function (x) { return x < 3; }, [1, 3, 2, 4]),
+    [[1, 2], [3, 4]]);
+  
   
   
   

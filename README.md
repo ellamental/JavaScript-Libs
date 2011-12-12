@@ -90,3 +90,14 @@ Remove count elements for which pred(element) returns true and return a newly al
     remove(function (x) { return x < 5; }, [1, 2, 3, 4, 5, 6, 7], 2) //===> [3, 4, 5, 6, 7]
 
 \* remove$ is allowed, but not required, to destructively update the array argument to produce its result.
+
+<br />
+
+<a id="partition"> [**partition**](#i_partition)  
+<a id="partition$"> [**partition$**](#i_partition)
+
+Returns an array consisting of two arrays, one containing elements for which pred(element) returns true (return[0]) and one with elements for which pred(element) returns false (return[1]).
+
+    partition(function (x) { return x < 3; }, [1, 3, 2, 4]) //===> [[1, 2], [3, 4]]
+
+\* partition$ is allowed, but not required, to destructively update the array argument to produce its result.

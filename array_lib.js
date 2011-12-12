@@ -40,27 +40,130 @@
 "use strict";
 
 
-array_lib = {};
-
-array_lib.is_equal = function (a, b, eq) {
-  // General array equality, eq is an optional function that accepts 2
-  // arguments and returns a boolean value (defaults to ===).
-  eq = (typeof eq === 'undefined') ? function (x, y) { return x === y; } : eq;
-  if (a instanceof Array && b instanceof Array) {
-    if (a.length === b.length) {
-      for (var i=0,j=a.length; i < j; i++) {
-        if (!array_lib.is_equal(a[i], b[i], eq)) {
-          return false;
-        }
+var array_lib = (function () {
+  
+  var a = {};
+  
+  
+  //________________________________________________________________________//
+  // Private Methods
+  //________________________________________________________________________//
+  
+  function shortest_array(args) {
+    var shortest = args[0].length,
+        i;
+    for (i=0, j=args.length; i < j; i++) {
+      if (args[i].length < shortest) {
+        shortest = args[i].length;
       }
-      return true;
     }
-    return false;
+    return shortest;
   }
-  else {
-    return eq(a, b);
-  }
-};
+  
+  
+  //________________________________________________________________________//
+  // Equality
+  //________________________________________________________________________//
+  
+  a.is_equal = function (a, b, eq) {
+    // General array equality, eq is an optional function that accepts 2
+    // arguments and returns a boolean value (defaults to ===).
+    eq = (typeof eq === 'undefined') ? function (x, y) { return x === y; } : eq;
+    if (a instanceof Array && b instanceof Array) {
+      if (a.length === b.length) {
+        for (var i=0,j=a.length; i < j; i++) {
+          if (!array_lib.is_equal(a[i], b[i], eq)) {
+            return false;
+          }
+        }
+        return true;
+      }
+      return false;
+    }
+    else {
+      return eq(a, b);
+    }
+  };
+  
+  
+  //________________________________________________________________________//
+  // map, filter, reduce, etc
+  //________________________________________________________________________//
+  
+  a.map = function (fn /* array_1 ... array_n */) {
+    // Returns a new array that is the result of applying fn to each element of
+    // array.  fn is a function taking as many arguments as there are array
+    // arguments and returning a single value.
+    var out = [],
+        args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        length = shortest_array(args),
+        values, i, j;
+    for (i=0; i < length; i++) {
+      values = [];
+      for (j=0; j < num_args; j++) {
+        values.push(args[j][i]);
+      }
+      out.push(fn.apply(fn, values));
+    }
+    return out;
+  };
+  
+  a.map$ = function (fn /* array_1 ... array_n */) {
+    // Returns a new array that is the result of applying fn to each element of
+    // array.  fn is a function taking as many arguments as there are array
+    // arguments and returning a single value.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        out = args[0],
+        length = shortest_array(args),
+        values, i, j;
+    for (i=0; i < length; i++) {
+      values = [];
+      for (j=0; j < num_args; j++) {
+        values.push(args[j][i]);
+      }
+      out[i] = fn.apply(fn, values);
+    }
+    return out;
+  };
+  
+  
+  //________________________________________________________________________//
+  // filtering and partitioning
+  //________________________________________________________________________//
+  
+  a.filter = function (pred, array) {
+    // Return a new array with all the elements for which pred(element)
+    // returns true.
+    var out = [];
+    for (var i=0, j=array.length; i < j; i++) {
+      if (pred(array[i])) {
+        out.push(array[i]);
+      }
+    }
+    return out;
+  };
+  
+  a.filter$ = function (pred, array) {
+    // Like filter, except filter$ is allowed, but not required, to
+    // destructively update array.
+    for (var i=array.length-1; i >= 0; i--) {
+      if (!pred(array[i])) {
+        array.splice(i, 1);
+      }
+    }
+    return array;
+  };
+  
+  
+  //________________________________________________________________________//
+  // Return the array_lib object
+  //________________________________________________________________________//
+  
+  return a;
+})();
+
 
 
 
@@ -122,6 +225,78 @@ array_lib.is_equal = function (a, b, eq) {
   // 8 - eq function
   t(a.is_equal([1, 2, 3], [1, 2, 3], function (x, y) { return x === y-1; }),
     false);
+  
+  
+  //________________________________________________________________________//
+  // map
+  //________________________________________________________________________//
+  
+  current_method = "map"
+  counter = 0;
+  
+  // 0
+  t(a.map(function (x) { return x+1; }, [0, 1, 2]),
+    [1, 2, 3]);
+  
+  // 1 - multiple lists
+  t(a.map(function (x, y) { return x+y; }, [0, 1, 2], [3, 4, 5]),
+    [3, 5, 7]);
+  
+  // 2 - unequal length lists 1st is longest
+  t(a.map(function (x, y) { return x+y; }, [0, 1, 2, 10], [3, 4, 5]),
+    [3, 5, 7]);
+
+  // 3 - unequal length lists 2nd is longest
+  t(a.map(function (x, y) { return x+y; }, [0, 1, 2], [3, 4, 5, 10]),
+    [3, 5, 7]);
+  
+  
+  //________________________________________________________________________//
+  // map$
+  //________________________________________________________________________//
+  
+  current_method = "map$"
+  counter = 0;
+  
+  // 0
+  t(a.map$(function (x) { return x+1; }, [0, 1, 2]),
+    [1, 2, 3]);
+  
+  // 1 - multiple lists
+  t(a.map$(function (x, y) { return x+y; }, [0, 1, 2], [3, 4, 5]),
+    [3, 5, 7]);
+  
+  // 2 - unequal length lists 1st is longest
+  t(a.map$(function (x, y) { return x+y; }, [0, 1, 2, 10], [3, 4, 5]),
+    [3, 5, 7, 10]);
+
+  // 3 - unequal length lists 2nd is longest
+  t(a.map$(function (x, y) { return x+y; }, [0, 1, 2], [3, 4, 5, 10]),
+    [3, 5, 7]);
+  
+  
+  //________________________________________________________________________//
+  // filter
+  //________________________________________________________________________//
+  
+  current_method = "filter"
+  counter = 0;
+  
+  // 0
+  t(a.filter(function (x) { return x < 3; }, [1, 2, 3, 4]),
+    [1, 2]);
+  
+  
+  //________________________________________________________________________//
+  // filter$
+  //________________________________________________________________________//
+  
+  current_method = "filter$"
+  counter = 0;
+  
+  // 0
+  t(a.filter$(function (x) { return x < 3; }, [1, 2, 3, 4]),
+    [1, 2]);
   
   
   

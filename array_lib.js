@@ -87,7 +87,7 @@ var array_lib = (function () {
   
   
   //________________________________________________________________________//
-  // map, filter, reduce, etc
+  // map, fold, reduce, etc
   //________________________________________________________________________//
   
   a.map = function (fn /* array_1 ... array_n */) {
@@ -134,8 +134,8 @@ var array_lib = (function () {
   //________________________________________________________________________//
   
   a.filter = function (pred, array) {
-    // Return a new array with all the elements for which pred(element)
-    // returns true.
+    // Return a new array consisting of all the elements for which
+    // pred(element) returns true.
     var out = [];
     for (var i=0, j=array.length; i < j; i++) {
       if (pred(array[i])) {
@@ -155,6 +155,71 @@ var array_lib = (function () {
     }
     return array;
   };
+  
+  a.remove = function (pred, array, count) {
+    // Remove count elements for which pred(element) returns true and return
+    // a newly allocated array.  If count is not provided all elements
+    // for which pred(element) returns true will be removed.
+    var temp = [],
+        i, j;
+    if (typeof count === 'undefined') {
+      for (i=0, j=array.length; i < j; i++) {
+        if (!pred(array[i])) {
+          temp.push(array[i]);
+        }
+      }
+    }
+    else {
+      for (i=0, j=array.length; i < j; i++) {
+        if (count > 0) {
+          if (!pred(array[i])) {
+            temp.push(array[i]);
+          }
+          else {
+            count -= 1;
+          }
+        }
+        else {
+          temp.push(array[i]);
+        }
+      }
+    }
+    return temp;
+  };
+  
+  a.remove$ = function (pred, array, count) {
+    // Like remove except remove$ is allowed, but not required, to
+    // destructively update array.
+    var indicies_to_remove = [],
+        i;
+    if (typeof count === 'undefined') {
+      for (i=0, j=array.length; i < j; i++) {
+        if (pred(array[i])) {
+          array.splice(i, 1);
+          j -= 1;
+          i -= 1;
+          count -= 1;
+        }
+      }
+    }
+    else {
+      for (i=0, j=array.length; i < j; i++) {
+        if (count > 0) {
+          if (pred(array[i])) {
+            array.splice(i, 1);
+            j -= 1;
+            i -= 1;
+            count -= 1;
+          }
+        }
+        else {
+          return array;
+        }
+      }
+    }
+    return array;
+  };
+  
   
   
   //________________________________________________________________________//
@@ -297,6 +362,47 @@ var array_lib = (function () {
   // 0
   t(a.filter$(function (x) { return x < 3; }, [1, 2, 3, 4]),
     [1, 2]);
+  
+  
+  //________________________________________________________________________//
+  // remove
+  //________________________________________________________________________//
+  
+  current_method = "remove"
+  counter = 0;
+  
+  // 0 - Remove single element
+  t(a.remove(function (x) { return x === 2; }, [1, 2, 3, 4]),
+    [1, 3, 4]);
+  
+  // 1 - Remove all less than 3
+  t(a.remove(function (x) { return x < 3; }, [1, 3, 2, 4]),
+    [3, 4]);
+  
+  // 2 - Remove only 2 elements less than 5
+  t(a.remove(function (x) { return x < 5; }, [1, 2, 3, 4, 5, 6, 7], 2),
+    [3, 4, 5, 6, 7]);
+  
+  
+  //________________________________________________________________________//
+  // remove$
+  //________________________________________________________________________//
+  
+  current_method = "remove$"
+  counter = 0;
+  
+  // 0 - Remove single element
+  t(a.remove$(function (x) { return x === 2; }, [1, 2, 3, 4]),
+    [1, 3, 4]);
+  
+  // 1 - Remove all less than 3
+  t(a.remove$(function (x) { return x < 3; }, [1, 3, 2, 4]),
+    [3, 4]);
+  
+  // 2 - Remove only 2 elements less than 5
+  t(a.remove$(function (x) { return x < 5; }, [1, 2, 3, 4, 5, 6, 7], 2),
+    [3, 4, 5, 6, 7]);
+  
   
   
   

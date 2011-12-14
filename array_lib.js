@@ -256,6 +256,32 @@ var array_lib = (function () {
   
   
   //________________________________________________________________________//
+  // Searching
+  //________________________________________________________________________//
+  
+  a.index = function (pred /* array_1 ... array_n */ ) {
+    // Return the index of the left-most element for which
+    // pred(array_0[i], ..., array[n][i]) returns true.
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        length = shortest_array(args),
+        count = 0;
+        values, i, j;
+    for (i=0; i < length; i++) {
+      values = [];
+      for (j=0; j < num_args; j++) {
+        values.push(args[j][i]);
+      }
+      if (pred.apply(pred, values)) {
+        return count;
+      }
+      count += 1;
+    }
+    return -1;
+  };
+  
+  
+  //________________________________________________________________________//
   // Return the array_lib object
   //________________________________________________________________________//
   
@@ -461,6 +487,28 @@ var array_lib = (function () {
     [[1, 2], [3, 4]]);
   
   
+  //________________________________________________________________________//
+  // index
+  //________________________________________________________________________//
+  
+  current_method = "index"
+  counter = 0;
+  
+  // 0 - in array
+  t(a.index(function (x) { return x === 2; }, [1, 2, 3]),
+    1);
+  
+  // 1 - not in array
+  t(a.index(function (x) { return x === 42; }, [1, 2, 3]),
+    -1);
+  
+  // 2 - in multiple arrays
+  t(a.index(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1]),
+    2);
+  
+  // 3 - not in multiple arrays
+  t(a.index(function (x, y) { return x > y; }, [1, 2, 3], [10, 20, 30]),
+    -1);
   
   
   

@@ -22,6 +22,7 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 
 \* GitHub does not yet support internal reference links in README files, so the TOC is non-working.
 
+
 ### Equality and comparison ###
 
 * [is_equal](#is_equal) <a id="i_is_equal"/>
@@ -36,6 +37,13 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 
 * [filter](#filter) [filter$](#filter$) <a id="i_filter"/>
 * [remove](#remove) [remove$](#remove$) <a id="i_remove"/>
+* [partition](#partition) [partition$](#partition$) <a id="i_partition"/>
+
+
+### Searching ###
+
+* [index](#index) <a id="i_index"/>
+
 
 -------------------------------------------------------------------------------
 
@@ -101,3 +109,16 @@ Returns an array consisting of two arrays, one containing elements for which pre
     partition(function (x) { return x < 3; }, [1, 3, 2, 4]) //===> [[1, 2], [3, 4]]
 
 \* partition$ is allowed, but not required, to destructively update the array argument to produce its result.
+
+<br /><br />
+
+### Searching ###
+
+<a id="index"> [**index**](#i_index)
+
+Return the index of the left-most element for which pred(array_0[i], ..., array[n][i]) returns true.
+
+    a.index(function (x) { return x === 2; }, [1, 2, 3]) //===> 1
+    a.index(function (x) { return x === 42; }, [1, 2, 3]) //===> -1
+    a.index(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1]) //===> 2
+

@@ -44,6 +44,8 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 
 * [index](#index) <a id="i_index"/>
 * [indexOf](#indexOf) <a id="i_indexOf"/>
+* [find](#find) <a id="i_find"/>
+
 
 -------------------------------------------------------------------------------
 
@@ -118,9 +120,9 @@ Returns an array consisting of two arrays, one containing elements for which pre
 
 Return the index of the left-most element for which pred(array_0[i], ..., array_n[i]) returns true or -1 if no index matches.
 
-    a.index(function (x) { return x === 2; }, [1, 2, 3]) //===> 1
-    a.index(function (x) { return x === 42; }, [1, 2, 3]) //===> -1
-    a.index(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1]) //===> 2
+    index(function (x) { return x === 2; }, [1, 2, 3]) //===> 1
+    index(function (x) { return x === 42; }, [1, 2, 3]) //===> -1
+    index(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1]) //===> 2
 
 <br />
 
@@ -128,8 +130,17 @@ Return the index of the left-most element for which pred(array_0[i], ..., array_
 
 Return the index of the left-most element in array that === element or -1 if no index matches.  The optional start argument can be used to exclude the first n indices of the array.
 
-    a.indexOf(2, [1, 2, 3]) //===> 1
-    a.indexOf(42, [1, 2, 3]) //===> -1
-    a.indexOf(42, [0, 42, 7, 35, 42, 64], 2) //===> 4
-    a.indexOf(42, [42, 35, 7, 0], 1) //===> -1
+    indexOf(2, [1, 2, 3]) //===> 1
+    indexOf(42, [1, 2, 3]) //===> -1
+    indexOf(42, [0, 42, 7, 35, 42, 64], 2) //===> 4
+    indexOf(42, [42, 35, 7, 0], 1) //===> -1
+
+<br />
+
+[**find**](#i_find) (pred, array) <a id="find"/>
+
+Return the first element of array which satisifes pred, false if no element does.
+
+    find(function (x) { return x % 2 === 0; }, [1, 3, 4, 5]) //===> 4
+    find(function (x) { return x % 2 === 0; }, [1, 3, 5]) //===> false
 

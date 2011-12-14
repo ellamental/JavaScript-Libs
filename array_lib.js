@@ -297,6 +297,18 @@ var array_lib = (function () {
     return -1;
   };
   
+  a.find = function (pred, array) {
+    // Return the first element of array which satisifes pred, false if no
+    // element does.
+    var i, j;
+    for (i=0,j=array.length; i < j; i++) {
+      if (pred(array[i])) {
+        return array[i];
+      }
+    }
+    return false;
+  };
+  
   
   //________________________________________________________________________//
   // Return the array_lib object
@@ -551,6 +563,21 @@ var array_lib = (function () {
   t(a.indexOf(42, [42, 35, 7, 0], 1),
     -1);
   
+  
+  //________________________________________________________________________//
+  // find
+  //________________________________________________________________________//
+  
+  current_method = "find"
+  counter = 0;
+  
+  // 0 - find even number
+  t(a.find(function (x) { return x % 2 === 0; }, [1, 3, 4, 5]),
+    4);
+  
+  // 1 - find with element not in array
+  t(a.find(function (x) { return x % 2 === 0; }, [1, 3, 5]),
+    false);
   
   
   

@@ -310,7 +310,7 @@ var array_lib = (function () {
   };
   
   a.any = function (pred /* array, ..., array_n */) {
-    // Return true if pred(element) returns true for all elements of array
+    // Return true if pred(element) returns true for any element of array
     var args = Array.prototype.slice.call(arguments, 1),
         num_args = args.length,
         length = shortest_array(args),
@@ -325,6 +325,24 @@ var array_lib = (function () {
       }
     }
     return false;
+  };
+  
+  a.every = function (pred /* array, ..., array_n */) {
+    // Return true if pred(element) returns true for all elements of array
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        length = shortest_array(args),
+        values, i, j;
+    for (i=0; i < length; i++) {
+      values = [];
+      for (j=0; j < num_args; j++) {
+        values.push(args[j][i]);
+      }
+      if (!pred.apply(pred, values)) {
+        return false;
+      }
+    }
+    return true;
   };
   
   
@@ -619,6 +637,30 @@ var array_lib = (function () {
   
   // 3 - any greater than
   t(a.any(function (x, y) { return x > y; }, [1, 2, 3], [10, 11, 12]),
+    false);
+  
+  
+  //________________________________________________________________________//
+  // every
+  //________________________________________________________________________//
+  
+  current_method = "every"
+  counter = 0;
+  
+  // 0 - every even
+  t(a.every(function (x) { return x % 2 === 0; }, [2, 4, 6]),
+    true);
+  
+  // 1 - every even (false)
+  t(a.every(function (x) { return x % 2 === 0; }, [2, 4, 5]),
+    false);
+  
+  // 2 - every greater than
+  t(a.every(function (x, y) { return x > y; }, [10, 11, 12], [1, 2, 3]),
+    true);
+  
+  // 3 - every greater than
+  t(a.every(function (x, y) { return x > y; }, [3, 2, 1], [1, 2, 3]),
     false);
   
   

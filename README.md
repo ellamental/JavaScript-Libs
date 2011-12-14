@@ -46,7 +46,7 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 * [indexOf](#indexOf) <a id="i_indexOf"/>
 * [find](#find) <a id="i_find"/>
 * [any](#any) <a id="i_any"/>
-
+* [every](#every) <a id="i_every"/>
 
 -------------------------------------------------------------------------------
 
@@ -149,9 +149,19 @@ Return the first element of array which satisifes pred, false if no element does
 
 [**any**](#i_any) (pred, array, ...) <a id="any"/>
 
-Return true if pred(element) returns true for all elements of array.
+Return true if pred(element) returns true for any element of array.  pred is a function which takes as many arguments as there are array arguments and returns a boolean value.
 
     any(function (x) { return x % 2 === 0; }, [1, 3, 4])
     any(function (x) { return x % 2 === 0; }, [1, 3, 5])
     any(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1])
+
+<br />
+
+[**every**](#i_every) (pred, array, ...) <a id="every"/>
+
+Return true if pred(element) returns true for all elements of array.  pred is a function which takes as many arguments as there are array arguments and returns a boolean value.
+
+    every(function (x) { return x % 2 === 0; }, [1, 3, 4])
+    every(function (x) { return x % 2 === 0; }, [1, 3, 5])
+    every(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1])
 

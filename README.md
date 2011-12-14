@@ -49,7 +49,7 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 
 ### Equality and comparison ###
 
-[**is_equal**](#i_is_equal) <a id="is_equal"/> (a, b)
+[**is_equal**](#i_is_equal) (a, b) <a id="is_equal"/>
 
 General array equality, eq is an optional function that accepts 2 arguments and returns a boolean value (defaults to ===).
 
@@ -62,7 +62,7 @@ General array equality, eq is an optional function that accepts 2 arguments and 
 ### map, fold, reduce, etc ###
 
 [**map**](#i_map) <a id="map"/>  
-[**map$**](#i_map) <a id="map$"/> (fn, array1, array2, ...)
+[**map$**](#i_map) (fn, array1, array2, ...) <a id="map$"/>
 
 Returns a new array that is the result of applying fn to each element of array.  fn is a function taking as many arguments as there are array arguments and returning a single value.
 
@@ -78,7 +78,7 @@ Returns a new array that is the result of applying fn to each element of array. 
 ### Filtering and partitioning ###
 
 [**filter**](#i_filter) <a id="filter"/>  
-[**filter$**](#i_filter) <a id="filter$"/> (pred, array)
+[**filter$**](#i_filter) (pred, array) <a id="filter$"/>
 
 Return a new array consisting of all the elements for which pred(element) returns true.
 
@@ -89,7 +89,7 @@ Return a new array consisting of all the elements for which pred(element) return
 <br />
 
 [**remove**](#i_remove)  
-[**remove$**](#i_remove) <a id="remove$"> (pred, array, count)
+[**remove$**](#i_remove) (pred, array, count) <a id="remove$"/>
 
 Remove count elements for which pred(element) returns true and return a newly allocated array.  If count is not provided all elements for which pred(element) returns true will be removed.
 
@@ -102,7 +102,7 @@ Remove count elements for which pred(element) returns true and return a newly al
 <br />
 
 [**partition**](#i_partition)  
-[**partition$**](#i_partition) <a id="partition$"> (pred, array)
+[**partition$**](#i_partition) (pred, array) <a id="partition$"/>
 
 Returns an array consisting of two arrays, one containing elements for which pred(element) returns true (return[0]) and one with elements for which pred(element) returns false (return[1]).
 
@@ -114,7 +114,7 @@ Returns an array consisting of two arrays, one containing elements for which pre
 
 ### Searching ###
 
-[**index**](#i_index) <a id="index"> (pred, array1, array2, ...)
+[**index**](#i_index) (pred, array1, array2, ...) <a id="index"/>
 
 Return the index of the left-most element for which pred(array_0[i], ..., array[n][i]) returns true.
 

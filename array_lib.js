@@ -265,7 +265,7 @@ var array_lib = (function () {
     var args = Array.prototype.slice.call(arguments, 1),
         num_args = args.length,
         length = shortest_array(args),
-        count = 0;
+        count = 0,
         values, i, j;
     for (i=0; i < length; i++) {
       values = [];
@@ -304,6 +304,24 @@ var array_lib = (function () {
     for (i=0,j=array.length; i < j; i++) {
       if (pred(array[i])) {
         return array[i];
+      }
+    }
+    return false;
+  };
+  
+  a.any = function (pred /* array, ..., array_n */) {
+    // Return true if pred(element) returns true for all elements of array
+    var args = Array.prototype.slice.call(arguments, 1),
+        num_args = args.length,
+        length = shortest_array(args),
+        values, i, j;
+    for (i=0; i < length; i++) {
+      values = [];
+      for (j=0; j < num_args; j++) {
+        values.push(args[j][i]);
+      }
+      if (pred.apply(pred, values)) {
+        return true;
       }
     }
     return false;
@@ -578,6 +596,31 @@ var array_lib = (function () {
   // 1 - find with element not in array
   t(a.find(function (x) { return x % 2 === 0; }, [1, 3, 5]),
     false);
+  
+  
+  //________________________________________________________________________//
+  // any
+  //________________________________________________________________________//
+  
+  current_method = "any"
+  counter = 0;
+  
+  // 0 - any even
+  t(a.any(function (x) { return x % 2 === 0; }, [1, 3, 4]),
+    true);
+  
+  // 1 - any even (not in array)
+  t(a.any(function (x) { return x % 2 === 0; }, [1, 3, 5]),
+    false);
+  
+  // 2 - any greater than
+  t(a.any(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1]),
+    true);
+  
+  // 3 - any greater than
+  t(a.any(function (x, y) { return x > y; }, [1, 2, 3], [10, 11, 12]),
+    false);
+  
   
   
   

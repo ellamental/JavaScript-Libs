@@ -45,6 +45,7 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 * [index](#index) <a id="i_index"/>
 * [indexOf](#indexOf) <a id="i_indexOf"/>
 * [find](#find) <a id="i_find"/>
+* [any](#any) <a id="i_any"/>
 
 
 -------------------------------------------------------------------------------
@@ -64,7 +65,7 @@ General array equality, eq is an optional function that accepts 2 arguments and 
 ### map, fold, reduce, etc ###
 
 [**map**](#i_map) <a id="map"/>  
-[**map$**](#i_map) (fn, array1, array2, ...) <a id="map$"/>
+[**map$**](#i_map) (fn, array, ...) <a id="map$"/>
 
 Returns a new array that is the result of applying fn to each element of array.  fn is a function taking as many arguments as there are array arguments and returning a single value.
 
@@ -116,7 +117,7 @@ Returns an array consisting of two arrays, one containing elements for which pre
 
 ### Searching ###
 
-[**index**](#i_index) (pred, array1, array2, ...) <a id="index"/>
+[**index**](#i_index) (pred, array, ...) <a id="index"/>
 
 Return the index of the left-most element for which pred(array_0[i], ..., array_n[i]) returns true or -1 if no index matches.
 
@@ -143,4 +144,14 @@ Return the first element of array which satisifes pred, false if no element does
 
     find(function (x) { return x % 2 === 0; }, [1, 3, 4, 5]) //===> 4
     find(function (x) { return x % 2 === 0; }, [1, 3, 5]) //===> false
+
+<br />
+
+[**any**](#i_any) (pred, array, ...) <a id="any"/>
+
+Return true if pred(element) returns true for all elements of array.
+
+    any(function (x) { return x % 2 === 0; }, [1, 3, 4])
+    any(function (x) { return x % 2 === 0; }, [1, 3, 5])
+    any(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1])
 

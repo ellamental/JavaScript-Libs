@@ -43,7 +43,7 @@ A test suite is included. Currently it is part of the main array_lib.js file and
 ### Searching ###
 
 * [index](#index) <a id="i_index"/>
-
+* [indexOf](#indexOf) <a id="i_indexOf"/>
 
 -------------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ Return a new array consisting of all the elements for which pred(element) return
 <br />
 
 [**remove**](#i_remove)  
-[**remove$**](#i_remove) (pred, array, count) <a id="remove$"/>
+[**remove$**](#i_remove) (pred, array, *count*) <a id="remove$"/>
 
 Remove count elements for which pred(element) returns true and return a newly allocated array.  If count is not provided all elements for which pred(element) returns true will be removed.
 
@@ -116,9 +116,20 @@ Returns an array consisting of two arrays, one containing elements for which pre
 
 [**index**](#i_index) (pred, array1, array2, ...) <a id="index"/>
 
-Return the index of the left-most element for which pred(array_0[i], ..., array[n][i]) returns true.
+Return the index of the left-most element for which pred(array_0[i], ..., array_n[i]) returns true or -1 if no index matches.
 
     a.index(function (x) { return x === 2; }, [1, 2, 3]) //===> 1
     a.index(function (x) { return x === 42; }, [1, 2, 3]) //===> -1
     a.index(function (x, y) { return x > y; }, [1, 2, 3], [3, 2, 1]) //===> 2
+
+<br />
+
+[**indexOf**](#i_indexOf) (element, array, *start*) <a id="indexOf"/>
+
+Return the index of the left-most element in array that === element or -1 if no index matches.  The optional start argument can be used to exclude the first n indices of the array.
+
+    a.indexOf(2, [1, 2, 3]) //===> 1
+    a.indexOf(42, [1, 2, 3]) //===> -1
+    a.indexOf(42, [0, 42, 7, 35, 42, 64], 2) //===> 4
+    a.indexOf(42, [42, 35, 7, 0], 1) //===> -1
 

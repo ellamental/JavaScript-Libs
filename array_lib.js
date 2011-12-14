@@ -280,6 +280,23 @@ var array_lib = (function () {
     return -1;
   };
   
+  a.indexOf = function (element, array, start) {
+    // Return the index of the left-most element in array that === element or
+    // -1 if no index matches.  The optional start argument can be used to
+    // exclude the first n indices of the array.
+    var native_indexOf = Array.prototype.indexOf,
+        i, j;
+    if (native_indexOf && array.indexOf === native_indexOf) {
+      return array.indexOf(element, array);
+    }
+    for (i=(start || 0), j=array.length; i < j; i++) {
+      if (element === array[i]) {
+        return i;
+      }
+    }
+    return -1;
+  };
+  
   
   //________________________________________________________________________//
   // Return the array_lib object
@@ -511,6 +528,28 @@ var array_lib = (function () {
     -1);
   
   
+  //________________________________________________________________________//
+  // indexOf
+  //________________________________________________________________________//
+  
+  current_method = "indexOf"
+  counter = 0;
+  
+  // 0 - in array
+  t(a.indexOf(2, [1, 2, 3]),
+    1);
+  
+  // 1 - not in array
+  t(a.indexOf(42, [1, 2, 3]),
+    -1);
+  
+  // 2 - in array with optional start argument
+  t(a.indexOf(42, [0, 42, 7, 35, 42, 64], 2),
+    4);
+  
+  // 3 - not in array with optional start argument
+  t(a.indexOf(42, [42, 35, 7, 0], 1),
+    -1);
   
   
   

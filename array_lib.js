@@ -287,7 +287,7 @@ var array_lib = (function () {
     var native_indexOf = Array.prototype.indexOf,
         i, j;
     if (native_indexOf && array.indexOf === native_indexOf) {
-      return array.indexOf(element, array);
+      return array.indexOf(element, (start || 0));
     }
     for (i=(start || 0), j=array.length; i < j; i++) {
       if (element === array[i]) {

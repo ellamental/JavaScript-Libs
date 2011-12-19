@@ -78,18 +78,7 @@ var Set = function () {
       return true;
     }
   };
-
-
-
+  
+  
+  
 };
-  
-  
-  
-  
-  
-//   // Set constructor function (new is not required)
-//   s.set = function () {
-//     var newSet = Object.create(s.Set.prototype);
-//     s.Set.apply(newSet, arguments);
-//     return newSet;
-//   };

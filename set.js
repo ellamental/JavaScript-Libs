@@ -40,183 +40,56 @@
 "use strict";
 
 
-var set = (function () {
+var Set = function () {
+  var i, j;
   
-  var s = {};
+  this.data = [];
+  this.length = 0;
   
-  
-  //________________________________________________________________________//
-  // Set type
-  //________________________________________________________________________//
-  
-  s.Set = function () {
-    var i, j;
-    
-    this.data = [];
-    this.length = 0;
-    
-    for (i=0, j=arguments.length; i < j; i++) {
-      if (this.data.indexOf(arguments[i]) < 0) {
-        this.data.push(arguments[i]);
-        this.length += 1;
-      }
+  for (i=0, j=arguments.length; i < j; i++) {
+    if (this.data.indexOf(arguments[i]) < 0) {
+      this.data.push(arguments[i]);
+      this.length += 1;
     }
-        
-    this.toString = function () {
-      return "[object Set]";
-    };
-    
-    this.toArray = function () {
-      return this.data;
-    };
+  }
+  
+  this.toString = function () {
+    return "[object Set]";
   };
   
-  s.set = function () {
-    var newSet = Object.create(s.Set.prototype);
-    s.Set.apply(newSet, arguments);
-    return newSet;
+  this.toArray = function () {
+    return this.data;
   };
-  
-  
-  //________________________________________________________________________//
-  // Equality
-  //________________________________________________________________________//
-  
-  s.isEqual = function (a, b) {
-    if (!(a instanceof s.Set && b instanceof s.Set)) {
+
+  this.equals = function (other) {
+    var i, j;
+    if (!(other instanceof Set)) {
       return false;
     }
-    else if (a.length !== b.length) {
+    else if (other.length !== this.length) {
       return false;
     }
     else {
-      for (var i=0, j=a.length; i < j; i++) {
-        if (b.data.indexOf(a.data[i]) < 0) {
+      for (i=0, j=this.length; i < j; i++) {
+        if (other.data.indexOf(this.data[i]) < 0) {
           return false;
         }
       }
       return true;
     }
   };
-  
-  
-  //________________________________________________________________________//
-  // Return the set object
-  //________________________________________________________________________//
-  
-  return s;
-  
-})();
 
 
 
-
-//___________________________________________________________________________//
-// Tests
-//___________________________________________________________________________//
-
-
-(function () {
-  var s = set,
-      counter, current_method;
-    
-  function t(expr, expected) {
-    if (expected instanceof s.Set) {
-      if (!s.isEqual(expr, expected)) {
-        console.log("Test Failed! "+current_method+": #"+counter);
-      }
-    }
-    else {
-      if (expr !== expected) {
-        console.log("Test Failed! "+current_method+": #"+counter);
-      }
-    }
-    counter++;
-  }
-  
-  
-  //________________________________________________________________________//
-  // Set
-  //________________________________________________________________________//
-  
-  current_method = "Set"
-  counter = 0;
-  
-  // 0 - empty Set
-  t(new s.Set(),
-    new s.Set());
-  
-  // 1 - one element Set
-  t(new s.Set(1),
-    new s.Set(1));
-  
-  // 2 - multiple element Set
-  t(new s.Set(1, 2, 3),
-    new s.Set(1, 2, 3));
-  
-  // 3 - unordered Sets still compare equal
-  t(new s.Set(1, 2, 3),
-    new s.Set(3, 2, 1));
-  
-  
-  //________________________________________________________________________//
-  // set
-  //________________________________________________________________________//
-  
-  current_method = "set"
-  counter = 0;
-  
-  // 0 - set
-  t(s.set(1, 2, 3),
-    s.set(3, 2, 1));
-  
-  
-  //________________________________________________________________________//
-  // isEqual
-  //________________________________________________________________________//
-  
-  current_method = "isEqual"
-  counter = 0;
-  
-  // 0 - empty Sets
-  t(s.isEqual(s.set(), s.set()),
-    true);
-  
-  // 1 - multiple elements
-  t(s.isEqual(s.set(1, 2, 3), s.set(1, 2, 3)),
-    true);
-  
-  // 2 - unordered Sets
-  t(s.isEqual(s.set(1, 2, 3), s.set(3, 1, 2)),
-    true);
-  
-  // 3 - unequal elements
-  t(s.isEqual(s.set(1, 2, 3), s.set(2, 3, 4)),
-    false);
-  
-  // 4 - unequal length
-  t(s.isEqual(s.set(1, 2, 3), s.set(1, 2)),
-    false);
-  
-  // 5 - Set and array
-  t(s.isEqual(s.set(1, 2, 3), [1, 2, 3]),
-    false);
+};
   
   
   
   
   
-  
-  //________________________________________________________________________//
-  // Finish tests and display # of functions implemented
-  //________________________________________________________________________//
-  
-  console.log("Tests completed!");
-  counter = 0;
-  for(var i in set) {
-    if (set.hasOwnProperty(i)) {
-      counter += 1;
-    }
-  }
-  return counter + " functions implemented";
-})();
+//   // Set constructor function (new is not required)
+//   s.set = function () {
+//     var newSet = Object.create(s.Set.prototype);
+//     s.Set.apply(newSet, arguments);
+//     return newSet;
+//   };

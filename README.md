@@ -3,3 +3,7 @@ JavaScript-Libs is... wait for it... a collection of JavaScript libraries.  Thes
 ## [array.js](https://github.com/jacktrades/JavaScript-Libs/wiki/array.js)
 
 The array.js library is a library of array functions inspired by [Scheme's SRFI-1](http://srfi.schemers.org/srfi-1/srfi-1.html).
+
+## [set.js](https://github.com/jacktrades/JavaScript-Libs/wiki/set.js)
+
+The set.js library is a library of set functions.

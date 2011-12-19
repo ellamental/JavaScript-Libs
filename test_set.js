@@ -65,5 +65,30 @@ $(document).ready(function(){
   });
   
   
+  test("Set.add", function () {
+    var a = new Set(1, 2);
+    
+    a.add(3);
+    
+    equal( a.length,
+           3,
+           "New length should equal 3" );
+    
+    equal( a.equals(new Set(1, 2, 3)),
+           true,
+           "a contains the elements 1, 2 and 3" );
+    
+    a.add(2);
+    
+    equal( a.length,
+           3,
+           "2 was already present in a so add should not increment length" );
+    
+    equal( a.equals(new Set(1, 2, 3)),
+           true,
+           "a should remain unchanged so this test should still return true" );
+  });
+  
+  
   
 });

@@ -84,5 +84,11 @@ var Set = function () {
   };
   
   
+  this.add = function (element) {
+    if (this.data.indexOf(element) < 0) {
+      this.data.push(element);
+      this.length += 1;
+    }
+  };
   
 };

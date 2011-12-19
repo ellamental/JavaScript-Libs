@@ -113,4 +113,38 @@ $(document).ready(function(){
            "Calling remove with an element not in the set should have no effect" );
   });
   
+  
+  test("Set.pop", function () {
+    var a = new Set(1, 2),
+        b = a.pop(),
+        c, d;
+    
+    equal( a.length,
+           1,
+           "a only contains 1 element after a.pop()" );
+    
+    ok( (b === 1 || b === 2),
+        "b equals an element from the set" );
+
+    c = a.pop();
+    
+    equal( a.length,
+           0,
+           "a is empty after 2 pops" );
+    
+    ok( (c === 1 || c === 2),
+        "c equals an element from the set" );
+    
+    d = a.pop();
+    
+    equal( a.length,
+           0,
+           "a is still empty after 3 pops" );
+    
+    ok( d === undefined,
+        "d is undefined" );
+  });
+  
+  
+  
 });

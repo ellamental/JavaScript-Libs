@@ -99,6 +99,15 @@ var Set = function () {
     }
   };
   
+  this.pop = function () {
+    // Remove and return an arbitrary element, returns undefined if set is empty
+    if (this.length > 0) {
+      this.length -= 1;
+      return this.data.pop();
+    }
+    return undefined;
+  };
+  
   
   
 };

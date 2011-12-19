@@ -89,6 +89,28 @@ $(document).ready(function(){
            "a should remain unchanged so this test should still return true" );
   });
   
-  
+  test("Set.remove", function () {
+    var a = new Set(1, 2, 3);
+    
+    a.remove(2);
+    
+    equal( a.length,
+           2,
+           "New length should equal 2" );
+    
+    equal( a.equals(new Set(1, 3)),
+           true,
+           "a contains the elements 1 and 3" );
+    
+    a.remove(42);
+    
+    equal( a.length,
+           2,
+           "Calling remove with an element not in the set should have no effect" );
+    
+    equal( a.equals(new Set(1, 3)),
+           true,
+           "Calling remove with an element not in the set should have no effect" );
+  });
   
 });

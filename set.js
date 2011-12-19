@@ -91,4 +91,14 @@ var Set = function () {
     }
   };
   
+  this.remove = function (element) {
+    var idx = this.data.indexOf(element);
+    if (idx >= 0) {
+      this.data.splice(idx, 1);
+      this.length -= 1;
+    }
+  };
+  
+  
+  
 };

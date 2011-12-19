@@ -79,6 +79,10 @@ var Set = function () {
     }
   };
   
+  this.isEmpty = function () {
+    return this.length === 0;
+  };
+  
   
   
 };

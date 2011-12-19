@@ -50,5 +50,20 @@ $(document).ready(function(){
            "Sets with unequal length do not compare equal" );
   });
   
-
+  
+  test("Set.isEmpty", function () {
+    var a = new Set(),
+        b = new Set(1);
+    
+    equal( a.isEmpty(),
+           true,
+           "Empty set returns true" );
+    
+    equal( b.isEmpty(),
+           false,
+           "Non-empty set returns false" );
+  });
+  
+  
+  
 });

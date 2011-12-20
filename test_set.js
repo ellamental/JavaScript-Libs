@@ -24,6 +24,28 @@ $(document).ready(function(){
            "5 arguments but only 3 unique values should have length 3" );
   });
   
+  
+  test("Set.toString", function () {
+    var a = new Set(1, 2, 3);
+    
+    test( a.toString,
+          "[object Set]",
+          "toString" );
+  });
+  
+  
+  test("Set.toArray", function () {
+    var a = new Set(1, 2),
+        b = a.toArray();
+    
+    ok( b.indexOf(1) >= 0,
+        "1 in array" );
+    
+    ok( b.indexOf(2) >= 0,
+        "2 in array" );
+  });
+  
+  
   test("Set.equals", function () {
     var a = new Set(),
         b = new Set(1),

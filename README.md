@@ -11,3 +11,7 @@ The set.js library is a library of set functions.
 ## [srfi1.js](https://github.com/jacktrades/JavaScript-Libs/wiki/srfi1.js)
 
 The srfi1.js library is a Javascript implementation of [Scheme's SRFI-1](http://srfi.schemers.org/srfi-1/srfi-1.html) linked list library.
+
+## [random.js]()
+
+The random.js library is a set of functions for dealing with random numbers and selections.

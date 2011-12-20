@@ -26,11 +26,11 @@ $(document).ready(function(){
   
   
   test("Set.toString", function () {
-    var a = new Set(1, 2, 3);
+    var a = new Set(1, 2);
     
-    test( a.toString,
-          "[object Set]",
-          "toString" );
+    equal( a.toString(),
+           "[object Set]",
+           "toString" );
   });
   
   

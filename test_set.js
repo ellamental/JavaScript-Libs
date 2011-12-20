@@ -206,6 +206,61 @@ $(document).ready(function(){
   });
   
   
+  test("Set.isSubset", function () {
+    var a = new Set(),
+        b = new Set(1, 2, 3);
+    
+    equal( a.isSubset(new Set()),
+           true,
+           "Empty set is a subset of the empty set" );
+    
+    equal( a.isSubset(b),
+           true,
+           "Empty set is a subset of a populated set" );
+    
+    equal( b.isSubset(new Set(1, 2, 3, 4, 5)),
+           true,
+           "The set [1, 2, 3] is a subset of the set [1, 2, 3, 4, 5]" );
+    
+    equal( b.isSubset(a),
+           false,
+           "The set [1, 2, 3] is not a subset of the empty set" );
+    
+    equal( b.isSubset(new Set(2, 3, 4)),
+           false,
+           "The set [1, 2, 3] is not a subset of the set [2, 3, 4]" );
+  });
+  
+  
+  test("Set.isSuperset", function () {
+    var a = new Set(),
+        b = new Set(1, 2, 3);
+    
+    equal( a.isSuperset(new Set()),
+           true,
+           "Empty set is a superset of the empty set" );
+    
+    equal( b.isSuperset(a),
+           true,
+           "A populated set is a superset of the empty set" );
+    
+    equal( b.isSuperset(new Set(1, 2, 3)),
+           true,
+           "The set [1, 2, 3] is a superset of the set [1, 2, 3]" );
+    
+    equal( b.isSuperset(new Set(1, 2)),
+           true,
+           "The set [1, 2, 3] is a superset of the set [1, 2]" );
+    
+    equal( a.isSuperset(b),
+           false,
+           "The empty set is not a superset of the set [1, 2, 3]" );
+    
+    equal( b.isSuperset(new Set(2, 3, 4)),
+           false,
+           "The set [1, 2, 3] is not a superset of the set [2, 3, 4]" );
+  });
+
   
   
 });

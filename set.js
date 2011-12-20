@@ -143,5 +143,23 @@ var Set = function () {
     return true;
   };
   
+  this.isSubset = function (set) {
+    var i, j;
+    if (set.length < this.length) {
+      return false;
+    }
+    for (i=0, j=this.length; i < j; i++) {
+      if (!set.member(this.data[i])) {
+        return false;
+      }
+    }
+    return true;
+  };
+  
+  this.isSuperset = function (set) {
+    return set.isSubset(this);
+  };
+  
+  
   
 };

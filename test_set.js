@@ -146,5 +146,19 @@ $(document).ready(function(){
   });
   
   
+  test("Set.clear", function () {
+    var a = new Set(1, 2, 3);
+    
+    a.clear();
+    
+    equal( a.length,
+           0,
+           "a.length === 0" );
+    
+    ok( a.isEmpty(),
+        "a.isEmpty returns true" );
+  });
+  
+  
   
 });

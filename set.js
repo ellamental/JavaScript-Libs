@@ -108,6 +108,12 @@ var Set = function () {
     return undefined;
   };
   
+  this.clear = function () {
+    // Remove all elements from set
+    this.data = [];
+    this.length = 0;
+  };
+  
   
   
 };

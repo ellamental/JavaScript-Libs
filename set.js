@@ -91,6 +91,15 @@ var Set = function () {
     }
   };
   
+  this.update = function (set) {
+    // Add the elements from set
+    var d = set.data,
+        i, j;
+    for (i=0, j=set.length; i < j; i++) {
+      this.add(set.data[i]);
+    }
+  };
+  
   this.remove = function (element) {
     var idx = this.data.indexOf(element);
     if (idx >= 0) {

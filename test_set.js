@@ -89,6 +89,23 @@ $(document).ready(function(){
            "a should remain unchanged so this test should still return true" );
   });
   
+  
+  test("Set.update", function () {
+    var a = new Set(1, 2, 3),
+        b = new Set(3, 4, 5);
+    
+    a.update(b);
+    
+    equal( a.length,
+           5,
+           "a contains 5 elements" );
+    
+    equal( a.equals(new Set(1, 2, 3, 4, 5)),
+           true,
+           "a contains the elements 1, 2, 3, 4 and 5" );
+  });
+  
+  
   test("Set.remove", function () {
     var a = new Set(1, 2, 3);
     

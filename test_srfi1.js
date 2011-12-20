@@ -965,6 +965,10 @@ $(document).ready(function(){
     deepEqual( s.partition_d(function (x) { return (x % 2) === 0; }, s.list(1, 2, 3, 4)),
                s.cons(s.list(2, 4), s.list(1, 3)),
                "partition on even?" );
+    
+    deepEqual( s.partition_d(function (x) { return (x % 2) === 1; }, s.list(1, 2, 3, 4)),
+               s.cons(s.list(1, 3), s.list(2, 4)),
+               "partition on odd?" );
   });
   
   
@@ -979,6 +983,10 @@ $(document).ready(function(){
     deepEqual( s.remove_d(function (x) { return x < 3; }, s.list(1, 2, 3, 4, 1)),
                s.list(3, 4),
                "remove < 3" );
+    
+    deepEqual( s.remove_d(function (x) { return x > 2; }, s.list(1, 2, 3, 4)),
+               s.list(1, 2),
+               "remove > 2" );
   });
   
   

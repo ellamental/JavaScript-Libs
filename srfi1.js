@@ -874,23 +874,20 @@ srfi1.filter = function (pred, list) {
 };
 
 srfi1.filter_d = function (pred, list) {
-  var head = null,
-      last_pair = null;
-  while (list !== null) {
-    if (!pred(list.car)) {
-      if (head === null) {
-        head = list;
-      }
-      last_pair = list;
-      list = list.cdr;
-      last_pair.cdr = list;
+  if (list instanceof srfi1.Pair) {
+    if (pred(list.car)) {
+      list.cdr = srfi1.filter_d(pred, list.cdr);
+      return list;
     }
     else {
-      list = list.cdr;
+      return srfi1.filter_d(pred, list.cdr);
     }
   }
-  return head;
+  else {
+    return null;
+  }
 };
+
 
 srfi1.partition = function (pred, list) {
   // Partitions the elements of list with predicate pred, and returns two
@@ -910,24 +907,28 @@ srfi1.partition = function (pred, list) {
 };
 
 srfi1.partition_d = function (pred, list) {
-  var head = null,
-      last_pair = null,
-      out_list = null;
-  while (list !== null) {
-    if (pred(list.car)) {
-      if (head === null) {
-        head = list;
+  var out_list = null,
+      in_list,
+      recur;
+  
+  recur = function (lst) {
+    if (lst instanceof srfi1.Pair) {
+      if (pred(lst.car)) {
+        lst.cdr = recur(lst.cdr);
+        return lst;
       }
-      last_pair = list;
-      list = list.cdr;
-      last_pair.cdr = list;
+      else {
+        out_list = srfi1.cons(lst.car, out_list);
+        return recur(lst.cdr);
+      }
     }
     else {
-      out_list = srfi1.cons(list.car, out_list);
-      list = list.cdr;
+      return null;
     }
   }
-  return srfi1.cons(head, srfi1.reverse(out_list));
+  
+  in_list = recur(list);
+  return srfi1.cons(in_list, srfi1.reverse(out_list));
 };
 
 srfi1.remove = function (pred, list) {
@@ -943,22 +944,18 @@ srfi1.remove = function (pred, list) {
 };
 
 srfi1.remove_d = function (pred, list) {
-  var head = null,
-      last_pair = null;
-  while (list !== null) {
-    if (pred(list.car)) {
-      if (head === null) {
-        head = list;
-      }
-      last_pair = list;
-      list = list.cdr;
-      last_pair.cdr = list;
+  if (list instanceof srfi1.Pair) {
+    if (!pred(list.car)) {
+      list.cdr = srfi1.remove_d(pred, list.cdr);
+      return list;
     }
     else {
-      list = list.cdr;
+      return srfi1.remove_d(pred, list.cdr);
     }
   }
-  return head;
+  else {
+    return null;
+  }
 };
 
 

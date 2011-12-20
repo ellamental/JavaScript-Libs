@@ -99,6 +99,19 @@ var Set = function () {
     }
   };
   
+  this.removeEvery = function (pred) {
+    // Remove every element in set for which pred(element) returns true.
+    // pred is a function taking one argument and returning a boolean value.
+    var d = this.data,
+        i;
+    for (i=this.data.length-1; i >= 0; i--) {
+      if (pred(d[i])) {
+        this.data.splice(i, 1);
+        this.length -= 1;
+      }
+    }
+  };
+  
   this.pop = function () {
     // Remove and return an arbitrary element, returns undefined if set is empty
     if (this.length > 0) {

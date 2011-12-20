@@ -114,6 +114,22 @@ $(document).ready(function(){
   });
   
   
+  test("Set.removeEvery", function () {
+    var a = new Set(1, 2, 3, 4, 5, 6);
+    
+    // Remove every even number from the set.
+    a.removeEvery(function (x) { return x % 2 === 0; });
+    
+    equal( a.length,
+           3,
+           "Length of a equals 3" );
+    
+    equal( a.equals(new Set(1, 3, 5)),
+           true,
+           "a contains only the elements 1, 3 and 5" );
+  });
+  
+  
   test("Set.pop", function () {
     var a = new Set(1, 2),
         b = a.pop(),

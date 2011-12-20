@@ -1,7 +1,7 @@
 //___________________________________________________________________________//
-// array_lib
+// array.js
 //
-// array_lib is a collection of array functions
+// array.js is a collection of array functions
 //
 // Copyright (c) 2011, Nick Zarczynski
 // All rights reserved.
@@ -40,7 +40,7 @@
 "use strict";
 
 
-var array_lib = (function () {
+var array = (function () {
   
   var a = {};
   
@@ -72,7 +72,7 @@ var array_lib = (function () {
     if (a instanceof Array && b instanceof Array) {
       if (a.length === b.length) {
         for (var i=0,j=a.length; i < j; i++) {
-          if (!array_lib.is_equal(a[i], b[i], eq)) {
+          if (!array.is_equal(a[i], b[i], eq)) {
             return false;
           }
         }
@@ -347,7 +347,7 @@ var array_lib = (function () {
   
   
   //________________________________________________________________________//
-  // Return the array_lib object
+  // Return the array object
   //________________________________________________________________________//
   
   return a;

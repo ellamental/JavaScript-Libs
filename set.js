@@ -83,7 +83,6 @@ var Set = function () {
     return this.length === 0;
   };
   
-  
   this.add = function (element) {
     if (this.data.indexOf(element) < 0) {
       this.data.push(element);
@@ -158,6 +157,18 @@ var Set = function () {
   
   this.isSuperset = function (set) {
     return set.isSubset(this);
+  };
+  
+  this.union = function (set) {
+    var s = new Set(),
+        i, j;
+    for (i=0, j=this.length; i < j; i++) {
+      s.add(this.data[i]);
+    }
+    for (i=0, j=set.length; i < j; i++) {
+      s.add(set.data[i]);
+    }
+    return s;
   };
   
   

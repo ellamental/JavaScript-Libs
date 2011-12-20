@@ -262,5 +262,20 @@ $(document).ready(function(){
   });
 
   
+  test("Set.union", function () {
+    var a = new Set(1, 2, 3),
+        b = new Set(3, 4, 5),
+        c = a.union(b);
+    
+    equal( c.length,
+           5,
+           "Length of c is 5" );
+    
+    equal( c.equals(new Set(1, 2, 3, 4, 5)),
+           true,
+           "a.union(b) returns a new set with the elements 1, 2, 3, 4 and 5" );
+  });
+  
+  
   
 });

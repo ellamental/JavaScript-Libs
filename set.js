@@ -160,6 +160,7 @@ var Set = function () {
   };
   
   this.union = function (set) {
+    // Return a new set with elements from both this and the set argument
     var s = new Set(),
         i, j;
     for (i=0, j=this.length; i < j; i++) {
@@ -170,6 +171,19 @@ var Set = function () {
     }
     return s;
   };
+  
+  this.intersection = function (set) {
+    // Return a new set with common elements in both this and the set argument
+    var s = new Set(),
+        i, j;
+    for (i=0, j=this.length; i < j; i++) {
+      if (set.member(this.data[i])) {
+        s.add(this.data[i]);
+      }
+    }
+    return s;
+  };
+  
   
   
   

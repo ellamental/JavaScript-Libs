@@ -184,6 +184,44 @@ var Set = function () {
     return s;
   };
   
+  this.difference = function (set) {
+    // Return a new set with elements from this which are not in set
+    var s = new Set(),
+        i, j;
+    for (i=0, j=this.length; i < j; i++) {
+      if (!set.member(this.data[i])) {
+        s.add(this.data[i]);
+      }
+    }
+    return s;
+  };
+  
+  this.symmetricDifference = function (set) {
+    // Return a new set with elements from this which are not in set and
+    // elements from set which are not in this
+    var s = new Set(),
+        i, j;
+    for (i=0, j=this.length; i < j; i++) {
+      if (!set.member(this.data[i])) {
+        s.add(this.data[i]);
+      }
+    }
+    for (i=0, j=set.length; i < j; i++) {
+      if (!this.member(set.data[i])) {
+        s.add(set.data[i]);
+      }
+    }
+    return s;
+  };
+  
+  this.copy = function () {
+    var s = new Set(),
+        i, j;
+    for (i=0, j=this.length; i < j; i++) {
+      s.add(this.data[i]);
+    }
+    return s;
+  };
   
   
   

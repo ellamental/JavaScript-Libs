@@ -284,6 +284,36 @@ $(document).ready(function(){
   });
   
   
+  test("Set.difference", function () {
+    var a = new Set(1, 2, 3),
+        b = new Set(3, 4, 5),
+        c = a.difference(b);
+    
+    equal( c.equals(new Set(1, 2)),
+           true,
+           "The difference of sets [1, 2, 3] and [3, 4, 5] is the set [1, 2]" );
+  });
+  
+  
+  test("Set.symmetricDifference", function () {
+    var a = new Set(1, 2, 3, 4),
+        b = new Set(3, 4, 5, 6),
+        c = a.symmetricDifference(b);
+    
+    equal( c.equals(new Set(1, 2, 5, 6)),
+           true,
+           "The symmetricDifference of sets [1, 2, 3, 4] and [3, 4, 5, 6] is the set [1, 2, 5, 6]" );
+  });
+  
+  
+  test("Set.copy", function () {
+    var a = new Set(1, 2, 3),
+        b = a.copy();
+    
+    equal( b.equals(a),
+           true,
+           "Make a copy of a set" );
+  });
   
   
   

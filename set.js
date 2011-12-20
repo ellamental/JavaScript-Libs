@@ -136,6 +136,12 @@ var Set = function () {
     this.length = 0;
   };
   
+  this.member = function (element) {
+    if (this.data.indexOf(element) < 0) {
+      return false;
+    }
+    return true;
+  };
   
   
 };

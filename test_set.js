@@ -193,5 +193,19 @@ $(document).ready(function(){
   });
   
   
+  test("Set.member", function () {
+    var a = new Set(1, 2, 3);
+    
+    equal( a.member(2),
+           true,
+           "1 is in a" );
+    
+    equal( a.member(42),
+           false,
+           "42 is not in a" );
+  });
+  
+  
+  
   
 });

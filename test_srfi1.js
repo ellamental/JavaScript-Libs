@@ -1268,6 +1268,33 @@ $(document).ready(function(){
   
   
   //________________________________________________________________________//
+  // Primitive side-effects
+  //________________________________________________________________________//
+  
+  test("set_car", function () {
+    var a = s.cons(0, 1);
+    
+    s.set_car(a, 42);
+    
+    equal( s.car(a),
+           42,
+           "car of a has been set to 42" );
+  });
+  
+  
+  test("set_cdr", function () {
+    var a = s.cons(0, 1);
+    
+    s.set_cdr(a, 42);
+    
+    equal( s.cdr(a),
+           42,
+           "cdr of a has been set to 42" );
+  });
+  
+  
+  
+  //________________________________________________________________________//
   // Implementation specific helper functions (not in srfi-1)
   //________________________________________________________________________//
   

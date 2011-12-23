@@ -1317,6 +1317,10 @@ $(document).ready(function(){
     deepEqual( s.to_string(s.cons(1, s.cons(2, 3))),
                "(1 2 . 3)",
                "improper list" );
+    
+    deepEqual( s.to_string(null),
+               "()",
+               "empty list" );
   });
   
   

@@ -925,7 +925,7 @@ srfi1.partition_d = function (pred, list) {
     else {
       return null;
     }
-  }
+  };
   
   in_list = recur(list);
   return srfi1.cons(in_list, srfi1.reverse(out_list));

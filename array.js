@@ -347,6 +347,35 @@ var array = (function () {
   
   
   //________________________________________________________________________//
+  // Misc
+  //________________________________________________________________________//
+  
+  a.copy = function (array) {
+    // Return a shallow copy of an array
+    var newArray = [],
+        i, j;
+    for (i=0, j=array.length; i < j; i++) {
+      newArray.push(array[i]);
+    }
+    return newArray;
+  };
+  
+  a.swap$ = function (array, idx1, idx2) {
+    // Swap two elements in array, modifying the original array
+    var tmp = array[idx2];
+    array[idx2] = array[idx1];
+    array[idx1] = tmp;
+    return array;
+  };
+  
+  a.swap = function (array, idx1, idx2) {
+    // Swap two elements in array, returning a new array
+    var newArray = a.copy(array);
+    return a.swap$(newArray, idx1, idx2);
+  }
+  
+  
+  //________________________________________________________________________//
   // Return the array object
   //________________________________________________________________________//
   

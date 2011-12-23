@@ -33,6 +33,11 @@ $(document).ready(function(){
   });
   
   
+  
+  //________________________________________________________________________//
+  // map, fold, reduce, etc
+  //________________________________________________________________________//
+  
   test("map", function () {
     deepEqual( array.map(function (x) { return x+1; }, [0, 1, 2]),
                [1, 2, 3],
@@ -70,6 +75,11 @@ $(document).ready(function(){
                "Unequal length lists 2nd is longest" );
   });
   
+  
+  
+  //________________________________________________________________________//
+  // filtering and partitioning
+  //________________________________________________________________________//
   
   test("filter", function () {
     deepEqual( array.filter(function (x) { return x < 3; }, [1, 2, 3, 4]),
@@ -128,7 +138,12 @@ $(document).ready(function(){
                "Return 2 arrays: 1st containing elements < 3, 2nd containing elements >= 3" );
   });
 
-
+  
+  
+  //________________________________________________________________________//
+  // Searching
+  //________________________________________________________________________//
+  
   test("index", function () {
     equal( array.index(function (x) { return x === 2; }, [1, 2, 3]),
            1,
@@ -214,6 +229,42 @@ $(document).ready(function(){
            false,
            "every element in array1[i] greater than element in array2[i] (false)" );
   });
+  
+  
+  
+  //________________________________________________________________________//
+  // Misc
+  //________________________________________________________________________//
+  
+  test("copy", function () {
+    deepEqual( array.copy([1, 2, 3]),
+               [1, 2, 3],
+               "copy an array" );
+  });
+  
+  
+  test("swap", function () {
+    var a = [1, 2, 3, 4];
+    
+    deepEqual( array.swap(a, 1, 3),
+               [1, 4, 3, 2],
+               "swap the 2nd and 4th elements" );
+    
+    deepEqual( a,
+               [1, 2, 3, 4],
+               "ensure the original array is unchanged" );
+  });
+  
+  
+  test("swap$", function () {
+    var a = [1, 2, 3, 4];
+    
+    deepEqual( array.swap(a, 1, 3),
+               [1, 4, 3, 2],
+               "swap the 2nd and 4th elements" );
+  });
+  
+  
   
   
   

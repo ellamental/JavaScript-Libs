@@ -58,7 +58,7 @@ Set.prototype.toString = function () {
   return "[object Set]";
 };
   
-Set.prototype..toArray = function () {
+Set.prototype.toArray = function () {
   return this.data;
 };
 

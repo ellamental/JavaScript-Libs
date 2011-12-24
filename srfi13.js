@@ -153,6 +153,33 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Selection
+  //________________________________________________________________________//
+  
+  s.length = function (str) {
+    return str.length;
+  };
+  
+  s.ref = function (str, idx) {
+    if (idx < 0) {
+      idx = str.length + idx;
+    }
+    return str[idx];
+  };
+  
+  s.substring = function (str, start, end) {
+    end = end || str.length;
+    if (start < 0) {
+      start = str.length + start;
+    }
+    if (end < 0) {
+      end = str.length + end;
+    }
+    return str.substring(start, end);
+  };
+  
+  
   
   return s;
 })();

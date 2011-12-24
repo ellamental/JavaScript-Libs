@@ -203,6 +203,42 @@ $(document).ready(function(){
   });
     
   
+  test("length", function () {
+    equal( s.length(""),
+           0,
+           "length of an empty string is 0" );
+    
+    equal( s.length("hello"),
+           5,
+           "length of 'hello' is 5" );
+  });
+  
+  
+  test("ref", function () {
+    equal( s.ref("abc", 1),
+           "b",
+           "the character at 'abc'[1] is 'b'" );
+  });
+  
+  
+  test("substring", function () {
+    equal( s.substring("hello", 1),
+           "ello",
+           "substring without end parameter" );
+    
+    equal( s.substring("hello", 1, 4),
+           "ell",
+           "substring with end parameter" );
+    
+    equal( s.substring("hello", 1, -2),
+           "el",
+           "substring with negative end parameter" );
+    
+    equal( s.substring("hello", -4, -2),
+           "el",
+           "substring with negative start and end parameters" );
+  });
+  
   
   
 });

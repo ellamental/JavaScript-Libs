@@ -104,6 +104,29 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Constructors
+  //________________________________________________________________________//
+  
+  s.make_string = function (len, char_or_fn) {
+    var str = "",
+        i;
+    if (s.is_string(char_or_fn) && char_or_fn.length === 1) {
+      return Array(len+1).join(char_or_fn);
+    }
+    else {
+      for (i=0; i < len; i++) {
+        str += char_or_fn(i);
+      }
+      return str;
+    }
+  };
+  
+  s.tabulate = s.make_string;
+  
+  
+  
+  
   return s;
 })();
 

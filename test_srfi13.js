@@ -125,7 +125,35 @@ $(document).ready(function(){
            false,
            "'a' is not in the substring abcba[1:4]" );
   });
+  
+  
+  test("make_string", function () {
+    var fn = (function () {
+      var c = 0;
+      
+      var fn = function () {
+        c += 1;
+        return c.toString(10);
+      };
+      return fn;
+    })();
     
+    equal( s.make_string(3, "a"),
+           "aaa",
+           "make a string of length 1 filled with 'a' characters" );
     
+    equal( s.make_string(3, fn),
+           "123",
+           "call fn for each index of the new string" );
+  });
+  
+  
+  test("tabulate", function () {
+    equal( s.tabulate(3, function (x) { return x.toString(); }),
+           "012",
+           "call fn(i) for each index of the new string" );
+  });
+  
+  
 });
   

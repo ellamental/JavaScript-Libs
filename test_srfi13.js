@@ -258,6 +258,34 @@ $(document).ready(function(){
   });
   
   
+  test("take", function () {
+    equal( s.take("world", 3),
+           "wor",
+           "take first 3 chars" );
+  });
+  
+  
+  test("drop", function () {
+    equal( s.drop("world", 3),
+           "ld",
+           "drop the first 3 chars" );
+  });
+  
+  
+  test("take_right", function () {
+    equal( s.take_right("world", 3),
+           "rld",
+           "take the last 3 chars" );
+  });
+  
+  
+  test("drop_right", function () {
+    equal( s.drop_right("world", 3),
+           "wo",
+           "drop the last 3 chars" );
+  });
+  
+  
   
 });
   

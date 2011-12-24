@@ -183,6 +183,22 @@ var srfi13 = (function () {
     return str.substring(start, end);
   };
   
+  s.take = function (str, num_chars) {
+    return s.substring(str, 0, num_chars);
+  };
+  
+  s.drop = function (str, num_chars) {
+    return s.substring(str, -num_chars + 1);
+  };
+  
+  s.take_right = function (str, num_chars) {
+    return s.substring(str, -num_chars);
+  };
+  
+  s.drop_right = function (str, num_chars) {
+    return s.substring(str, 0, num_chars - 1);
+  };
+  
   
   
   return s;

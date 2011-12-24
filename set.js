@@ -52,177 +52,174 @@ var Set = function () {
       this.length += 1;
     }
   }
-  
-  this.toString = function () {
-    return "[object Set]";
-  };
-  
-  this.toArray = function () {
-    return this.data;
-  };
+};
 
-  this.equals = function (other) {
-    var i, j;
-    if (!(other instanceof Set)) {
-      return false;
-    }
-    else if (other.length !== this.length) {
-      return false;
-    }
-    else {
-      for (i=0, j=this.length; i < j; i++) {
-        if (other.data.indexOf(this.data[i]) < 0) {
-          return false;
-        }
-      }
-      return true;
-    }
-  };
+Set.prototype.toString = function () {
+  return "[object Set]";
+};
   
-  this.isEmpty = function () {
-    return this.length === 0;
-  };
-  
-  this.add = function (element) {
-    if (this.data.indexOf(element) < 0) {
-      this.data.push(element);
-      this.length += 1;
-    }
-  };
-  
-  this.update = function (set) {
-    // Add the elements from set
-    var d = set.data,
-        i, j;
-    for (i=0, j=set.length; i < j; i++) {
-      this.add(set.data[i]);
-    }
-  };
-  
-  this.remove = function (element) {
-    var idx = this.data.indexOf(element);
-    if (idx >= 0) {
-      this.data.splice(idx, 1);
-      this.length -= 1;
-    }
-  };
-  
-  this.removeEvery = function (pred) {
-    // Remove every element in set for which pred(element) returns true.
-    // pred is a function taking one argument and returning a boolean value.
-    var d = this.data,
-        i;
-    for (i=this.data.length-1; i >= 0; i--) {
-      if (pred(d[i])) {
-        this.data.splice(i, 1);
-        this.length -= 1;
-      }
-    }
-  };
-  
-  this.pop = function () {
-    // Remove and return an arbitrary element, returns undefined if set is empty
-    if (this.length > 0) {
-      this.length -= 1;
-      return this.data.pop();
-    }
-    return undefined;
-  };
-  
-  this.clear = function () {
-    // Remove all elements from set
-    this.data = [];
-    this.length = 0;
-  };
-  
-  this.member = function (element) {
-    if (this.data.indexOf(element) < 0) {
-      return false;
-    }
-    return true;
-  };
-  
-  this.isSubset = function (set) {
-    var i, j;
-    if (set.length < this.length) {
-      return false;
-    }
+Set.prototype..toArray = function () {
+  return this.data;
+};
+
+Set.prototype.equals = function (other) {
+  var i, j;
+  if (!(other instanceof Set)) {
+    return false;
+  }
+  else if (other.length !== this.length) {
+    return false;
+  }
+  else {
     for (i=0, j=this.length; i < j; i++) {
-      if (!set.member(this.data[i])) {
+      if (other.data.indexOf(this.data[i]) < 0) {
         return false;
       }
     }
     return true;
-  };
-  
-  this.isSuperset = function (set) {
-    return set.isSubset(this);
-  };
-  
-  this.union = function (set) {
-    // Return a new set with elements from both this and the set argument
-    var s = new Set(),
-        i, j;
-    for (i=0, j=this.length; i < j; i++) {
+  }
+};
+
+Set.prototype.isEmpty = function () {
+  return this.length === 0;
+};
+
+Set.prototype.add = function (element) {
+  if (this.data.indexOf(element) < 0) {
+    this.data.push(element);
+    this.length += 1;
+  }
+};
+
+Set.prototype.update = function (set) {
+  // Add the elements from set
+  var d = set.data,
+      i, j;
+  for (i=0, j=set.length; i < j; i++) {
+    this.add(set.data[i]);
+  }
+};
+
+Set.prototype.remove = function (element) {
+  var idx = this.data.indexOf(element);
+  if (idx >= 0) {
+    this.data.splice(idx, 1);
+    this.length -= 1;
+  }
+};
+
+Set.prototype.removeEvery = function (pred) {
+  // Remove every element in set for which pred(element) returns true.
+  // pred is a function taking one argument and returning a boolean value.
+  var d = this.data,
+      i;
+  for (i=this.data.length-1; i >= 0; i--) {
+    if (pred(d[i])) {
+      this.data.splice(i, 1);
+      this.length -= 1;
+    }
+  }
+};
+
+Set.prototype.pop = function () {
+  // Remove and return an arbitrary element, returns undefined if set is empty
+  if (this.length > 0) {
+    this.length -= 1;
+    return this.data.pop();
+  }
+  return undefined;
+};
+
+Set.prototype.clear = function () {
+  // Remove all elements from set
+  this.data = [];
+  this.length = 0;
+};
+
+Set.prototype.member = function (element) {
+  if (this.data.indexOf(element) < 0) {
+    return false;
+  }
+  return true;
+};
+
+Set.prototype.isSubset = function (set) {
+  var i, j;
+  if (set.length < this.length) {
+    return false;
+  }
+  for (i=0, j=this.length; i < j; i++) {
+    if (!set.member(this.data[i])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+Set.prototype.isSuperset = function (set) {
+  return set.isSubset(this);
+};
+
+Set.prototype.union = function (set) {
+  // Return a new set with elements from both this and the set argument
+  var s = new Set(),
+      i, j;
+  for (i=0, j=this.length; i < j; i++) {
+    s.add(this.data[i]);
+  }
+  for (i=0, j=set.length; i < j; i++) {
+    s.add(set.data[i]);
+  }
+  return s;
+};
+
+Set.prototype.intersection = function (set) {
+  // Return a new set with common elements in both this and the set argument
+  var s = new Set(),
+      i, j;
+  for (i=0, j=this.length; i < j; i++) {
+    if (set.member(this.data[i])) {
       s.add(this.data[i]);
     }
-    for (i=0, j=set.length; i < j; i++) {
+  }
+  return s;
+};
+
+Set.prototype.difference = function (set) {
+  // Return a new set with elements from this which are not in set
+  var s = new Set(),
+      i, j;
+  for (i=0, j=this.length; i < j; i++) {
+    if (!set.member(this.data[i])) {
+      s.add(this.data[i]);
+    }
+  }
+  return s;
+};
+
+Set.prototype.symmetricDifference = function (set) {
+  // Return a new set with elements from this which are not in set and
+  // elements from set which are not in this
+  var s = new Set(),
+      i, j;
+  for (i=0, j=this.length; i < j; i++) {
+    if (!set.member(this.data[i])) {
+      s.add(this.data[i]);
+    }
+  }
+  for (i=0, j=set.length; i < j; i++) {
+    if (!this.member(set.data[i])) {
       s.add(set.data[i]);
     }
-    return s;
-  };
-  
-  this.intersection = function (set) {
-    // Return a new set with common elements in both this and the set argument
-    var s = new Set(),
-        i, j;
-    for (i=0, j=this.length; i < j; i++) {
-      if (set.member(this.data[i])) {
-        s.add(this.data[i]);
-      }
-    }
-    return s;
-  };
-  
-  this.difference = function (set) {
-    // Return a new set with elements from this which are not in set
-    var s = new Set(),
-        i, j;
-    for (i=0, j=this.length; i < j; i++) {
-      if (!set.member(this.data[i])) {
-        s.add(this.data[i]);
-      }
-    }
-    return s;
-  };
-  
-  this.symmetricDifference = function (set) {
-    // Return a new set with elements from this which are not in set and
-    // elements from set which are not in this
-    var s = new Set(),
-        i, j;
-    for (i=0, j=this.length; i < j; i++) {
-      if (!set.member(this.data[i])) {
-        s.add(this.data[i]);
-      }
-    }
-    for (i=0, j=set.length; i < j; i++) {
-      if (!this.member(set.data[i])) {
-        s.add(set.data[i]);
-      }
-    }
-    return s;
-  };
-  
-  this.copy = function () {
-    var s = new Set(),
-        i, j;
-    for (i=0, j=this.length; i < j; i++) {
-      s.add(this.data[i]);
-    }
-    return s;
-  };
-  
-  
-  
+  }
+  return s;
+};
+
+Set.prototype.copy = function () {
+  var s = new Set(),
+      i, j;
+  for (i=0, j=this.length; i < j; i++) {
+    s.add(this.data[i]);
+  }
+  return s;
 };

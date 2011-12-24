@@ -176,6 +176,32 @@ $(document).ready(function(){
   });
   
   
+  test("join", function () {
+    equal( s.join([1, 2, 3], ":"),
+           "1:2:3",
+           "infix join" );
+    
+    equal( s.join([], ":"),
+           "",
+           "infix join on empty list" );
+    
+    equal( s.join([1, 2, 3], ":", 'prefix'),
+           ":1:2:3",
+           "prefix join" );
+    
+    equal( s.join([], ":", 'prefix'),
+           "",
+           "prefix join on empty list" );
+    
+    equal( s.join([1, 2, 3], ":", 'suffix'),
+           "1:2:3:",
+           "suffix join" );
+    
+    equal( s.join([], ":", 'suffix'),
+           "",
+           "suffix join on empty list" );
+  });
+    
   
   
   

@@ -141,6 +141,17 @@ var srfi13 = (function () {
     return array.reverse().join('');
   };
   
+  s.join = function (array, delimiter, grammar) {
+    var str = array.join(delimiter);
+    if (grammar === 'prefix' && array.length !== 0) {
+      return delimiter + str;
+    }
+    else if (grammar === 'suffix' && array.length !== 0) {
+      return str + delimiter;
+    }
+    return str;
+  };
+  
   
   
   return s;

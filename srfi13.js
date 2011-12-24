@@ -112,7 +112,7 @@ var srfi13 = (function () {
     var str = "",
         i;
     if (s.is_string(char_or_fn) && char_or_fn.length === 1) {
-      return Array(len+1).join(char_or_fn);
+      return new Array(len+1).join(char_or_fn);
     }
     else {
       for (i=0; i < len; i++) {

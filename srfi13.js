@@ -40,22 +40,70 @@
 "use strict";
 
 
-var srfi13 = {};
+var srfi13 = (function () {
   
-//__________________________________________________________________________//
-// Predicates
-//__________________________________________________________________________//
+  var s = {};
 
-srfi13.is_string = function (obj) {
-  // Return true if obj is a string, false if not
+  function char_set_or_function(criteria) {
+    var fn;
+    if (srfi13.is_string(criteria) && criteria.length === 1) {
+      fn = function (a) { return a === criteria; };
+    }
+    else if (srfi13.is_string(criteria) && criteria.length > 1) {
+      fn = function (a) { return criteria.indexOf(a) >= 0; };
+    }
+    else if (criteria instanceof Function) {
+      fn = criteria;
+    }
+    return fn;
+  }
   
-  // "hello" instanceof String returns false and
-  // typeof new String("hello") returns Object
-  // both tests are needed to correctly return true for any string instance
-  if (obj instanceof String || typeof obj === 'string') { return true; }
-  else { return false; }
-};
+  
+  //________________________________________________________________________//
+  // Predicates
+  //________________________________________________________________________//
 
+  s.is_string = function (obj) {
+    // Return true if obj is a string, false if not
+    
+    // "hello" instanceof String returns false and
+    // typeof new String("hello") returns Object
+    // both tests are needed to correctly return true for any string instance
+    if (obj instanceof String || typeof obj === 'string') { return true; }
+    else { return false; }
+  };
 
+  s.is_string_null = function (obj) {
+    return (s.is_string(obj) && obj.length === 0);
+  };
 
+  s.every = function (criteria, str, start, end) {
+    // Checks to see if the given criteria is true of every character in s
+    var fn = char_set_or_function(criteria);
+    start = start || 0;
+    end = end || str.length;
+    for (start; start < end; start++) {
+      if (!fn(str[start])) {
+        return false;
+      }
+    }
+    return true;
+  };
+  
+  s.any = function (criteria, str, start, end) {
+    // Checks to see if the given criteria is true of any character in s
+    var fn = char_set_or_function(criteria);
+    start = start || 0;
+    end = end || str.length;
+    for (start; start < end; start++) {
+      if (fn(str[start])) {
+        return true;
+      }
+    }
+    return false;
+  };
+  
+  
+  return s;
+})();
 

@@ -155,5 +155,29 @@ $(document).ready(function(){
   });
   
   
+  test("string_to_array", function () {
+    deepEqual( s.string_to_array("abc"),
+               ["a", "b", "c"],
+               "string to array" );
+  });
+  
+  
+  test("array_to_string", function () {
+    equal( s.array_to_string(["a", "b", "c"]),
+           "abc",
+           "array to string" );
+  });
+  
+  
+  test("reverse_array_to_string", function () {
+    equal( s.reverse_array_to_string([1, 2, 3]),
+           "321",
+           "reverse the given array and join the elements to return a string" );
+  });
+  
+  
+  
+  
+  
 });
   

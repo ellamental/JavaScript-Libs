@@ -125,6 +125,22 @@ var srfi13 = (function () {
   s.tabulate = s.make_string;
   
   
+  //________________________________________________________________________//
+  // Array & string conversion
+  //________________________________________________________________________//
+  
+  s.array_to_string = function (array) {
+    return array.join('');
+  };
+  
+  s.string_to_array = function (str) {
+    return str.split('');
+  };
+  
+  s.reverse_array_to_string = function (array) {
+    return array.reverse().join('');
+  };
+  
   
   
   return s;

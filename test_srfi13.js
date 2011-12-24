@@ -77,6 +77,15 @@ $(document).ready(function(){
     equal( s.every("a", "cdaar", 2, 4),
            true,
            "every char in 'cdaar' starting from index[2] and ending at index[4] is === 'a'" );
+    
+    // every(char, str, neg-start, neg-stop
+    equal( s.every("a", "cbaa", -2),
+           true,
+           "every with negative start" );
+    
+    equal( s.every("a", "cbaabc", -4, -2),
+           true,
+           "every with negative start and end" );
   });
     
     
@@ -124,6 +133,15 @@ $(document).ready(function(){
     equal( s.any("a", "abcba", 1, 4),
            false,
            "'a' is not in the substring abcba[1:4]" );
+    
+    // any(char, str, neg-start, neg-stop)
+    equal( s.any("a", "aabc", -2),
+           false,
+           "any with negative start" );
+    
+    equal( s.any("a", "aabcaa", -4, -2),
+           false,
+           "any with negative start and end" );
   });
   
   

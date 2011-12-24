@@ -82,6 +82,8 @@ var srfi13 = (function () {
     var fn = char_set_or_function(criteria);
     start = start || 0;
     end = end || str.length;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
     for (start; start < end; start++) {
       if (!fn(str[start])) {
         return false;
@@ -95,6 +97,8 @@ var srfi13 = (function () {
     var fn = char_set_or_function(criteria);
     start = start || 0;
     end = end || str.length;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
     for (start; start < end; start++) {
       if (fn(str[start])) {
         return true;

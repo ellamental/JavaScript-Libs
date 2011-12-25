@@ -107,6 +107,40 @@ var srfi13 = (function () {
     return false;
   };
   
+  s.starts_with = function (str, prefix, start, end) {
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    if (s.is_string(prefix)) {
+      return str.substring(0, prefix.length) === prefix;
+    }
+    else {
+      for (var i=0, j=prefix.length; i < j; i++) {
+        if (s.starts_with(str, prefix[i])) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+  
+  s.ends_with = function (str, suffix, start, end) {
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    if (s.is_string(suffix)) {
+      return str.substring(str.length-suffix.length, str.length) === suffix;
+    }
+    else {
+      for (var i=0, j=suffix.length; i < j; i++) {
+        if (s.ends_with(str, suffix[i])) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+  
   
   //________________________________________________________________________//
   // Constructors

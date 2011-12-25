@@ -145,6 +145,44 @@ $(document).ready(function(){
   });
   
   
+  test("starts_with", function () {
+    equal( s.starts_with("hello", "he"),
+           true,
+           "'hello' starts with 'he'" );
+    
+    equal( s.starts_with("hello", "he", 1),
+           false,
+           "'ello' does not start with 'he'" );
+    
+    equal( s.starts_with("hello", "he", 0, 1),
+           false,
+           "'h' does not start with 'he'" );
+    
+    equal( s.starts_with("hello", ["we", "he", "do"]),
+           true,
+           "'hello' starts with a prefix in the array ['we', 'he', 'do']" );
+  });
+  
+  
+  test("ends_with", function () {
+    equal( s.ends_with("hello", "lo"),
+           true,
+           "'hello' ends with 'lo'" );
+    
+    equal( s.ends_with("hello", "llo", 3),
+           false,
+           "'lo' does not end with 'llo'" );
+    
+    equal( s.ends_with("hello", "lo", 0, -2),
+           false,
+           "'hel' does not end with 'lo'" );
+    
+    equal(s.ends_with("hello", ["we", "lo", "do"]),
+          true,
+          "'hello' ends with a suffix in the array ['we', 'lo', 'do']" );
+  });
+  
+  
   test("make_string", function () {
     var fn = (function () {
       var c = 0;

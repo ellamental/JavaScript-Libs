@@ -247,9 +247,46 @@ var srfi13 = (function () {
     return str;
   };
   
+  s.trim_left = function (str, criteria, start, end) {
+    var idx = 0,
+        fn;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    criteria = criteria || " \n\r";
+    fn = char_set_or_function(criteria);
+    while (idx < str.length && fn(str[idx])) {
+      idx += 1;
+    }
+    return str.substring(idx, str.length);
+  };
+  
+  s.trim_right = function (str, criteria, start, end) {
+    var fn, idx;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    criteria = criteria || " \n\r";
+    fn = char_set_or_function(criteria)
+    idx = str.length - 1;
+    while (idx >= 0 && fn(str[idx])) {
+      idx -= 1;
+    }
+    return str.substring(0, idx+1);
+  };
+  
+  s.trim = function (str, criteria, start, end) {
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    str = s.trim_left(str, criteria);
+    str = s.trim_right(str, criteria);
+    return str;
+  };
   
   
   
+
   return s;
 })();
 

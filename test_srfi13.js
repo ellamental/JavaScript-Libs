@@ -3,6 +3,11 @@ $(document).ready(function(){
   
   module("srfi13.js");
   
+  
+  //________________________________________________________________________//
+  // Predicates
+  //________________________________________________________________________//
+  
   test("is_string", function () {
     equal( s.is_string(""),
            true,
@@ -183,6 +188,10 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Constructors
+  //________________________________________________________________________//
+  
   test("make_string", function () {
     var fn = (function () {
       var c = 0;
@@ -210,6 +219,10 @@ $(document).ready(function(){
            "call fn(i) for each index of the new string" );
   });
   
+  
+  //________________________________________________________________________//
+  // Array & string conversion
+  //________________________________________________________________________//
   
   test("string_to_array", function () {
     deepEqual( s.string_to_array("abc"),
@@ -257,7 +270,11 @@ $(document).ready(function(){
            "",
            "suffix join on empty list" );
   });
-    
+  
+  
+  //________________________________________________________________________//
+  // Selection
+  //________________________________________________________________________//
   
   test("length", function () {
     equal( s.length(""),
@@ -355,6 +372,78 @@ $(document).ready(function(){
   });
   
   
+  test("trim_left", function () {
+    equal( s.trim_left("  abc"),
+           "abc",
+           "trim whitespace" );
+    
+    equal( s.trim_left("abc"),
+           "abc",
+           "string with nothing to trim" );
+    
+    equal( s.trim_left("a   abc", " \n\r", 1),
+           "abc",
+           "trim whitespace from substring starting at index[1]" );
+    
+    equal( s.trim_left("aaabbb", "a"),
+           "bbb",
+           "trim 'a' chars" );
+    
+    equal( s.trim_left("abccba", "ab"),
+           "ccba",
+           "trim 'a' and 'b' chars" );
+    
+    equal( s.trim_left("aabb", function (x) { return x === "a"; }),
+           "bb",
+           "trim 'a' chars using a predicate function" );
+  });
+  
+  
+  test("trim_right", function () {
+    equal( s.trim_right("abc  "),
+           "abc",
+           "trim whitespace" );
+    
+    equal( s.trim_right("abc"),
+           "abc",
+           "string with nothing to trim" );
+    
+    equal( s.trim_right("abc   a", " \n\r", 0, -1),
+           "abc",
+           "trim whitespace from substring starting at index[1]" );
+    
+    equal( s.trim_right("bbbaaa", "a"),
+           "bbb",
+           "trim 'a' chars" );
+    
+    equal( s.trim_right("abccba", "ab"),
+           "abcc",
+           "trim 'a' and 'b' chars" );
+    
+    equal( s.trim_right("bbaa", function (x) { return x === "a"; }),
+           "bb",
+           "trim 'a' chars using a predicate function" );
+  });
+  
+  
+  test("trim", function () {
+    equal( s.trim("  abc  "),
+           "abc",
+           "trim whitespace" );
+    
+    equal( s.trim("aabbaa", "a"),
+           "bb",
+           "trim 'a'" );
+    
+    equal( s.trim("baaccaab", "a", 1, -1),
+           "cc",
+           "trim 'a' from str[1:-1]" );
+  });
+  
+  
+  //________________________________________________________________________//
+  // 
+  //________________________________________________________________________//
   
   
 });

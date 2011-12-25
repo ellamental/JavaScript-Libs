@@ -199,6 +199,21 @@ var srfi13 = (function () {
     return s.substring(str, 0, num_chars - 1);
   };
   
+  s.pad = function (str, len, char, start, end) {
+    var p;
+    char = char || " ";
+    str = s.substring(str, start, end);
+    if (len < str.length) {
+      str = s.substring(str, -len);
+    }
+    else if (len > str.length) {
+      p = new Array((len - str.length) + 1).join(char)
+      return p + str;
+    }
+    return str;
+  };
+  
+  
   
   
   return s;

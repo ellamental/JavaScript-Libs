@@ -286,6 +286,38 @@ $(document).ready(function(){
   });
   
   
+  test("pad", function () {
+    equal( s.pad("325", 5),
+           "  325",
+           "pad the string '325' with 2 spaces in front" );
+    
+    equal( s.pad("71325", 5),
+           "71325",
+           "'71325' is length 5 so just return the string" );
+    
+    equal( s.pad("8871325", 5),
+           "71325",
+           "'8871325' is length 7 so truncate it by removing the first 2 chars" );
+    
+    equal( s.pad("325", 5, '.'),
+           "..325",
+           "pad with optional char argument to use as padding" );
+    
+    equal( s.pad("12345", 5, " ", 2),
+           "  345",
+           "pad with optional start argument" );
+    
+    equal( s.pad("12345", 5, " ", 2, 4),
+           "   34",
+           "pad with optional start and end arguments" );
+    
+    equal( s.pad("12345", 5, " ", -4, -2),
+           "   23",
+           "pad with negative start and end arguments" );
+  });
+  
+  
+  
   
 });
   

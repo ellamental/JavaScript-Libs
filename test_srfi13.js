@@ -539,5 +539,249 @@ $(document).ready(function(){
   });
   
   
+  test("eq", function () {
+    equal( s.eq("aaaa", "aaaa"),
+           4,
+           "equal strings" );
+    
+    equal( s.eq("aa", "aaaa"),
+           false,
+           "s1 < s2 because of length" );
+    
+    equal( s.eq("aaaa", "aa"),
+           false,
+           "s1 > s2 because of length" );
+    
+    equal( s.eq("aaba", "aaaa"),
+           false,
+           "s1 > s2" );
+    
+    equal( s.eq("aaaa", "aaba"),
+           false,
+           "s1 < s2" );
+  });
+  
+  
+  test("ltgt", function () {
+    equal( s.ltgt("aaa", "aaa"),
+           false,
+           "equal strings" );
+    
+    equal( s.ltgt("aaa", "aba"),
+           1,
+           "s1 < s2 at index 1" );
+    
+    equal( s.ltgt("aba", "aaa"),
+           1,
+           "s1 > s2 at index 1" );
+    
+    // different lengths
+    
+    equal( s.ltgt("aaa", "aa"),
+           true,
+           "s1.length > s2.length" );
+    
+    equal( s.ltgt("aa", "aaa"),
+           true,
+           "s1.length < s2.length" );
+    
+    // start and stop arguments
+    
+    equal( s.ltgt("bbaaa", "aaa", 2),
+           false,
+           "s1start" );
+    
+    equal( s.ltgt("bbaaabb", "aaa", 2, 5),
+           false,
+           "s1start, s1end" );
+    
+    equal( s.ltgt("bbaaabb", "bbaaa", 2, 5, 2),
+           false,
+           "s1start, s1end, s2start" );
+    
+    equal( s.ltgt("bbaaabb", "bbaaabb", 2, 5, 2, 5),
+           false,
+           "s1start, s1end, s2start, s2end" );
+  });
+  
+  
+  test("lt", function () {
+    equal( s.lt("aaa", "aaa"),
+           false,
+           "equal strings" );
+    
+    equal( s.lt("aaa", "aba"),
+           1,
+           "s1 < s2 at index 1" );
+    
+    equal( s.lt("aba", "aaaa"),
+           false,
+           "s1 > s2 at index 1" );
+    
+    // different lengths but otherwise equal
+    
+    equal( s.lt("aaa", "aa"),
+           false,
+           "s1.length > s2.length" );
+    
+    equal( s.lt("aa", "aaa"),
+           2,
+           "s1.length < s2.length" );
+    
+    // start and stop arguments
+    
+    equal( s.lt("bbaaa", "aaa", 2),
+           false,
+           "s1start" );
+    
+    equal( s.lt("bbaaabb", "aaa", 2, 5),
+           false,
+           "s1start, s1end" );
+    
+    equal( s.lt("bbaaabb", "bbaaa", 2, 5, 2),
+           false,
+           "s1start, s1end, s2start" );
+    
+    equal( s.lt("bbaaabb", "bbaaabb", 2, 5, 2, 5),
+           false,
+           "s1start, s1end, s2start, s2end" );
+  });
+  
+  
+  test("gt", function () {
+    equal( s.gt("aaa", "aaa"),
+           false,
+           "equal strings" );
+    
+    equal( s.gt("aaaa", "aba"),
+           false,
+           "s1 < s2 at index 1" );
+    
+    equal( s.gt("aba", "aaa"),
+           1,
+           "s1 > s2 at index 1" );
+    
+    // different lengths but otherwise equal
+    
+    equal( s.gt("aaa", "aa"),
+           2,
+           "s1.length > s2.length" );
+    
+    equal( s.gt("aa", "aaa"),
+           false,
+           "s1.length < s2.length" );
+    
+    // start and stop arguments
+    
+    equal( s.gt("bbaaa", "aaa", 2),
+           false,
+           "s1start" );
+    
+    equal( s.gt("bbaaabb", "aaa", 2, 5),
+           false,
+           "s1start, s1end" );
+    
+    equal( s.gt("bbaaabb", "bbaaa", 2, 5, 2),
+           false,
+           "s1start, s1end, s2start" );
+    
+    equal( s.gt("bbaaabb", "bbaaabb", 2, 5, 2, 5),
+           false,
+           "s1start, s1end, s2start, s2end" );
+  });
+  
+  
+  test("lteq", function () {
+    equal( s.lteq("aaa", "aaa"),
+           3,
+           "equal strings" );
+    
+    equal( s.lteq("aaa", "aba"),
+           1,
+           "s1 < s2 at index 1" );
+    
+    equal( s.lteq("aba", "aaaa"),
+           false,
+           "s1 > s2 at index 1" );
+    
+    // different lengths but otherwise equal
+    
+    equal( s.lteq("aaa", "aa"),
+           false,
+           "s1.length > s2.length" );
+    
+    equal( s.lteq("aa", "aaa"),
+           2,
+           "s1.length < s2.length" );
+    
+    // start and stop arguments
+    
+    equal( s.lteq("bbaaa", "aaa", 2),
+           3,
+           "s1start" );
+    
+    equal( s.lteq("bbaaabb", "aaa", 2, 5),
+           3,
+           "s1start, s1end" );
+    
+    equal( s.lteq("bbaaabb", "bbaaa", 2, 5, 2),
+           3,
+           "s1start, s1end, s2start" );
+    
+    equal( s.lteq("bbaaabb", "bbaaabb", 2, 5, 2, 5),
+           3,
+           "s1start, s1end, s2start, s2end" );
+  });
+  
+  
+  test("gteq", function () {
+    equal( s.gteq("aaa", "aaa"),
+           3,
+           "equal strings" );
+    
+    equal( s.gteq("aaaa", "aba"),
+           false,
+           "s1 < s2 at index 1" );
+    
+    equal( s.gteq("aba", "aaa"),
+           1,
+           "s1 > s2 at index 1" );
+    
+    // different lengths but otherwise equal
+    
+    equal( s.gteq("aaa", "aa"),
+           2,
+           "s1.length > s2.length" );
+    
+    equal( s.gteq("aa", "aaa"),
+           false,
+           "s1.length < s2.length" );
+    
+    // start and stop arguments
+    
+    equal( s.gteq("bbaaa", "aaa", 2),
+           3,
+           "s1start" );
+    
+    equal( s.gteq("bbaaabb", "aaa", 2, 5),
+           3,
+           "s1start, s1end" );
+    
+    equal( s.gteq("bbaaabb", "bbaaa", 2, 5, 2),
+           3,
+           "s1start, s1end, s2start" );
+    
+    equal( s.gteq("bbaaabb", "bbaaabb", 2, 5, 2, 5),
+           3,
+           "s1start, s1end, s2start, s2end" );
+  });
+  
+  
+  
+  
+  
+  
+  
+  
 });
   

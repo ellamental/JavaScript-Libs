@@ -287,6 +287,11 @@ var srfi13 = (function () {
   
   //________________________________________________________________________//
   // Comparison
+  // 
+  // There is a lot of code duplication in these comparison functions.  This
+  // is by design.  Abstracting these to use a comparison function instead of
+  // primitive operators (< > = etc) results in a 15-40% decrease in
+  // performance in Firefox 8 and Chrome 15.
   //________________________________________________________________________//
   
   s.compare = function (s1, s2, lt, eq, gt, s1start, s1end, s2start, s2end) {
@@ -321,7 +326,146 @@ var srfi13 = (function () {
     return s.compare(s1.toLowerCase(), s2.toLowerCase(), lt, eq, gt, s1start, s1end, s2start, s2end);
   };
   
+  s.eq = function (s1, s2, s1start, s1end, s2start, s2end) {
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    if (s1 === s2) {
+      return s1.length;
+    }
+    else {
+      return false;
+    }
+  };
+  
+  s.ltgt = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    s1start = s1start || 0;
+    for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] < s2[i] || s1[i] > s2[i]) {
+        return i + s1start;
+      }
+    }
+    if (s1.length !== s2.length) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
 
+  s.lt = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    s1start = s1start || 0;
+    for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] < s2[i]) {
+        return i + s1start;
+      }
+      else if (s1[i] > s2[i]) {
+        return false;
+      }
+    }
+    if (s1.length < s2.length) {
+      return s1.length;
+    }
+    else {
+      return false;
+    }
+  };
+
+  s.gt = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    s1start = s1start || 0;
+    for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] > s2[i]) {
+        return i + s1start;
+      }
+      else if (s1[i] < s2[i]) {
+        return false;
+      }
+    }
+    if (s1.length > s2.length) {
+      return s2.length;
+    }
+    else {
+      return false;
+    }
+  };
+
+  s.lteq = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    s1start = s1start || 0;
+    for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] < s2[i]) {
+        return i + s1start;
+      }
+      else if (s1[i] > s2[i]) {
+        return false;
+      }
+    }
+    if (s1.length <= s2.length) {
+      return s1.length;
+    }
+    else {
+      return false;
+    }
+  };
+
+  s.gteq = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    s1start = s1start || 0;
+    for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] > s2[i]) {
+        return i + s1start;
+      }
+      else if (s1[i] < s2[i]) {
+        return false;
+      }
+    }
+    if (s1.length >= s2.length) {
+      return s2.length;
+    }
+    else {
+      return false;
+    }
+  };
+
+
+  
+  
   return s;
 })();
 

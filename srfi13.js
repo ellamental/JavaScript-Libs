@@ -285,6 +285,38 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Comparison
+  //________________________________________________________________________//
+  
+  s.compare = function (s1, s2, lt, eq, gt, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    s1start = s1start || 0;
+    for (i=0, j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] < s2[i]) {
+        return lt(i + s1start);
+      }
+      else if (s1[i] > s2[i]) {
+        return gt(i + s1start);
+      }
+    }
+    if (s1.length < s2.length) {
+      return lt(i + s1start);
+    }
+    else if (s1.length > s2.length) {
+      return gt(i + s1start);
+    }
+    else {
+      return eq(i + s1start);
+    }
+  };
+  
   
 
   return s;

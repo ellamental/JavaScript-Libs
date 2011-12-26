@@ -442,8 +442,78 @@ $(document).ready(function(){
   
   
   //________________________________________________________________________//
-  // 
+  // Comparison
   //________________________________________________________________________//
+  
+  test("compare", function () {
+    var lt = function (x) { return "lt " + x; },
+        eq = function (x) { return "eq " + x; },
+        gt = function (x) { return "gt " + x; };
+    
+    equal( s.compare("bab", "bbb", lt, eq, gt),
+           "lt 1",
+           "s1 < s2 at index 1" );
+    
+    equal( s.compare("bbb", "bbb", lt, eq, gt),
+           "eq 3",
+           "s1 === s2 so return eq(2)" );
+    
+    equal( s.compare("bbb", "bab", lt, eq, gt),
+           "gt 1",
+           "s1 > s2 at index 1" );
+    
+    // empty strings
+    
+    equal( s.compare("", "", lt, eq, gt),
+           "eq 0",
+           "s1 and s2 are empty" );
+    
+    equal( s.compare("", "a", lt, eq, gt),
+           "lt 0",
+           "s1 is empty s2 has 1 character" );
+    
+    equal( s.compare("a", "", lt, eq, gt),
+           "gt 0",
+           "s1 has 1 character and s2 is empty" );
+    
+    // unequal lengths but otherwise equal
+    
+    equal( s.compare("aa", "aaa", lt, eq, gt),
+           "lt 2",
+           "s1 < s2 at index 2" );
+    
+    equal( s.compare("aaa", "aa", lt, eq, gt),
+           "gt 2",
+           "s1 > s2 at index 2" );
+    
+    // start/stop arguments
+    
+    equal( s.compare("aabbb", "bbb", lt, eq, gt, 2),
+           "eq 5",
+           "s1[2:5] === s2 so return eq(5)" );
+    
+    equal( s.compare("aabbbaa", "bbb", lt, eq, gt, 2, 5),
+           "eq 5",
+           "s1[2:5] === s2 so return eq(5)" );
+    
+    equal( s.compare("aabbbaa", "bbbb", lt, eq, gt, 2, 5),
+           "lt 5",
+           "s1[2:5] < s2 at index 5" );
+    
+    equal( s.compare("aabbbaa", "bb", lt, eq, gt, 2, 5),
+           "gt 4",
+           "s1[2:5] > s2 at index 4" );
+    
+    equal( s.compare("aabbbaa", "zzbbb", lt, eq, gt, 2, 5, 2),
+           "eq 5",
+           "s1[2:5] === s2[2:] so return eq(5)" );
+    
+    equal( s.compare("aabbbaa", "zzbbbzz", lt, eq, gt, 2, 5, 2, 5),
+           "eq 5",
+           "s1[2:5] === s2[2:5] so return eq(5)" );
+  });
+  
+  
   
   
 });

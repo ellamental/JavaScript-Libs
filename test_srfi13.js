@@ -777,6 +777,46 @@ $(document).ready(function(){
   });
   
   
+  test("ci_eq", function () {
+    equal( s.ci_eq("aAa", "AaA"),
+           3,
+           "equal strings" );
+  });
+  
+  
+  test("ci_ltgt", function () {
+    equal( s.ci_ltgt("aAa", "AaA"),
+           false,
+           "equal strings" );
+  });
+  
+  
+  test("ci_lt", function () {
+    equal( s.ci_lt("aAa", "AaA"),
+           false,
+           "equal strings" );
+  });
+  
+  
+  test("ci_gt", function () {
+    equal( s.ci_gt("aAa", "AaA"),
+           false,
+           "equal strings" );
+  });
+  
+  
+  test("ci_lteq", function () {
+    equal( s.ci_lteq("aAa", "AaA"),
+           3,
+           "equal strings" );
+  });
+  
+  
+  test("ci_gteq", function () {
+    equal( s.ci_gteq("aAa", "AaA"),
+           3,
+           "equal strings" );
+  });
   
   
   

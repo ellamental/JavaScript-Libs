@@ -462,8 +462,31 @@ var srfi13 = (function () {
       return false;
     }
   };
-
-
+  
+  s.ci_eq = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.eq(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.ci_ltgt = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.ltgt(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.ci_lt = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.lt(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.ci_gt = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.gt(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.ci_lteq = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.lteq(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.ci_gteq = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.gteq(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
   
   
   return s;

@@ -476,6 +476,16 @@ $(document).ready(function(){
            "gt 0",
            "s1 has 1 character and s2 is empty" );
     
+    // unequal case
+    
+    equal( s.compare("aaa", "aAa", lt, eq, gt),
+           "gt 1",
+           "s1 > s2 at index 1 (a > A)" );
+    
+    equal( s.compare("aAa", "aaa", lt, eq, gt),
+           "lt 1",
+           "s1 < s2 at index 1 (A < a)" );
+    
     // unequal lengths but otherwise equal
     
     equal( s.compare("aa", "aaa", lt, eq, gt),
@@ -514,6 +524,19 @@ $(document).ready(function(){
   });
   
   
+  test("compare_ci", function () {
+    var lt = function (x) { return "lt " + x; },
+        eq = function (x) { return "eq " + x; },
+        gt = function (x) { return "gt " + x; };
+    
+    equal( s.compare_ci("aaa", "aAa", lt, eq, gt),
+           "eq 3",
+           "s1 === s2 so return eq(3)" );
+    
+    equal( s.compare_ci("aAa", "AaA", lt, eq, gt),
+           "eq 3",
+           "s1 === s2 so return eq(3)" );
+  });
   
   
 });

@@ -317,6 +317,9 @@ var srfi13 = (function () {
     }
   };
   
+  s.compare_ci = function (s1, s2, lt, eq, gt, s1start, s1end, s2start, s2end) {
+    return s.compare(s1.toLowerCase(), s2.toLowerCase(), lt, eq, gt, s1start, s1end, s2start, s2end);
+  };
   
 
   return s;

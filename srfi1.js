@@ -224,14 +224,17 @@ srfi1.is_proper_list = function (list) {
 };
 
 srfi1.is_circular_list = function (list) {
-  var first_node = list;
+  var tortoise, hare;
   if (!(list instanceof srfi1.Pair)) { return false; }
-  list = list.cdr;
-  while (list instanceof srfi1.Pair) {
-    if (list === first_node) {
-      return true;
-    }
-    list = list.cdr;
+  tortoise = list;
+  hare = list.cdr;
+  while (hare instanceof srfi1.Pair && tortoise !== hare) {
+    tortoise = tortoise.cdr;
+    hare = hare.cdr;
+    if (tortoise === hare) { return true; }
+    else if (!(hare instanceof srfi1.Pair)) { return false; }
+    hare = hare.cdr;
+    if (tortoise === hare) { return true; }
   }
   return false;
 };

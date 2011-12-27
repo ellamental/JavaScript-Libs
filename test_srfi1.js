@@ -341,6 +341,21 @@ $(document).ready(function(){
     deepEqual( s.is_circular_list( s.circular_list(0, 1, 2) ),
                true,
                "circular lists are circular lists" );
+    
+    deepEqual( s.is_circular_list( s.circular_list(0, 1) ),
+               true,
+               "circular list of length 2" );
+    
+    deepEqual( s.is_circular_list( s.cons(0, s.circular_list(1, 2)) ),
+               true,
+               "circular list with cycle repeating from index 1 to 2" );
+    
+    deepEqual( s.is_circular_list( s.cons(0,
+                                          s.cons(1,
+                                                 s.cons(2,
+                                                        s.circular_list(3, 4, 5, 6, 7, 8, 9)))) ),
+               true,
+               "circular list with cycle repeating from index 3 to 9" );
   });
   
   

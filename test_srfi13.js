@@ -852,5 +852,27 @@ $(document).ready(function(){
   });
   
   
+  test("prefix_length", function () {
+    equal( s.prefix_length("abc", "abcdefg"),
+           3,
+           "full prefix" );
+    
+    equal( s.prefix_length("abz", "abcdefg"),
+           2,
+           "partial prefix" );
+    
+    equal( s.prefix_length("cba", "abcdefg"),
+           0,
+           "no match" );
+    
+    equal( s.prefix_length("abcdefg", "abc"),
+           3,
+           "prefix string longer" );
+    
+    equal( s.prefix_length("zzbczz", "abcdefg", 2, 5, 1, 5),
+           2,
+           "start/end parameters" );
+  });
+  
   
 });

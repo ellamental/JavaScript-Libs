@@ -516,6 +516,22 @@ var srfi13 = (function () {
     }
   };
   
+  s.prefix_length = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    for (i=0, j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] !== s2[i]) {
+        return i;
+      }
+    }
+    return i;
+  };
+  
   
   
   return s;

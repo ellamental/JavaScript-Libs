@@ -819,9 +819,38 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Prefixes & suffixes
+  //________________________________________________________________________//
   
+  test("is_prefix", function () {
+    equal( s.is_prefix("abc", "abcdefg"),
+           true,
+           "'abc' is the prefix of 'abcdefg'" );
+    
+    equal( s.is_prefix("cba", "abcdefg"),
+           false,
+           "'cba' is not the prefix of 'abcdefg'" );
+    equal( s.is_prefix("zzdefzz", "abcdefzzz", 2, 5, 3, 7),
+           true,
+           "start/end parameters" );
+  });
+  
+  
+  test("is_suffix", function () {
+    equal( s.is_suffix("efg", "abcdefg"),
+           true,
+           "'efg' is the suffix of 'abcdefg'" );
+    
+    equal( s.is_suffix("gfe", "abcdefg"),
+           false,
+           "'gfe' is not the suffex of 'abcdefg'" );
+    
+    equal( s.is_suffix("zzdefzz", "abcdefzz", 2, 5, 1, 6),
+           true,
+           "start/end parameters" );
+  });
   
   
   
 });
-  

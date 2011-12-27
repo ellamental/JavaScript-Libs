@@ -107,40 +107,6 @@ var srfi13 = (function () {
     return false;
   };
   
-  s.starts_with = function (str, prefix, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
-    if (s.is_string(prefix)) {
-      return str.substring(0, prefix.length) === prefix;
-    }
-    else {
-      for (var i=0, j=prefix.length; i < j; i++) {
-        if (s.starts_with(str, prefix[i])) {
-          return true;
-        }
-      }
-      return false;
-    }
-  };
-  
-  s.ends_with = function (str, suffix, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
-    if (s.is_string(suffix)) {
-      return str.substring(str.length-suffix.length, str.length) === suffix;
-    }
-    else {
-      for (var i=0, j=suffix.length; i < j; i++) {
-        if (s.ends_with(str, suffix[i])) {
-          return true;
-        }
-      }
-      return false;
-    }
-  };
-  
   
   //________________________________________________________________________//
   // Constructors
@@ -485,6 +451,69 @@ var srfi13 = (function () {
   
   s.ci_gteq = function (s1, s2, s1start, s1end, s2start, s2end) {
     return s.gteq(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  
+  //________________________________________________________________________//
+  // Prefixes & suffixes
+  //________________________________________________________________________//
+  
+  s.is_prefix = function (s1, s2, s1start, s1end, s2start, s2end) {
+    // is s1 a prefix of s2?
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    return s2.substring(0, s1.length) === s1;
+  };
+  
+  s.is_suffix = function (s1, s2, s1start, s1end, s2start, s2end) {
+    // is s1 a suffix of s2?
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    return s2.substring(s2.length - s1.length, s2.length) === s1;
+  };
+  
+  s.starts_with = function (str, prefix, start, end) {
+    // prefix may be either a string or an array of strings
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    if (s.is_string(prefix)) {
+      return str.substring(0, prefix.length) === prefix;
+    }
+    else {
+      for (var i=0, j=prefix.length; i < j; i++) {
+        if (s.starts_with(str, prefix[i])) {
+          return true;
+        }
+      }
+      return false;
+    }
+  };
+  
+  s.ends_with = function (str, suffix, start, end) {
+    // prefix may be either a string or an array of strings
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    if (s.is_string(suffix)) {
+      return str.substring(str.length-suffix.length, str.length) === suffix;
+    }
+    else {
+      for (var i=0, j=suffix.length; i < j; i++) {
+        if (s.ends_with(str, suffix[i])) {
+          return true;
+        }
+      }
+      return false;
+    }
   };
   
   

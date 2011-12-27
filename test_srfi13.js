@@ -150,44 +150,6 @@ $(document).ready(function(){
   });
   
   
-  test("starts_with", function () {
-    equal( s.starts_with("hello", "he"),
-           true,
-           "'hello' starts with 'he'" );
-    
-    equal( s.starts_with("hello", "he", 1),
-           false,
-           "'ello' does not start with 'he'" );
-    
-    equal( s.starts_with("hello", "he", 0, 1),
-           false,
-           "'h' does not start with 'he'" );
-    
-    equal( s.starts_with("hello", ["we", "he", "do"]),
-           true,
-           "'hello' starts with a prefix in the array ['we', 'he', 'do']" );
-  });
-  
-  
-  test("ends_with", function () {
-    equal( s.ends_with("hello", "lo"),
-           true,
-           "'hello' ends with 'lo'" );
-    
-    equal( s.ends_with("hello", "llo", 3),
-           false,
-           "'lo' does not end with 'llo'" );
-    
-    equal( s.ends_with("hello", "lo", 0, -2),
-           false,
-           "'hel' does not end with 'lo'" );
-    
-    equal(s.ends_with("hello", ["we", "lo", "do"]),
-          true,
-          "'hello' ends with a suffix in the array ['we', 'lo', 'do']" );
-  });
-  
-  
   //________________________________________________________________________//
   // Constructors
   //________________________________________________________________________//
@@ -823,6 +785,66 @@ $(document).ready(function(){
   // Prefixes & suffixes
   //________________________________________________________________________//
   
+  test("prefix_length", function () {
+    equal( s.prefix_length("abc", "abcdefg"),
+           3,
+           "full prefix" );
+    
+    equal( s.prefix_length("abz", "abcdefg"),
+           2,
+           "partial prefix" );
+    
+    equal( s.prefix_length("cba", "abcdefg"),
+           0,
+           "no match" );
+    
+    equal( s.prefix_length("abcdefg", "abc"),
+           3,
+           "prefix string longer" );
+    
+    equal( s.prefix_length("zzbczz", "abcdefg", 2, 5, 1, 5),
+           2,
+           "start/end parameters" );
+  });
+  
+  
+  test("suffix_length", function () {
+    equal( s.suffix_length("def", "abcdef"),
+           3,
+           "full suffix" );
+    
+    equal( s.suffix_length("zef", "abcdef"),
+           2,
+           "partial suffix" );
+    
+    equal( s.suffix_length("dez", "abcdef"),
+           0,
+           "no match" );
+    
+    equal( s.suffix_length("abcdef", "def"),
+           3,
+           "suffix string longer" );
+    
+    equal( s.suffix_length("zzdefzz", "abcdefghi", 2, 5, 1, 6),
+           3,
+           "start/end parameters" );
+  });
+  
+  
+  test("prefix_length_ci", function () {
+    equal( s.prefix_length_ci("zaBcz", "yAbCdefy", 1, 4, 1, 7),
+           3,
+           "case insensitive prefix length" );
+  });
+  
+  
+  test("suffix_length_ci", function () {
+    equal( s.suffix_length_ci("zdEfz", "yabcDeFy", 1, 4, 1, 7),
+           3,
+           "case insensitive suffix length" );
+  });
+  
+  
   test("is_prefix", function () {
     equal( s.is_prefix("abc", "abcdefg"),
            true,
@@ -852,27 +874,60 @@ $(document).ready(function(){
   });
   
   
-  test("prefix_length", function () {
-    equal( s.prefix_length("abc", "abcdefg"),
-           3,
-           "full prefix" );
-    
-    equal( s.prefix_length("abz", "abcdefg"),
-           2,
-           "partial prefix" );
-    
-    equal( s.prefix_length("cba", "abcdefg"),
-           0,
-           "no match" );
-    
-    equal( s.prefix_length("abcdefg", "abc"),
-           3,
-           "prefix string longer" );
-    
-    equal( s.prefix_length("zzbczz", "abcdefg", 2, 5, 1, 5),
-           2,
-           "start/end parameters" );
+  test("is_prefix_ci", function () {
+    equal( s.is_prefix_ci("zzdEfzz", "abcDeFzzz", 2, 5, 3, 7),
+           true,
+           "case insensitive prefix" );
   });
+  
+  
+  test("is_suffix_ci", function () {
+    equal( s.is_suffix_ci("zzdEfzz", "abcDeFzz", 2, 5, 1, 6),
+           true,
+           "case insensitive suffix" );
+  });
+  
+  
+  test("starts_with", function () {
+    equal( s.starts_with("hello", "he"),
+           true,
+           "'hello' starts with 'he'" );
+    
+    equal( s.starts_with("hello", "he", 1),
+           false,
+           "'ello' does not start with 'he'" );
+    
+    equal( s.starts_with("hello", "he", 0, 1),
+           false,
+           "'h' does not start with 'he'" );
+    
+    equal( s.starts_with("hello", ["we", "he", "do"]),
+           true,
+           "'hello' starts with a prefix in the array ['we', 'he', 'do']" );
+  });
+  
+  
+  test("ends_with", function () {
+    equal( s.ends_with("hello", "lo"),
+           true,
+           "'hello' ends with 'lo'" );
+    
+    equal( s.ends_with("hello", "llo", 3),
+           false,
+           "'lo' does not end with 'llo'" );
+    
+    equal( s.ends_with("hello", "lo", 0, -2),
+           false,
+           "'hel' does not end with 'lo'" );
+    
+    equal(s.ends_with("hello", ["we", "lo", "do"]),
+          true,
+          "'hello' ends with a suffix in the array ['we', 'lo', 'do']" );
+  });
+  
+  
+  
+  
   
   
 });

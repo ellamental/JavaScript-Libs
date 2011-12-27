@@ -207,7 +207,7 @@ var srfi13 = (function () {
       str = s.substring(str, -len);
     }
     else if (len > str.length) {
-      p = new Array((len - str.length) + 1).join(char)
+      p = new Array((len - str.length) + 1).join(char);
       return p + str;
     }
     return str;
@@ -233,7 +233,7 @@ var srfi13 = (function () {
       str = s.substring(str, start, end);
     }
     criteria = criteria || " \n\r";
-    fn = char_set_or_function(criteria)
+    fn = char_set_or_function(criteria);
     idx = str.length - 1;
     while (idx >= 0 && fn(str[idx])) {
       idx -= 1;
@@ -458,6 +458,46 @@ var srfi13 = (function () {
   // Prefixes & suffixes
   //________________________________________________________________________//
   
+  s.prefix_length = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    for (i=0, j=Math.min(s1.length, s2.length); i < j; i++) {
+      if (s1[i] !== s2[i]) {
+        return i;
+      }
+    }
+    return i;
+  };
+  
+  s.suffix_length = function (s1, s2, s1start, s1end, s2start, s2end) {
+    var i, j, count;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    for (i=s1.length-1, j=s2.length-1, count=0; i >= 0; i--, j--, count++) {
+      if (s1[i] !== s2[j]) {
+        return count;
+      }
+    }
+    return count;
+  };
+
+  s.prefix_length_ci = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.prefix_length(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.suffix_length_ci = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.suffix_length(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
   s.is_prefix = function (s1, s2, s1start, s1end, s2start, s2end) {
     // is s1 a prefix of s2?
     if (typeof s1start !== 'undefined') {
@@ -478,6 +518,14 @@ var srfi13 = (function () {
       s2 = s.substring(s2, s2start, s2end);
     }
     return s2.substring(s2.length - s1.length, s2.length) === s1;
+  };
+  
+  s.is_prefix_ci = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.is_prefix(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  s.is_suffix_ci = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.is_suffix(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
   };
   
   s.starts_with = function (str, prefix, start, end) {
@@ -514,22 +562,6 @@ var srfi13 = (function () {
       }
       return false;
     }
-  };
-  
-  s.prefix_length = function (s1, s2, s1start, s1end, s2start, s2end) {
-    var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    for (i=0, j=Math.min(s1.length, s2.length); i < j; i++) {
-      if (s1[i] !== s2[i]) {
-        return i;
-      }
-    }
-    return i;
   };
   
   

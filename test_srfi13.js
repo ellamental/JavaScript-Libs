@@ -1097,4 +1097,34 @@ $(document).ready(function(){
   });
   
   
+  test("contains", function () {
+    equal( s.contains("abcdefg", "def"),
+           3,
+           "substring in search string" );
+    
+    equal( s.contains("abcdefg", "xyz"),
+           false,
+           "substring not in search string" );
+    
+    equal( s.contains("abcdefabc", "abc", 3),
+           6,
+           "start argument" );
+    
+    equal( s.contains("abcdef", "def", 0, -2),
+           false,
+           "start and end arguments" );
+  });
+  
+  
+  test("contains_ci", function () {
+    equal( s.contains_ci("abcdefAbCdef", "aBc", 3, -3),
+           6,
+           "case insensitive contains" );
+  });
+  
+  
+  
+  
+  
+  
 });

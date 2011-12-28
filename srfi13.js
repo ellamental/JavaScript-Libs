@@ -640,8 +640,30 @@ var srfi13 = (function () {
     return count;
   };
   
+  s.contains = function (s1, s2, s1start, s1end, s2start, s2end) {
+    // is s2 contained in s1?
+    var idx;
+    if (typeof s1start !== 'undefined') {
+      s1 = s.substring(s1, s1start, s1end);
+    }
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    start = s1start || 0;
+    idx = s1.indexOf(s2);
+    if (idx < 0) {
+      return false;
+    }
+    else {
+      return idx + start;
+    }
+  };
   
-
+  s.contains_ci = function (s1, s2, s1start, s1end, s2start, s2end) {
+    return s.contains(s1.toLowerCase(), s2.toLowerCase(), s1start, s1end, s2start, s2end);
+  };
+  
+  
   
   return s;
 })();

@@ -625,6 +625,22 @@ var srfi13 = (function () {
     return false;
   };
   
+  s.count = function (str, criteria, start, end) {
+    var count = 0;
+    start = start || 0;
+    end = end || str.length-1;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
+    criteria = char_set_or_function(criteria);
+    for (start; start < end; start++) {
+      if (criteria(str[start])) {
+        count += 1;
+      }
+    }
+    return count;
+  };
+  
+  
 
   
   return s;

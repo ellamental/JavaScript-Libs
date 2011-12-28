@@ -1070,7 +1070,31 @@ $(document).ready(function(){
   });
   
   
-  
+  test("count", function () {
+    equal( s.count("abcabcabc", "b"),
+           3,
+           "character argument" );
+    
+    equal( s.count("abcabcabc", "z"),
+           0,
+           "character argument not in string" );
+    
+    equal( s.count("abcdeabcde", "abc"),
+           6,
+           "character set" );
+    
+    equal( s.count("aabbcc", function (x) { return x === "b"; }),
+           2,
+           "predicate function argument" );
+    
+    equal( s.count("aabbcc", "a", 2),
+           0,
+           "start argument" );
+    
+    equal( s.count("aabbaa", "a", 2, -3),
+           0,
+           "start and end arguments" );
+  });
   
   
 });

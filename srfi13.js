@@ -565,6 +565,67 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Searching
+  //________________________________________________________________________//
+  
+  s.index = function (str, criteria, start, end) {
+    start = start || 0;
+    end = end || str.length;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
+    criteria = char_set_or_function(criteria);
+    for (start; start < end; start++) {
+      if (criteria(str[start])) {
+        return start;
+      }
+    }
+    return false;
+  };
+  
+  s.index_right = function (str, criteria, start, end) {
+    start = start || 0;
+    end = end || str.length-1;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
+    criteria = char_set_or_function(criteria);
+    for (end; end >= start; end--) {
+      if (criteria(str[end])) {
+        return end;
+      }
+    }
+    return false;
+  };
+  
+  s.skip = function (str, criteria, start, end) {
+    start = start || 0;
+    end = end || str.length;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
+    criteria = char_set_or_function(criteria);
+    for (start; start < end; start++) {
+      if (!criteria(str[start])) {
+        return start;
+      }
+    }
+    return false;
+  };
+  
+  s.skip_right = function (str, criteria, start, end) {
+    start = start || 0;
+    end = end || str.length-1;
+    if (start < 0) { start = str.length + start; }
+    if (end < 0) { end = str.length + end; }
+    criteria = char_set_or_function(criteria);
+    for (end; end >= start; end--) {
+      if (!criteria(str[end])) {
+        return end;
+      }
+    }
+    return false;
+  };
+  
+
   
   return s;
 })();

@@ -926,6 +926,149 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Searching
+  //________________________________________________________________________//
+  
+  test("index", function () {
+    equal( s.index("world", "r"),
+           2,
+           "single character in string" );
+    
+    equal( s.index("world", "z"),
+           false,
+           "single character not in string" );
+    
+    equal( s.index("world", "xrz"),
+           2,
+           "character set in string" );
+    
+    equal( s.index("world", "xyz"),
+           false,
+           "character set not in string" );
+    
+    equal( s.index("world", function (x) { return x === "r"; }),
+           2,
+           "predicate function in string" );
+    
+    equal( s.index("world", function (x) { return x === "z"; }),
+           false,
+           "predicate function not in string" );
+    
+    equal( s.index("dabcde", "d", 1),
+           4,
+           "start argument" );
+    
+    equal( s.index("dabcde", "d", 1, -2),
+           false,
+           "start and end arguments" );
+  });
+  
+  
+  test("index_right", function () {
+    equal( s.index_right("abcdcba", "a"),
+           6,
+           "single character in string" );
+    
+    equal( s.index_right("world", "z"),
+           false,
+           "single character not in string" );
+    
+    equal( s.index_right("abcdcba", "xcz"),
+           4,
+           "character set in string" );
+    
+    equal( s.index_right("world", "xyz"),
+           false,
+           "character set not in string" );
+    
+    equal( s.index_right("abcdcba", function (x) { return x === "c"; }),
+           4,
+           "predicate function in string" );
+    
+    equal( s.index_right("world", function (x) { return x === "z"; }),
+           false,
+           "predicate function not in string" );
+    
+    equal( s.index_right("zabcde", "z", 1),
+           false,
+           "start argument" );
+    
+    equal( s.index_right("zabcze", "d", 0, -2),
+           0,
+           "start and end arguments" );
+  });
+  
+  
+  test("skip", function () {
+    equal( s.skip("  world", " "),
+           2,
+           "single character in string" );
+    
+    equal( s.skip("   ", " "),
+           false,
+           "single character not in string" );
+    
+    equal( s.skip("abcdef", "abc"),
+           3,
+           "character set in string" );
+    
+    equal( s.skip("abcabc", "abc"),
+           false,
+           "character set not in string" );
+    
+    equal( s.skip("aabb", function (x) { return x === "a"; }),
+           2,
+           "predicate function in string" );
+    
+    equal( s.skip("aaa", function (x) { return x === "a"; }),
+           false,
+           "predicate function not in string" );
+    
+    equal( s.skip("baaab", "a", 1),
+           4,
+           "start argument" );
+    
+    equal( s.skip("baaabcd", "a", 1, -3),
+           false,
+           "start and end arguments" );
+  });
+  
+  
+  test("skip_right", function () {
+    equal( s.skip_right("world  ", " "),
+           4,
+           "single character in string" );
+    
+    equal( s.skip_right("   ", " "),
+           false,
+           "single character not in string" );
+    
+    equal( s.skip_right("abcdef", "def"),
+           2,
+           "character set in string" );
+    
+    equal( s.skip_right("abcabc", "abc"),
+           false,
+           "character set not in string" );
+    
+    equal( s.skip_right("aabb", function (x) { return x === "b"; }),
+           1,
+           "predicate function in string" );
+    
+    equal( s.skip_right("aaa", function (x) { return x === "a"; }),
+           false,
+           "predicate function not in string" );
+    
+    equal( s.skip_right("baaa", "a", 1),
+           false,
+           "start argument" );
+    
+    equal( s.skip_right("baaabcd", "a", 0, -4),
+           0,
+           "start and end arguments" );
+  });
+  
   
   
   

@@ -1159,8 +1159,47 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Reverse & append
+  //________________________________________________________________________//
+  
+  test("reverse", function () {
+    equal( s.reverse("hello"),
+           "olleh",
+           "reverse a string" );
+    
+    equal( s.reverse("world", 1, -1),
+           "lro",
+           "start and end arguments" );
+  });
   
   
+  test("append", function () {
+    equal( s.append("one", "two", "three"),
+           "onetwothree",
+           "append strings" );
+  });
+  
+  
+  test("concatenate", function () {
+    equal( s.concatenate(["one", "two", "three"]),
+           "onetwothree",
+           "concatenate strings" );
+  });
+  
+  test("concatenate_reverse", function () {
+    equal( s.concatenate_reverse(["one", "two", "three"]),
+           "threetwoone",
+           "reverse the array, then concatenate the strings" );
+    
+    equal( s.concatenate_reverse(["one", "two", "three"], "hello"),
+           "threetwoonehello",
+           "with final string" );
+    
+    equal( s.concatenate_reverse(["one", "two", "three"], "hello", -3),
+           "threetwoonehe",
+           "with final string and end argument" );
+  });
   
   
 });

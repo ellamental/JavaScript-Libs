@@ -709,7 +709,36 @@ var srfi13 = (function () {
     }
     return str.toLowerCase();
   };
-
+  
+  
+  //________________________________________________________________________//
+  // Reverse & append
+  //________________________________________________________________________//
+  
+  s.reverse = function (str, start, end) {
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    return str.split("").reverse().join("");
+  };
+  
+  s.append = function ( /* str1, ..., strn */ ) {
+    return Array.prototype.slice.call(arguments).join("");
+  };
+  
+  s.concatenate = function (arr) {
+    return arr.join("");
+  };
+  
+  s.concatenate_reverse = function (arr, final_str, end) {
+    if (typeof end !== 'undefined') {
+      if (end < 0) { end = final_str.length + end; }
+      final_str = final_str.substring(0, end);
+    }
+    arr.reverse();
+    if (final_str) { arr.push(final_str); }
+    return arr.join("");
+  };
   
   
   

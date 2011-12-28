@@ -1123,6 +1123,42 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Alphabetic case mapping
+  //________________________________________________________________________//
+  
+  test("titlecase", function () {
+    equal( s.titlecase("beauty and the beast"),
+           "Beauty and the Beast",
+           "convert string to titlecase" );
+    
+    equal( s.titlecase("beauty and the beast", 2, -2),
+           "Auty and the Bea",
+           "start and end arguments" );
+  });
+  
+  
+  test("upcase", function () {
+    equal( s.upcase("hello woRld"),
+           "HELLO WORLD",
+           "convert string to uppercase" );
+    
+    equal( s.upcase("aabbcc", 2, -2),
+           "BB",
+           "start and end arguments" );
+  });
+  
+  test("downcase", function () {
+    equal( s.downcase("HELLO WOrLD"),
+           "hello world",
+           "convert string to lowercase" );
+    
+    equal( s.downcase("AABBCC", 2, -2),
+           "bb",
+           "start and end arguments" );
+  });
+  
+  
   
   
   

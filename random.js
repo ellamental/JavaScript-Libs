@@ -18,15 +18,11 @@
 // <http://www.gnu.org/licenses/>.
 //___________________________________________________________________________//
 
-// Putting the "use strict" statement here will affect all other files that
-// are concatenated with this code.  If this file is concatenated with other
-// files and they suddenly start breaking, comment this out.  For me this is
-// preferable to adding "use strict" to every function definition in this file.
-"use strict";
 
 
 var random = (function () {
-  
+  "use strict";
+
   //________________________________________________________________________//
   // PRNG Alea
   // Johannes BaagÃ¸e <baagoe@baagoe.com>, 2010

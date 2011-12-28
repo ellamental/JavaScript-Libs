@@ -33,15 +33,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //___________________________________________________________________________//
 
-// Putting the "use strict" statement here will affect all other files that
-// are concatenated with this code.  If this file is concatenated with other
-// files and they suddenly start breaking, comment this out.  For me this is
-// preferable to adding "use strict" to every function definition in this file.
-"use strict";
 
 
 var srfi13 = (function () {
-  
+  "use strict";
+
   var s = {};
 
   function char_set_or_function(criteria) {
@@ -649,13 +645,13 @@ var srfi13 = (function () {
     if (typeof s2start !== 'undefined') {
       s2 = s.substring(s2, s2start, s2end);
     }
-    start = s1start || 0;
+    s1start = s1start || 0;
     idx = s1.indexOf(s2);
     if (idx < 0) {
       return false;
     }
     else {
-      return idx + start;
+      return idx + s1start;
     }
   };
   

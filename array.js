@@ -33,15 +33,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //___________________________________________________________________________//
 
-// Putting the "use strict" statement here will affect all other files that
-// are concatenated with this code.  If this file is concatenated with other
-// files and they suddenly start breaking, comment this out.  For me this is
-// preferable to adding "use strict" to every function definition in this file.
-"use strict";
 
 
 var array = (function () {
-  
+  "use strict";
+
   var a = {};
   
   
@@ -372,7 +368,7 @@ var array = (function () {
     // Swap two elements in array, returning a new array
     var newArray = a.copy(array);
     return a.swap$(newArray, idx1, idx2);
-  }
+  };
   
   
   //________________________________________________________________________//

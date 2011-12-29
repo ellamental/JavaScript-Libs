@@ -1247,6 +1247,26 @@ $(document).ready(function(){
   });
   
   
+  test("unfold", function () {
+    equal( s.unfold(function (x) { return x.length === 0; },
+                    function (x) { return x[0]; },
+                    function (x) { return x.slice(1, x.length); },
+                    ["a", "b", "c"]),
+           "abc",
+           "array -> list" );
+  });
+  
+  
+  test("unfold_right", function () {
+    equal( s.unfold_right(function (x) { return x.length === 0; },
+                          function (x) { return x[0]; },
+                          function (x) { return x.slice(1, x.length); },
+                          ["a", "b", "c"]),
+           "cba",
+           "array -> list" );
+  });
+  
+  
   test("for_each", function () {
     equal( s.for_each(function (x) { return x.toUpperCase(); }, "abc"),
            "ABC",

@@ -775,6 +775,36 @@ var srfi13 = (function () {
     return nil;
   };
   
+  s.unfold = function (p, f, g, seed, base, make_final) {
+    base = base || "";
+    make_final = make_final || function (x) { return x; };
+    var loop = function (seed, ans) {
+      if (p(seed)) {
+        return ans + make_final(seed);
+      }
+      else {
+        return loop(g(seed), ans + f(seed));
+      }
+    }
+    
+    return loop(seed, base);
+  };
+  
+  s.unfold_right = function (p, f, g, seed, base, make_final) {
+    base = base || "";
+    make_final = make_final || function (x) { return x; };
+    var loop = function (seed, ans) {
+      if (p(seed)) {
+        return make_final(seed) + ans;
+      }
+      else {
+        return loop(g(seed), f(seed) + ans);
+      }
+    }
+    
+    return loop(seed, base);
+  };
+  
   s.for_each = function (fn, str, start, end) {
     var ret_str = "",
         i, j;

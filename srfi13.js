@@ -755,6 +755,19 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Miscellaneous: insertion, parsing
+  //________________________________________________________________________//
+  
+  s.replace = function (s1, s2, s1start, s1end, s2start, s2end) {
+    if (typeof s2start !== 'undefined') {
+      s2 = s.substring(s2, s2start, s2end);
+    }
+    if (s1start < 0) { s1start = s1.length + s1start; }
+    if (s1end < 0) { s1end = s1.length + s1end; }
+    return s1.substring(0, s1start) + s2 + s1.substring(s1end, s1.length);
+  };
+  
   
   
   return s;

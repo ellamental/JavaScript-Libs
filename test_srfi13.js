@@ -1229,6 +1229,30 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Miscellaneous: insertion, parsing
+  //________________________________________________________________________//
+  
+  test("replace", function () {
+    equal( s.replace("aabbcc", "zz", 2, 4),
+           "aazzcc",
+           "replace 'bb' with 'zz'" );
+    
+    equal( s.replace("aabbcc", "yyzz", 2, 4, 2, 4),
+           "aazzcc",
+           "optional start and end arguments" );
+    
+    equal( s.replace("aacc", "bb", 2, 2),
+           "aabbcc",
+           "insert" );
+    
+    equal( s.replace("The TCL programmer endured daily ridicule.",
+                     "another miserable perl drone", 4, 7, 8, 22),
+           "The miserable perl programmer endured daily ridicule.",
+           "example from SRFI-13 documentation" );
+  });
+  
+  
   
   
 });

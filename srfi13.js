@@ -737,6 +737,25 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Replicate & rotate
+  //________________________________________________________________________//
+  
+  s.xsubstring = function (str, from, to, start, end) {
+    var ret_str = "";
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    to = to || str.length+from;
+    for (from; from < to; from++) {
+      // Hack to make modulo on negative numbers return the proper index
+      ret_str += str[((from%str.length)+str.length)%str.length];
+    }
+    return ret_str;
+  };
+  
+  
+  
   
   return s;
 })();

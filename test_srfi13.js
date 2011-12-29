@@ -1202,4 +1202,33 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Reverse & append
+  //________________________________________________________________________//
+  
+  test("xsubstring", function () {
+    equal( s.xsubstring("abcdef", 2),
+           "cdefab",
+           "shift str by 2 index places" );
+    
+    equal( s.xsubstring("abcdef", -2),
+           "efabcd",
+           "shift str by -2 index places" );
+    
+    equal( s.xsubstring("abc", 0, 7),
+           "abcabca",
+           "replicate str" );
+    
+    equal( s.xsubstring("abcdefg", 0, 12, 1, 5),
+           "bcdebcdebcde",
+           "start and end arguments" );
+    
+    equal( s.xsubstring("abcdefg", 16, 18, 1, 3),
+           "bc",
+           "from argument larger than string" );
+  });
+  
+  
+  
+  
 });

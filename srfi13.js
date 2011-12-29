@@ -792,6 +792,43 @@ var srfi13 = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Filtering & deleting
+  //________________________________________________________________________//
+  
+  s.filter = function (str, criteria, start, end) {
+    var temp = "",
+        i, j;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    criteria = char_set_or_function(criteria);
+    for (i=0,j=str.length; i < j; i++) {
+      if (criteria(str[i])) {
+        temp = temp + str[i];
+      }
+    }
+    return temp;
+  };
+  
+  s.delete = function (str, criteria, start, end) {
+    var temp = "",
+        i, j;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    criteria = char_set_or_function(criteria);
+    for (i=0,j=str.length; i < j; i++) {
+      if (!criteria(str[i])) {
+        temp = temp + str[i];
+      }
+    }
+    return temp;
+  };
+  
+  
+  
+  
   
   return s;
 })();

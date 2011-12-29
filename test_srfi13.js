@@ -1276,6 +1276,47 @@ $(document).ready(function(){
   });
   
   
+  //________________________________________________________________________//
+  // Filtering & deleting
+  //________________________________________________________________________//
+  
+  test("filter", function () {
+    equal( s.filter("abcabc", "b"),
+           "bb",
+           "character argument" );
+    
+    equal( s.filter("abcabc", "cb"),
+           "bcbc",
+           "character set" );
+    
+    equal( s.filter("abcabc", function (x) { return x === "c"; }),
+           "cc",
+           "predicate function" );
+    
+    equal( s.filter("abcabc", "ac", 1, -2),
+           "ca",
+           "start and end arguments" );
+  });
+  
+  
+  test("delete", function () {
+    equal( s.delete("abcabc", "b"),
+           "acac",
+           "character argument" );
+    
+    equal( s.delete("abcabc", "cb"),
+           "aa",
+           "character set" );
+    
+    equal( s.delete("abcabc", function (x) { return x === "c"; }),
+           "abab",
+           "predicate function" );
+    
+    equal( s.delete("abcabc", "ac", 1, -2),
+           "b",
+           "start and end arguments" );
+  });
+  
   
   
   

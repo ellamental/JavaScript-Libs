@@ -768,6 +768,29 @@ var srfi13 = (function () {
     return s1.substring(0, s1start) + s2 + s1.substring(s1end, s1.length);
   };
   
+  s.tokenize = function (str, criteria, start, end) {
+    var temp = "",
+        ret_arr = [],
+        i, j;
+    if (typeof str !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    criteria = criteria ? char_set_or_function(criteria) : function (x) { return x !== ' '; };
+    for (i=0,j=str.length; i < j; i++) {
+      if (criteria(str[i])) {
+        temp = temp + str[i];
+      }
+      else {
+        if (temp !== "") {
+          ret_arr.push(temp);
+          temp = "";
+        }
+      }
+    }
+    if (temp !== "") { ret_arr.push(temp); }
+    return ret_arr;
+  };
+  
   
   
   return s;

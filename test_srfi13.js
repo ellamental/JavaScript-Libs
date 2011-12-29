@@ -1253,6 +1253,30 @@ $(document).ready(function(){
   });
   
   
+  test("tokenize", function () {
+    deepEqual( s.tokenize("abcabcabc", "b"),
+               ["b", "b", "b"],
+               "character argument" );
+    
+    deepEqual( s.tokenize("abcdabcdab", "cb"),
+               ["bc", "bc", "b"],
+               "character set" );
+    
+    deepEqual( s.tokenize("abcdabcdab", function (x) { return x === "c" || x === "b"; }),
+               ["bc", "bc", "b"],
+               "predicate function" );
+    
+    deepEqual( s.tokenize("aa bb cc"),
+               ["aa", "bb", "cc"],
+               "default is to split on whitespace" );
+    
+    deepEqual( s.tokenize("aabbcc", "a", 2, -2),
+               [],
+               "start and end arguments" );
+  });
+  
+  
+  
   
   
 });

@@ -1247,6 +1247,28 @@ $(document).ready(function(){
   });
   
   
+  test("for_each", function () {
+    equal( s.for_each(function (x) { return x.toUpperCase(); }, "abc"),
+           "ABC",
+           "map toUpperCase to each character in string" );
+    
+    equal( s.for_each(function (x) { return x.toUpperCase(); }, "abcde", 1, -1),
+           "BCD",
+           "start and end arguments" );
+  });
+  
+  
+  test("for_each_index", function () {
+    equal( s.for_each_index(function (x) { return x; }, "abc"),
+           "012",
+           "map toUpperCase to each character in string" );
+    
+    equal( s.for_each_index(function (x) { return x+1; }, "abcde", 1, -1),
+           "123",
+           "start and end arguments" );
+  });
+  
+  
   //________________________________________________________________________//
   // Replicate and rotate
   //________________________________________________________________________//

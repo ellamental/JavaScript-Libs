@@ -775,6 +775,30 @@ var srfi13 = (function () {
     return nil;
   };
   
+  s.for_each = function (fn, str, start, end) {
+    var ret_str = "",
+        i, j;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    for (i=0, j=str.length; i < j; i++) {
+      ret_str = ret_str + fn(str[i]);
+    }
+    return ret_str;
+  };
+  
+  s.for_each_index = function (fn, str, start, end) {
+    var ret_str = "",
+        i, j;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    for (i=0, j=str.length; i < j; i++) {
+      ret_str = ret_str + fn(i);
+    }
+    return ret_str;
+  };
+  
   
   //________________________________________________________________________//
   // Replicate & rotate

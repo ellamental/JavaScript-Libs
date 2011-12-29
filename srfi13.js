@@ -738,6 +738,45 @@ var srfi13 = (function () {
   
   
   //________________________________________________________________________//
+  // Reverse & append
+  //________________________________________________________________________//
+  
+  s.map = function (fn, str, start, end) {
+    var ret_str = "",
+        i, j;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    for (i=0, j=str.length; i < j; i++) {
+      ret_str = ret_str + fn(str[i]);
+    }
+    return ret_str;
+  };
+  
+  s.fold = function (kons, nil, str, start, end) {
+    var i, j;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    for (i=0, j=str.length; i < j; i++) {
+      nil = kons(str[i], nil);
+    }
+    return nil;
+  };
+  
+  s.fold_right = function (kons, nil, str, start, end) {
+    var i;
+    if (typeof start !== 'undefined') {
+      str = s.substring(str, start, end);
+    }
+    for (i=str.length-1; i >= 0; i--) {
+      nil = kons(str[i], nil);
+    }
+    return nil;
+  };
+  
+  
+  //________________________________________________________________________//
   // Replicate & rotate
   //________________________________________________________________________//
   

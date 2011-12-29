@@ -1203,7 +1203,52 @@ $(document).ready(function(){
   
   
   //________________________________________________________________________//
-  // Reverse & append
+  // Fold, unfold and map
+  //________________________________________________________________________//
+  
+  test("map", function () {
+    equal( s.map(function (x) { return x.toUpperCase(); }, "abc"),
+           "ABC",
+           "map toUpperCase to each character in string" );
+    
+    equal( s.map(function (x) { return x.toUpperCase(); }, "abcde", 1, -1),
+           "BCD",
+           "start and end arguments" );
+  });
+  
+  
+  test("fold", function () {
+    equal( s.fold(function (ch, count) { return count + 1; },
+                  0,
+                  "hello"),
+           5,
+           "length of string" );
+    
+    equal( s.fold(function (ch, ret) { return ret + ch.toUpperCase(); },
+                  "",
+                  "abc"),
+           "ABC",
+           "convert to uppercase" );
+  });
+  
+  
+  test("fold_right", function () {
+    equal( s.fold_right(function (ch, count) { return count + 1; },
+                  0,
+                  "hello"),
+           5,
+           "length of string" );
+    
+    equal( s.fold_right(function (ch, ret) { return ret + ch; },
+                  "",
+                  "abc"),
+           "cba",
+           "reverse string" );
+  });
+  
+  
+  //________________________________________________________________________//
+  // Replicate and rotate
   //________________________________________________________________________//
   
   test("xsubstring", function () {

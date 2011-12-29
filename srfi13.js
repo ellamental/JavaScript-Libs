@@ -73,7 +73,7 @@ var srfi13 = (function () {
     return (s.is_string(obj) && obj.length === 0);
   };
 
-  s.every = function (criteria, str, start, end) {
+  s.every = function (str, criteria, start, end) {
     // Checks to see if the given criteria is true of every character in s
     var fn = char_set_or_function(criteria);
     start = start || 0;
@@ -88,7 +88,7 @@ var srfi13 = (function () {
     return true;
   };
   
-  s.any = function (criteria, str, start, end) {
+  s.any = function (str, criteria, start, end) {
     // Checks to see if the given criteria is true of any character in s
     var fn = char_set_or_function(criteria);
     start = start || 0;

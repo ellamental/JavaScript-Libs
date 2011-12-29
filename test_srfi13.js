@@ -48,47 +48,47 @@ $(document).ready(function(){
   
   test("every", function () {
     // every(char, str)
-    equal( s.every("a", "aaa"),
+    equal( s.every("aaa", "a"),
            true,
            "every char in 'aaa' === 'a' returns true" );
     
-    equal( s.every("a", "ada"),
+    equal( s.every("ada", "a"),
            false,
            "every char in 'ada' === 'a' returns false" );
     
     // every(char_set, str)
-    equal( s.every("abc", "cbabc"),
+    equal( s.every("cbabc", "abc"),
            true,
            "each char in 'cbabc' is in the char_set 'abc'" );
     
-    equal( s.every("abc", "abcde"),
+    equal( s.every("abcde", "abc"),
            false,
            "there are chars in 'abcde' not present in the char_set 'abc'" );
     
     // every(pred, str)    
-    equal( s.every(function (x) { return x === "a"; }, "aaa"),
+    equal( s.every("aaa", function (x) { return x === "a"; }),
            true,
            "pred(chr) returns true for every char in the string literal 'aaa'" );
     
-    equal( s.every(function (x) { return x === "a"; }, "ada"),
+    equal( s.every("ada", function (x) { return x === "a"; }),
            false,
            "pred(chr) doesn't return true for every char in the string literal 'aaa'" );
     
     // every(char, str, start, stop)
-    equal( s.every("a", "cdaa", 2),
+    equal( s.every("cdaa", "a", 2),
            true,
            "every char in 'cdaa' starting from index[2] is === 'a'" );
     
-    equal( s.every("a", "cdaar", 2, 4),
+    equal( s.every("cdaar", "a", 2, 4),
            true,
            "every char in 'cdaar' starting from index[2] and ending at index[4] is === 'a'" );
     
     // every(char, str, neg-start, neg-stop
-    equal( s.every("a", "cbaa", -2),
+    equal( s.every("cbaa", "a", -2),
            true,
            "every with negative start" );
     
-    equal( s.every("a", "cbaabc", -4, -2),
+    equal( s.every("cbaabc", "a", -4, -2),
            true,
            "every with negative start and end" );
   });
@@ -96,55 +96,55 @@ $(document).ready(function(){
     
   test("any", function () {
     // any(char, str)
-    equal( s.any("a", "cbabc"),
+    equal( s.any("cbabc", "a"),
            true,
            "any char in 'cbabc' === 'a' returns true" );
     
-    equal( s.any("a", "bcd"),
+    equal( s.any("bcd", "a"),
            false,
            "any char in 'bcd' === 'a' returns false" );
     
     // any(char_set, str)
-    equal( s.any("abc", "fedc"),
+    equal( s.any("fedc", "abc"),
            true,
            "any char in 'fedc' is in the char_set 'abc'" );
     
-    equal( s.any("xyz", "abcde"),
+    equal( s.any("abcde", "xyz"),
            false,
            "No chars in 'abcde' are present in the char_set 'xyz'" );
     
     // any(pred, str)    
-    equal( s.any(function (x) { return x === "a"; }, "cbabc"),
+    equal( s.any("cbabc", function (x) { return x === "a"; }),
            true,
            "pred(chr) returns true for any char in the string literal 'cbabc'" );
     
-    equal( s.any(function (x) { return x === "a"; }, "xyz"),
+    equal( s.any("xyz", function (x) { return x === "a"; }),
            false,
            "pred(chr) doesn't return true for any char in the string literal 'xyz'" );
     
     // any(char, str, start, stop)
-    equal( s.any("a", "dcba", 2),
+    equal( s.any("dcba", "a", 2),
            true,
            "any char in 'cdaa' starting from index[2] is === 'a'" );
     
-    equal( s.any("a", "cdaar", 2, 4),
+    equal( s.any("cdaar", "a", 2, 4),
            true,
            "any char in 'cdaar' starting from index[2] and ending at index[4] is === 'a'" );
     
-    equal( s.any("a", "abc", 1),
+    equal( s.any("abc", "a", 1),
            false,
            "'a' is not in the substring 'abc'[1:]" );
     
-    equal( s.any("a", "abcba", 1, 4),
+    equal( s.any("abcba", "a", 1, 4),
            false,
            "'a' is not in the substring abcba[1:4]" );
     
     // any(char, str, neg-start, neg-stop)
-    equal( s.any("a", "aabc", -2),
+    equal( s.any("aabc", "a", -2),
            false,
            "any with negative start" );
     
-    equal( s.any("a", "aabcaa", -4, -2),
+    equal( s.any("aabcaa", "a", -4, -2),
            false,
            "any with negative start and end" );
   });

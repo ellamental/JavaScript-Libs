@@ -125,4 +125,91 @@ $(document).ready(function () {
   });
   
   
+  //________________________________________________________________________//
+  // Streams
+  //________________________________________________________________________//  
+  
+  test("Stream and is_stream", function () {
+    var a = new s.Stream(),
+        b = new s.Stream(1, function () { return new s.Stream(); });
+    
+    equal( s.is_stream(a),
+           true,
+           "the empty stream is a stream" );
+    
+    equal( s.is_stream(b),
+           true,
+           "a stream of length 1 is a stream" );
+    
+    equal( s.is_stream(42),
+           false,
+           "42 is not a stream" );
+  });
+  
+  
+  test("is_empty", function () {
+    var a = new s.Stream(),
+        b = new s.Stream(1, function () { return new s.Stream(); });
+    
+    equal( s.is_empty(a),
+           true,
+           "the empty stream" );
+    
+    equal( s.is_empty(b),
+           false,
+           "stream of length 1 is not the empty stream" );
+  });
+  
+  
+  test("cons", function () {
+    var a = s.cons(1, function () { return s.empty_stream; });
+    
+    equal( s.is_stream(a),
+           true,
+           "a is a stream" );
+    
+    equal( a.car,
+           1,
+           "a.car contains the number 1" );
+    
+    equal( s.is_stream(s.force(a.cdr)),
+           true,
+           "when forced, a.cdr is a stream" );
+  });
+  
+  
+  test("car and cdr", function () {
+    var a = s.cons(1, function () { return s.cons(2, function () { return s.empty_stream; }) });
+    
+    equal( s.car(a),
+           1,
+           "a.car === 1" );
+    
+    equal( s.car(s.cdr(a)),
+           2,
+           "The car of a.cdr === 2" );
+  });
+  
+  
+  test("make_stream", function () {
+    var a = s.make_stream(1, 2, 3);
+    
+    equal( s.car(a),
+           1,
+           "index[0] === 1" );
+    
+    equal( s.car(s.cdr(a)),
+           2,
+           "index[1] === 2" );
+    
+    equal( s.car(s.cdr(s.cdr(a))),
+           3,
+           "index[2] === 3" );
+    
+    equal( s.is_empty(s.cdr(s.cdr(s.cdr(a)))),
+           true,
+           "the cdr of index[2] is the empty stream" );
+  });
+  
+  
 });

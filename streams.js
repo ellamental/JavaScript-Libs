@@ -84,6 +84,53 @@ var streams = (function () {
   };
   
   
+  //________________________________________________________________________//
+  // Streams
+  //________________________________________________________________________//  
+  
+  s.Stream = function (car, cdr) {
+    this.car = car;
+    if (typeof cdr !== 'undefined') {
+      this.cdr = s.delay(cdr);
+    }
+  };
+  
+  s.empty_stream = new s.Stream();
+  
+  s.Stream.prototype.is_empty = function () {
+    if (typeof this.car === 'undefined' && typeof this.cdr === 'undefined') {
+      return true;
+    }
+    return false;
+  };
+  
+  s.is_stream = function (obj) {
+    return s.force(obj) instanceof s.Stream;
+  };
+  
+  s.is_empty = function (stream) {
+    return stream.is_empty();
+  };
+  
+  s.cons = function (car, cdr) {
+    return new s.Stream(car, cdr);
+  };
+  
+  s.car = function (stream) {
+    return stream.car;
+  };
+  
+  s.cdr = function (stream) {
+    return s.force(stream.cdr);
+  };
+  
+  s.make_stream = function () {
+    if (arguments.length === 0) {
+      return s.empty_stream;
+    }
+    rest = Array.prototype.slice.call(arguments, 1);
+    return s.cons(arguments[0], function () { return s.make_stream.apply(null, rest); });
+  };
   
   
   

@@ -47,6 +47,10 @@ $(document).ready(function () {
     equal( p.toString(),
            "[object Promise]",
            "toString returns [object Promise]" );
+    
+    raises( function () { s.delay(42); },
+            "argument to delay must be a thunk (function with no arguments)",
+            "delay called with an argument that is not a thunk" );
   });
   
   

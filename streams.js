@@ -59,7 +59,12 @@ var streams = (function () {
   };
   
   s.delay = function (expr) {
-    return new s.Promise(expr);
+    if (expr instanceof Function) {
+      return new s.Promise(expr);
+    }
+    else {
+      throw "argument to delay must be a thunk (function with no arguments)";
+    }
   };
   
   s.force = function (promise) {

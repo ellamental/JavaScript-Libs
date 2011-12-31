@@ -39,6 +39,27 @@ var srfi13 = (function () {
   "use strict";
 
   var s = {};
+  
+  function set_start(str, start) {
+    start = start || 0;
+    if (start < 0) { start = str.length + start; }
+    return start;
+  }
+  
+  function set_end(str, end) {
+    end = end || str.length;
+    if (end < 0) { end = str.length + end; }
+    return end;
+  }
+  
+  function set_substring(str, start, end) {
+    if (typeof start !== 'undefined') {
+      start = set_start(str, start);
+      end = set_end(str, end);
+      return str.substring(start, end);
+    }
+    return str;
+  }
 
   function char_set_or_function(criteria) {
     var fn;
@@ -76,10 +97,8 @@ var srfi13 = (function () {
   s.every = function (str, criteria, start, end) {
     // Checks to see if the given criteria is true of every character in s
     var fn = char_set_or_function(criteria);
-    start = start || 0;
-    end = end || str.length;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end);
     for (start; start < end; start++) {
       if (!fn(str[start])) {
         return false;
@@ -91,10 +110,8 @@ var srfi13 = (function () {
   s.any = function (str, criteria, start, end) {
     // Checks to see if the given criteria is true of any character in s
     var fn = char_set_or_function(criteria);
-    start = start || 0;
-    end = end || str.length;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end);
     for (start; start < end; start++) {
       if (fn(str[start])) {
         return true;
@@ -169,38 +186,31 @@ var srfi13 = (function () {
   };
   
   s.substring = function (str, start, end) {
-    end = end || str.length;
-    if (start < 0) {
-      start = str.length + start;
-    }
-    if (end < 0) {
-      end = str.length + end;
-    }
-    return str.substring(start, end);
+    return set_substring(str, start, end);
   };
   
   s.take = function (str, num_chars) {
-    return s.substring(str, 0, num_chars);
+    return set_substring(str, 0, num_chars);
   };
   
   s.drop = function (str, num_chars) {
-    return s.substring(str, -num_chars + 1);
+    return set_substring(str, -num_chars + 1);
   };
   
   s.take_right = function (str, num_chars) {
-    return s.substring(str, -num_chars);
+    return set_substring(str, -num_chars);
   };
   
   s.drop_right = function (str, num_chars) {
-    return s.substring(str, 0, num_chars - 1);
+    return set_substring(str, 0, num_chars - 1);
   };
   
   s.pad = function (str, len, char, start, end) {
     var p;
     char = char || " ";
-    str = s.substring(str, start, end);
+    str = set_substring(str, start, end);
     if (len < str.length) {
-      str = s.substring(str, -len);
+      str = set_substring(str, -len);
     }
     else if (len > str.length) {
       p = new Array((len - str.length) + 1).join(char);
@@ -212,12 +222,9 @@ var srfi13 = (function () {
   s.trim_left = function (str, criteria, start, end) {
     var idx = 0,
         fn;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
-    criteria = criteria || " \n\r";
-    fn = char_set_or_function(criteria);
-    while (idx < str.length && fn(str[idx])) {
+    str = set_substring(str, start, end);
+    criteria = char_set_or_function(criteria || " \n\r");
+    while (idx < str.length && criteria(str[idx])) {
       idx += 1;
     }
     return str.substring(idx, str.length);
@@ -225,22 +232,17 @@ var srfi13 = (function () {
   
   s.trim_right = function (str, criteria, start, end) {
     var fn, idx;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
-    criteria = criteria || " \n\r";
-    fn = char_set_or_function(criteria);
+    str = set_substring(str, start, end);
+    criteria = char_set_or_function(criteria || " \n\r");
     idx = str.length - 1;
-    while (idx >= 0 && fn(str[idx])) {
+    while (idx >= 0 && criteria(str[idx])) {
       idx -= 1;
     }
     return str.substring(0, idx+1);
   };
   
   s.trim = function (str, criteria, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     str = s.trim_left(str, criteria);
     str = s.trim_right(str, criteria);
     return str;
@@ -258,13 +260,9 @@ var srfi13 = (function () {
   
   s.compare = function (s1, s2, lt, eq, gt, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     for (i=0, j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] < s2[i]) {
         return lt(i + s1start);
@@ -289,12 +287,8 @@ var srfi13 = (function () {
   };
   
   s.eq = function (s1, s2, s1start, s1end, s2start, s2end) {
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
     if (s1 === s2) {
       return s1.length;
     }
@@ -305,13 +299,9 @@ var srfi13 = (function () {
   
   s.ltgt = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] < s2[i] || s1[i] > s2[i]) {
         return i + s1start;
@@ -327,13 +317,9 @@ var srfi13 = (function () {
 
   s.lt = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] < s2[i]) {
         return i + s1start;
@@ -352,13 +338,9 @@ var srfi13 = (function () {
 
   s.gt = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] > s2[i]) {
         return i + s1start;
@@ -377,13 +359,9 @@ var srfi13 = (function () {
 
   s.lteq = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] < s2[i]) {
         return i + s1start;
@@ -402,13 +380,9 @@ var srfi13 = (function () {
 
   s.gteq = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     for (i=0,j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] > s2[i]) {
         return i + s1start;
@@ -456,12 +430,8 @@ var srfi13 = (function () {
   
   s.prefix_length = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
     for (i=0, j=Math.min(s1.length, s2.length); i < j; i++) {
       if (s1[i] !== s2[i]) {
         return i;
@@ -472,12 +442,8 @@ var srfi13 = (function () {
   
   s.suffix_length = function (s1, s2, s1start, s1end, s2start, s2end) {
     var i, j, count;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
     for (i=s1.length-1, j=s2.length-1, count=0; i >= 0; i--, j--, count++) {
       if (s1[i] !== s2[j]) {
         return count;
@@ -496,23 +462,15 @@ var srfi13 = (function () {
   
   s.is_prefix = function (s1, s2, s1start, s1end, s2start, s2end) {
     // is s1 a prefix of s2?
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
     return s2.substring(0, s1.length) === s1;
   };
   
   s.is_suffix = function (s1, s2, s1start, s1end, s2start, s2end) {
     // is s1 a suffix of s2?
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
     return s2.substring(s2.length - s1.length, s2.length) === s1;
   };
   
@@ -526,9 +484,7 @@ var srfi13 = (function () {
   
   s.starts_with = function (str, prefix, start, end) {
     // prefix may be either a string or an array of strings
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     if (s.is_string(prefix)) {
       return str.substring(0, prefix.length) === prefix;
     }
@@ -544,9 +500,7 @@ var srfi13 = (function () {
   
   s.ends_with = function (str, suffix, start, end) {
     // prefix may be either a string or an array of strings
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     if (s.is_string(suffix)) {
       return str.substring(str.length-suffix.length, str.length) === suffix;
     }
@@ -566,10 +520,8 @@ var srfi13 = (function () {
   //________________________________________________________________________//
   
   s.index = function (str, criteria, start, end) {
-    start = start || 0;
-    end = end || str.length;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end);
     criteria = char_set_or_function(criteria);
     for (start; start < end; start++) {
       if (criteria(str[start])) {
@@ -580,10 +532,8 @@ var srfi13 = (function () {
   };
   
   s.index_right = function (str, criteria, start, end) {
-    start = start || 0;
-    end = end || str.length-1;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end) - 1;
     criteria = char_set_or_function(criteria);
     for (end; end >= start; end--) {
       if (criteria(str[end])) {
@@ -594,10 +544,8 @@ var srfi13 = (function () {
   };
   
   s.skip = function (str, criteria, start, end) {
-    start = start || 0;
-    end = end || str.length;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end);
     criteria = char_set_or_function(criteria);
     for (start; start < end; start++) {
       if (!criteria(str[start])) {
@@ -608,10 +556,8 @@ var srfi13 = (function () {
   };
   
   s.skip_right = function (str, criteria, start, end) {
-    start = start || 0;
-    end = end || str.length-1;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end) - 1;
     criteria = char_set_or_function(criteria);
     for (end; end >= start; end--) {
       if (!criteria(str[end])) {
@@ -623,10 +569,8 @@ var srfi13 = (function () {
   
   s.count = function (str, criteria, start, end) {
     var count = 0;
-    start = start || 0;
-    end = end || str.length-1;
-    if (start < 0) { start = str.length + start; }
-    if (end < 0) { end = str.length + end; }
+    start = set_start(str, start);
+    end = set_end(str, end) - 1;
     criteria = char_set_or_function(criteria);
     for (start; start < end; start++) {
       if (criteria(str[start])) {
@@ -639,13 +583,9 @@ var srfi13 = (function () {
   s.contains = function (s1, s2, s1start, s1end, s2start, s2end) {
     // is s2 contained in s1?
     var idx;
-    if (typeof s1start !== 'undefined') {
-      s1 = s.substring(s1, s1start, s1end);
-    }
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
-    s1start = s1start || 0;
+    s1 = set_substring(s1, s1start, s1end);
+    s2 = set_substring(s2, s2start, s2end);
+    s1start = set_start(s1, s1start);
     idx = s1.indexOf(s2);
     if (idx < 0) {
       return false;
@@ -673,9 +613,7 @@ var srfi13 = (function () {
   // 23 May 2008
   // License: http://individed.com/code/to-title-case/license.txt
   s.titlecase = function(str, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     return str.replace(/([\w&`'‘’"“.@:\/\{\(\[<>_]+-? *)/g, function(match, p1, index, title) {
       if (index > 0 && title.charAt(index - 2) !== ":" &&
           match.search(/^(a(nd?|s|t)?|b(ut|y)|en|for|i[fn]|o[fnr]|t(he|o)|vs?\.?|via)[ \-]/i) > -1) {
@@ -693,16 +631,12 @@ var srfi13 = (function () {
   };
   
   s.upcase = function (str, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     return str.toUpperCase();
   };
   
   s.downcase = function (str, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     return str.toLowerCase();
   };
   
@@ -712,9 +646,7 @@ var srfi13 = (function () {
   //________________________________________________________________________//
   
   s.reverse = function (str, start, end) {
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     return str.split("").reverse().join("");
   };
   
@@ -744,9 +676,7 @@ var srfi13 = (function () {
   s.map = function (fn, str, start, end) {
     var ret_str = "",
         i, j;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     for (i=0, j=str.length; i < j; i++) {
       ret_str = ret_str + fn(str[i]);
     }
@@ -755,9 +685,7 @@ var srfi13 = (function () {
   
   s.fold = function (kons, nil, str, start, end) {
     var i, j;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     for (i=0, j=str.length; i < j; i++) {
       nil = kons(str[i], nil);
     }
@@ -766,9 +694,7 @@ var srfi13 = (function () {
   
   s.fold_right = function (kons, nil, str, start, end) {
     var i;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     for (i=str.length-1; i >= 0; i--) {
       nil = kons(str[i], nil);
     }
@@ -808,9 +734,7 @@ var srfi13 = (function () {
   s.for_each = function (fn, str, start, end) {
     var ret_str = "",
         i, j;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     for (i=0, j=str.length; i < j; i++) {
       ret_str = ret_str + fn(str[i]);
     }
@@ -820,9 +744,7 @@ var srfi13 = (function () {
   s.for_each_index = function (fn, str, start, end) {
     var ret_str = "",
         i, j;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     for (i=0, j=str.length; i < j; i++) {
       ret_str = ret_str + fn(i);
     }
@@ -836,9 +758,7 @@ var srfi13 = (function () {
   
   s.xsubstring = function (str, from, to, start, end) {
     var ret_str = "";
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     to = to || str.length+from;
     for (from; from < to; from++) {
       // Hack to make modulo on negative numbers return the proper index
@@ -853,9 +773,7 @@ var srfi13 = (function () {
   //________________________________________________________________________//
   
   s.replace = function (s1, s2, s1start, s1end, s2start, s2end) {
-    if (typeof s2start !== 'undefined') {
-      s2 = s.substring(s2, s2start, s2end);
-    }
+    s2 = set_substring(s2, s2start, s2end);
     if (s1start < 0) { s1start = s1.length + s1start; }
     if (s1end < 0) { s1end = s1.length + s1end; }
     return s1.substring(0, s1start) + s2 + s1.substring(s1end, s1.length);
@@ -865,9 +783,7 @@ var srfi13 = (function () {
     var temp = "",
         ret_arr = [],
         i, j;
-    if (typeof str !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     criteria = criteria ? char_set_or_function(criteria) : function (x) { return x !== ' '; };
     for (i=0,j=str.length; i < j; i++) {
       if (criteria(str[i])) {
@@ -892,9 +808,7 @@ var srfi13 = (function () {
   s.filter = function (str, criteria, start, end) {
     var temp = "",
         i, j;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     criteria = char_set_or_function(criteria);
     for (i=0,j=str.length; i < j; i++) {
       if (criteria(str[i])) {
@@ -907,9 +821,7 @@ var srfi13 = (function () {
   s.delete = function (str, criteria, start, end) {
     var temp = "",
         i, j;
-    if (typeof start !== 'undefined') {
-      str = s.substring(str, start, end);
-    }
+    str = set_substring(str, start, end);
     criteria = char_set_or_function(criteria);
     for (i=0,j=str.length; i < j; i++) {
       if (!criteria(str[i])) {

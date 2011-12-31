@@ -19,3 +19,7 @@ The random.js library is a set of functions for dealing with random numbers and 
 ## [srfi13.js](https://github.com/jacktrades/JavaScript-Libs/wiki/srfi13.js)
 
 The srfi13.js library is a Javascript implementation of [Scheme's SRFI-13](http://srfi.schemers.org/srfi-13/srfi-13.html) string processing library.
+
+## [streams.js](https://github.com/jacktrades/JavaScript-Libs/wiki/streams.js)
+
+The streams.js library is a Javascript implementation of [Scheme's SRFI-41](http://srfi.schemers.org/srfi-41/srfi-41.html) streams library.

@@ -1,7 +1,7 @@
 //___________________________________________________________________________//
-// streams
+// misc.js
 //
-// streams is an implementation of Scheme's SRFI-41 library
+// misc is a collection of miscellaneous utilities
 //
 // Copyright (c) 2011, Nick Zarczynski
 // All rights reserved.
@@ -35,107 +35,30 @@
 
 
 
-var streams = (function () {
+var misc = (function () {
   "use strict";
   
-  var s = {};
-  
-  s.Promise = function (fn) {
-    this.is_ready = false;
-    this.data = null;
-    this.promise = fn;
-  };
-  
-  s.Promise.prototype.toString = function () {
-    return "[object Promise]";
-  };
-  
-  s.is_promise = function (obj) {
-    if (obj instanceof s.Promise) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  };
-  
-  s.delay = function (expr) {
-    if (expr instanceof Function) {
-      return new s.Promise(expr);
-    }
-    else {
-      throw "argument to delay must be a thunk (function with no arguments)";
-    }
-  };
-  
-  s.force = function (promise) {
-    if (promise instanceof s.Promise) {
-      if (promise.is_ready) {
-        return promise.data;
-      }
-      else {
-        promise.data = promise.promise();
-        promise.is_ready = true;
-        return promise.data;
-      }
-    }
-    else {
-      return promise;
-    }
-  };
-  
+  var m = {};
   
   //________________________________________________________________________//
-  // Streams
+  // recur
+  // 
+  // recur provides tail-call optimization to specially written functions.
+  // All tail-calls must be wrapped in a thunk (anon function with no args).
   //________________________________________________________________________//  
   
-  s.Stream = function (car, cdr) {
-    this.car = car;
-    if (typeof cdr !== 'undefined') {
-      this.cdr = s.delay(cdr);
+  m.recur = function (thunk) {
+    while (thunk instanceof Function) {
+      thunk = thunk();
     }
+    return thunk;
   };
-  
-  s.empty_stream = new s.Stream();
-  
-  s.Stream.prototype.is_empty = function () {
-    if (typeof this.car === 'undefined' && typeof this.cdr === 'undefined') {
-      return true;
-    }
-    return false;
-  };
-  
-  s.is_stream = function (obj) {
-    return s.force(obj) instanceof s.Stream;
-  };
-  
-  s.is_empty = function (stream) {
-    return stream.is_empty();
-  };
-  
-  s.cons = function (car, cdr) {
-    return new s.Stream(car, cdr);
-  };
-  
-  s.car = function (stream) {
-    return stream.car;
-  };
-  
-  s.cdr = function (stream) {
-    return s.force(stream.cdr);
-  };
-  
-  s.make_stream = function () {
-    if (arguments.length === 0) {
-      return s.empty_stream;
-    }
-    var rest = Array.prototype.slice.call(arguments, 1);
-    return s.cons(arguments[0], function () { return s.make_stream.apply(null, rest); });
-  };
+
+
   
   
   
-  
-  return s;
+  return m
   
 })();
+

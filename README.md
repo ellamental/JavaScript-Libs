@@ -23,3 +23,8 @@ The srfi13.js library is a Javascript implementation of [Scheme's SRFI-13](http:
 ## [streams.js](https://github.com/jacktrades/JavaScript-Libs/wiki/streams.js)
 
 The streams.js library is a Javascript implementation of [Scheme's SRFI-41](http://srfi.schemers.org/srfi-41/srfi-41.html) streams library.
+
+## [misc.js](https://github.com/jacktrades/JavaScript-Libs/wiki/misc.js)
+
+The misc.js library is a collection of miscellaneous utilities.
+

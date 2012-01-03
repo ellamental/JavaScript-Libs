@@ -127,7 +127,7 @@ var array = (function () {
     // The start and step parameters default to 0 and 1, respectively.
     var temp = [],
         i;
-    step = (typeof step === 'undefined') ? 1 : step;
+    step = step || 1;
     if (typeof stop === 'undefined') {
       stop = start;
       start = 0;

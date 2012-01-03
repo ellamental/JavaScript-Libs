@@ -160,21 +160,36 @@ srfi1.circular_list = function (/* elem, ..., elem-n */) {
   return first_node;
 };
 
-srfi1.iota = function (start, stop, step) {
-  // Returns a list containing the elements:
-  // (start start+step ... start+(count-1)*step)
+srfi1.iota = function (count, start, step) {
+  // Returns a list containing count elements:
+  // (start, start+step ... start+(count*step))
   // The start and step parameters default to 0 and 1, respectively.
-  step = (typeof step === 'undefined') ? 1 : step;
+  var temp = [],
+      i;
+  step = step || 1;
+  start = start || 0;
+  
+  while (count > 0) {
+    temp.push(start);
+    start += step;
+    count -= 1;
+  }
+  return srfi1.list.apply(this, temp);
+};
+
+srfi1.range = function (start, stop, step) {
+  // Returns a list containing the elements:
+  // (start start+step ... last<stop)
+  // The start and step parameters default to 0 and 1, respectively.
+  var temp = [],
+      i;
+  step = step || 1;
   if (typeof stop === 'undefined') {
     stop = start;
     start = 0;
   }
-  else {
-    stop = start + stop;
-  }
-  var temp = [];
   
-  for (var i = start; i < stop; i += step) {
+  for (i = start; i < stop; i += step) {
     temp.push(i);
   }
   return srfi1.list.apply(this, temp);
@@ -1183,7 +1198,7 @@ srfi1.alist_copy = function (alist) {
 
 
 //________________________________________________________________________//
-// Set operations on lists
+// Set operations on lists (see set.js for an implementation of sets)
 //
 // Implemented: lset_union
 //

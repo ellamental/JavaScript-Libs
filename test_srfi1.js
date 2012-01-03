@@ -236,17 +236,27 @@ $(document).ready(function(){
                s.list(0, 1, 2),
                "single argument" );
     
-    deepEqual( s.iota(0, 3),
+    deepEqual( s.iota(3, 3),
+               s.list(3, 4, 5),
+               "count and start arguments" );
+    
+    deepEqual( s.iota(3, 4, 2),
+               s.list(4, 6, 8),
+               "count, start and step arguments" );
+  });
+               
+  
+  test("range", function () {
+    deepEqual( s.range(3),
                s.list(0, 1, 2),
-               "start and stop arguments from 0" );
+               "single argument" );
     
-    deepEqual( s.iota(2, 3),
-               s.list(2, 3, 4),
-               "start and stop arguments from 2" );
+    deepEqual( s.range(3, 6),
+               s.list(3, 4, 5),
+               "start and stop arguments" );
     
-    // 1.2 !== 1.1+0.1 so we need to do the math to test for equality
-    deepEqual( s.iota(1, 0.3, 0.1),
-               s.list(1, 1+0.1, 1.1+0.1),
+    deepEqual( s.range(4, 8, 2),
+               s.list(4, 6),
                "start, stop and step arguments" );
   });
   

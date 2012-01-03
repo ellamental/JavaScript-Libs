@@ -82,9 +82,62 @@ var array = (function () {
   };
   
   a.is_array = function (obj) {
-    return obj instanceof Array;
+    return obj instanceof Array || Object.prototype.toString.call(obj) == '[object Array]';
   };
   
+  
+  //________________________________________________________________________//
+  // Constructors
+  //________________________________________________________________________//
+  
+  a.tabulate = function (n, proc) {
+    var arr = new Array(n),
+        i;
+    for (i=0; i < n; i++) {
+      arr[i] = proc(i);
+    }
+    return arr;
+  };
+  
+  a.make_array = function (n, fill) {
+    return a.tabulate(n, function (i) { return fill; });
+  };
+  
+  a.iota = function (count, start, step) {
+    // Returns an array containing count elements:
+    // [start, start+step ... start+(count*step)]
+    // The start and step parameters default to 0 and 1, respectively.
+    var temp = [],
+        i;
+    step = step || 1;
+    start = start || 0;
+    
+    while (count > 0) {
+      temp.push(start);
+      start += step;
+      count -= 1;
+    }
+    return temp;
+  };
+
+  
+  a.range = function (start, stop, step) {
+    // Returns an array containing the elements:
+    // [start start+step ... last<stop]
+    // The start and step parameters default to 0 and 1, respectively.
+    var temp = [],
+        i;
+    step = (typeof step === 'undefined') ? 1 : step;
+    if (typeof stop === 'undefined') {
+      stop = start;
+      start = 0;
+    }
+    
+    for (i = start; i < stop; i += step) {
+      temp.push(i);
+    }
+    return temp;
+  };
   
   
   //________________________________________________________________________//

@@ -81,6 +81,11 @@ var array = (function () {
     }
   };
   
+  a.is_array = function (obj) {
+    return obj instanceof Array;
+  };
+  
+  
   
   //________________________________________________________________________//
   // map, fold, reduce, etc

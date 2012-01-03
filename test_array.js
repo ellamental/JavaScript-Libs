@@ -33,6 +33,21 @@ $(document).ready(function(){
   });
   
   
+  test("is_array", function () {
+    equal( array.is_array([]),
+           true,
+           "Empty array literal is an array" );
+    
+    equal( array.is_array([1, 2]),
+           true,
+           "array literal is array" );
+    
+    equal( array.is_array( new Array() ),
+           true,
+           "Array object is array" );
+  });
+  
+  
   
   //________________________________________________________________________//
   // map, fold, reduce, etc

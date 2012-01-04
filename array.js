@@ -157,6 +157,8 @@ var array = (function () {
   };
   
   
+  
+  
   //________________________________________________________________________//
   // map, fold, reduce, etc
   //________________________________________________________________________//
@@ -443,6 +445,18 @@ var array = (function () {
     // Swap two elements in array, returning a new array
     var newArray = a.copy(array);
     return a.swap$(newArray, idx1, idx2);
+  };
+  
+  a.insert$ = function (arr, i, obj) {
+    arr.splice(i, 0, obj);
+    return arr;
+  };
+  
+  a.pop$ = function (arr, i) {
+    i = i || arr.length - 1;
+    var temp = arr[i];
+    arr.splice(i, 1);
+    return temp;
   };
   
   

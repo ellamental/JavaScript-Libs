@@ -363,7 +363,34 @@ $(document).ready(function(){
   });
   
   
+  test("insert$", function () {
+    var arr = [1, 2, 3, 4];
+    
+    deepEqual( a.insert$(arr, 2, 42),
+               [1, 2, 42, 3, 4],
+               "insert 42 at the 2nd index" );
+  })
   
+  
+  test("pop$", function () {
+    var arr = [1, 2, 3, 4, 5];
+    
+    deepEqual( a.pop$(arr),
+               5,
+               "remove and return last element" );
+    
+    deepEqual( arr,
+               [1, 2, 3, 4],
+               "arr should be modified to have 4 removed" );
+    
+    deepEqual( a.pop$(arr, 1),
+               2,
+               "remove and return from arbitrary index" );
+    
+    deepEqual( arr,
+               [1, 3, 4],
+               "arr should now be [1, 3, 4]" );
+  });
   
   
 });

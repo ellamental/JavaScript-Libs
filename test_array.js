@@ -101,6 +101,38 @@ $(document).ready(function(){
   
   
   //________________________________________________________________________//
+  // Selectors
+  //________________________________________________________________________//
+  
+  test("take", function () {
+    var arr = [0, 1, 2, 3, 4, 5];
+    
+    deepEqual( a.take(arr, 2),
+               [0, 1],
+               "Return a new array with the first 2 elements" );
+  });
+  
+  
+  test("drop", function () {
+    var arr = [0, 1, 2, 3, 4, 5];
+    
+    deepEqual( a.drop(arr, 2),
+               [2, 3, 4, 5],
+               "Return a new array with all but the first 2 elements" );
+  });
+  
+  
+  test("split_at", function () {
+    var arr = [0, 1, 2, 3, 4, 5];
+    
+    deepEqual( a.split_at(arr, 2),
+               [[0, 1], [2, 3, 4, 5]],
+               "Equivalent to [take(arr, 2), drop(arr, 2)]" );
+  });
+  
+  
+  
+  //________________________________________________________________________//
   // map, fold, reduce, etc
   //________________________________________________________________________//
   

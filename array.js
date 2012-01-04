@@ -459,6 +459,15 @@ var array = (function () {
     return temp;
   };
   
+  a.reverse = function (arr) {
+    var temp = [],
+        i;
+    for (i=arr.length-1; i >= 0; i--) {
+      temp.push(arr[i]);
+    }
+    return temp;
+  };
+  
   
   //________________________________________________________________________//
   // Return the array object

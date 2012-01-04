@@ -393,4 +393,14 @@ $(document).ready(function(){
   });
   
   
+  test("reverse", function () {
+    var arr = [1, 2, 3, 4];
+    
+    deepEqual( a.reverse(arr),
+               [4, 3, 2, 1],
+               "reverse array" );
+  });
+  
+  
+  
 });

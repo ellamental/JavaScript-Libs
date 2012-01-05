@@ -28,3 +28,6 @@ The streams.js library is a Javascript implementation of [Scheme's SRFI-41](http
 
 The misc.js library is a collection of miscellaneous utilities.
 
+## [tree.js](https://github.com/jacktrades/JavaScript-Libs/wiki/tree.js)
+
+The tree.js library contains utilities for building and manipulating n-array trees.

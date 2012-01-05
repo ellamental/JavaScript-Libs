@@ -1,7 +1,7 @@
 //___________________________________________________________________________//
-// misc.js
+// tree.js
 //
-// misc is a collection of miscellaneous utilities
+// tree is a library for the creation and manipulation of n-ary trees.
 //
 // Copyright (c) 2011, Nick Zarczynski
 // All rights reserved.
@@ -35,28 +35,24 @@
 
 
 
-var misc = (function () {
+var tree = (function () {
   "use strict";
   
-  var m = {};
+  var t = {};
   
   //________________________________________________________________________//
-  // recur
-  // 
-  // recur provides tail-call optimization to specially written functions.
-  // All tail-calls must be wrapped in a thunk (anon function with no args).
+  // Node
   //________________________________________________________________________//  
   
-  m.recur = function (thunk) {
-    while (thunk instanceof Function) {
-      thunk = thunk();
-    }
-    return thunk;
+  t.Node = function (value, left, right) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
   };
   
   
   
-  return m;
+  return t;
   
 })();
 

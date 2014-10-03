@@ -1,4 +1,4 @@
-JavaScript-Libs is... wait for it... a collection of JavaScript libraries.  These libraries are under active development and just about everything is subject to change.
+JavaScript-Libs is... wait for it... a collection of JavaScript libraries.  These libraries are not maintained and are for educational purposes only.
 
 ## [array.js](https://github.com/jacktrades/JavaScript-Libs/wiki/array.js)
 
